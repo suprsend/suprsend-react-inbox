@@ -1,10 +1,8 @@
 import React from 'react'
-
-import { ExampleComponent } from '@suprsend/react-inbox'
-import '@suprsend/react-inbox/dist/index.css'
+import SuprsendInbox from '@suprsend/react-inbox'
 
 const App = () => {
-  return <ExampleComponent text="Create React Library Example 😄" />
+  return <SuprsendInbox />
 }
 
 export default App
