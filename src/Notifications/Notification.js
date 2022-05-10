@@ -141,8 +141,9 @@ export default function Notification({ notificationData, isRead = true }) {
                   <p
                     css={css`
                       font-size: 12px;
-                      padding: 0px 4px;
+                      padding: 6px;
                       width: 100%;
+                      margin: 0px;
                     `}
                   >
                     UnRead

@@ -1,11 +1,12 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { usePopper } from 'react-popper'
 import Bell from './Bell'
 import Badge from './Badge'
+import Toaster, { toast } from './Toast'
 import NotificationsContainer from './NotificationContainer'
 import useClickOutside from './utils/useClickOutside'
-import { usePopper } from 'react-popper'
 
 const count = 5
 
@@ -29,6 +30,10 @@ function SuprsendInbox({ children }) {
       }
     ]
   })
+
+  useEffect(() => {
+    toast('call it buddy')
+  }, [])
 
   useClickOutside({ current: popperElement }, () => {
     toggleOpen((prev) => !prev)
@@ -78,6 +83,7 @@ function SuprsendInbox({ children }) {
           {notificationBox}
         </div>
       )}
+      <Toaster />
     </div>
   )
 }
