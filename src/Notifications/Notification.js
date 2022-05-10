@@ -1,7 +1,23 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/react'
+import { useState } from 'react'
+import { usePopper } from 'react-popper'
+import useClickOutside from '../utils/useClickOutside'
+import DropdownIcon from './DropdownIcon'
 
-export default function Notification({ notificationData, isRead = false }) {
+export default function Notification({ notificationData, isRead = true }) {
+  const [openMenu, toggleMenu] = useState(false)
+  const [referenceElement, setReferenceElement] = useState(null)
+  const [popperElement, setPopperElement] = useState(null)
+
+  useClickOutside({ current: popperElement }, () => {
+    toggleMenu((prev) => !prev)
+  })
+
+  const { styles, attributes } = usePopper(referenceElement, popperElement, {
+    placement: 'left'
+  })
+
   return (
     <div
       css={css`
@@ -50,6 +66,8 @@ export default function Notification({ notificationData, isRead = false }) {
                 border-radius: 5px;
                 text-align: center;
                 margin: 10px 0px;
+                padding: 1px 0px;
+                font-size: 14px;
               `}
               onClick={(e) => {
                 e.stopPropagation()
@@ -68,14 +86,7 @@ export default function Notification({ notificationData, isRead = false }) {
             flex-direction: row;
           `}
         >
-          <p
-            css={css`
-              font-size: 16px;
-            `}
-          >
-            1d
-          </p>
-          {isRead ? (
+          {!isRead ? (
             <div
               css={css`
                 margin-left: 10px;
@@ -91,10 +102,66 @@ export default function Notification({ notificationData, isRead = false }) {
               />
             </div>
           ) : (
-            <div></div>
+            <div
+              css={css`
+                position: relative;
+              `}
+            >
+              <div
+                ref={setReferenceElement}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  toggleMenu((prev) => !prev)
+                }}
+              >
+                <DropdownIcon openMenu={openMenu} toggleMenu={toggleMenu} />
+              </div>
+              {openMenu && (
+                <div
+                  css={css`
+                    background-color: #fff;
+                    position: absolute;
+                    border: 1px solid #f0f0f0;
+                    border-radius: 5px;
+                    box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2),
+                      0 6px 20px 0 rgba(0, 0, 0, 0.19);
+                  `}
+                  ref={setPopperElement}
+                  style={styles.popper}
+                  {...attributes.popper}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    console.log('Mark as unread')
+                  }}
+                  onMouseLeave={(e) => {
+                    e.stopPropagation()
+                    toggleMenu(false)
+                  }}
+                >
+                  <p
+                    css={css`
+                      font-size: 12px;
+                      padding: 0px 4px;
+                      width: 100%;
+                    `}
+                  >
+                    UnRead
+                  </p>
+                </div>
+              )}
+            </div>
           )}
         </div>
       </div>
+      <p
+        css={css`
+          font-size: 12px;
+          margin: 0px;
+          color: #2c394b;
+        `}
+      >
+        Yesterday at 2:35pm
+      </p>
     </div>
   )
 }

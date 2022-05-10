@@ -13,12 +13,14 @@ export default function Header() {
         padding: 12px;
         border-bottom: 1px solid #f0f0f0;
         align-items: center;
+        background-color: #fff;
+        z-index: 1000;
       `}
     >
       <p
         css={css`
           margin: 0px;
-          cursor: pointer;
+          font-weight: 600;
         `}
       >
         Notifications
