@@ -1,9 +1,17 @@
 import React from 'react'
 import DefaultBellIcon from './DefaultBellIcon'
 
-function Bell({ bellHeight, bellWidth, bellColor, bellType, bellComponent }) {
+function Bell({
+  bellHeight,
+  bellWidth,
+  bellColor,
+  bellType,
+  bellComponent,
+  ...otherProps
+}) {
   if (bellComponent) {
-    return bellComponent
+    const BellComponent = bellComponent
+    return <BellComponent {...otherProps} />
   }
   return (
     <DefaultBellIcon
@@ -11,6 +19,7 @@ function Bell({ bellHeight, bellWidth, bellColor, bellType, bellComponent }) {
       bellWidth={bellWidth}
       bellColor={bellColor}
       bellType={bellType}
+      {...otherProps}
     />
   )
 }

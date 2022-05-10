@@ -3,7 +3,7 @@ import { css, jsx } from '@emotion/react'
 import { useState } from 'react'
 import { usePopper } from 'react-popper'
 import useClickOutside from '../utils/useClickOutside'
-import DropdownIcon from './DropdownIcon'
+import MenuIcon from './MenuIcon'
 
 export default function Notification({ notificationData, isRead = true }) {
   const [openMenu, toggleMenu] = useState(false)
@@ -114,7 +114,7 @@ export default function Notification({ notificationData, isRead = true }) {
                   toggleMenu((prev) => !prev)
                 }}
               >
-                <DropdownIcon openMenu={openMenu} toggleMenu={toggleMenu} />
+                <MenuIcon />
               </div>
               {openMenu && (
                 <div

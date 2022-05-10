@@ -1,13 +1,18 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/react'
 
-export default function DropdownIcon({ toggleMenu }) {
+export default function DropdownIcon({
+  height = '18px',
+  width = '18px',
+  color = ''
+}) {
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'
       css={css`
-        height: 18px;
-        width: 18px;
+        height: ${height};
+        width: ${width};
+        color: ${color};
       `}
       fill='none'
       viewBox='0 0 24 24'

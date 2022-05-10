@@ -1,8 +1,17 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/react'
 
-export default function Badge({ count }) {
+export default function Badge({
+  count,
+  badgeStyle = '',
+  badgeComponent,
+  ...otherProps
+}) {
   if (count > 0) {
+    if (badgeComponent) {
+      const BadgeComponent = badgeComponent
+      return <BadgeComponent count={count} {...otherProps} />
+    }
     return (
       <span
         css={css`
@@ -16,6 +25,7 @@ export default function Badge({ count }) {
           display: inline-block;
           right: -3px;
           top: -7px;
+          ${badgeStyle}
         `}
       >
         {count}

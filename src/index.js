@@ -1,22 +1,29 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/react'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { usePopper } from 'react-popper'
 import Bell from './Bell'
 import Badge from './Badge'
-import Toaster, { toast } from './Toast'
-import NotificationsContainer from './NotificationContainer'
+import Toaster from './Toast'
+import NotificationContainer from './NotificationContainer'
 import useClickOutside from './utils/useClickOutside'
 
 const count = 5
 
-function SuprsendInbox({ children }) {
+function SuprsendInbox({
+  children,
+  toastProps,
+  bellProps,
+  badgeProps,
+  headerProps,
+  notificationProps
+}) {
   const [isOpen, toggleOpen] = useState(false)
   const [referenceElement, setReferenceElement] = useState(null)
   const [popperElement, setPopperElement] = useState(null)
   const [arrowElement, setArrowElement] = useState(null)
 
-  const notificationBox = children ? children() : <NotificationsContainer />
+  const NotificationBox = children ? children : NotificationContainer
 
   const { styles, attributes } = usePopper(referenceElement, popperElement, {
     placement: 'bottom',
@@ -30,10 +37,6 @@ function SuprsendInbox({ children }) {
       }
     ]
   })
-
-  useEffect(() => {
-    toast('call it buddy')
-  }, [])
 
   useClickOutside({ current: popperElement }, () => {
     toggleOpen((prev) => !prev)
@@ -70,8 +73,8 @@ function SuprsendInbox({ children }) {
           cursor: pointer;
         `}
       >
-        <Badge count={count} />
-        <Bell />
+        <Badge count={count} {...badgeProps} />
+        <Bell {...bellProps} />
       </div>
       {isOpen && (
         <div
@@ -80,10 +83,10 @@ function SuprsendInbox({ children }) {
           {...attributes.popper}
         >
           <div ref={setArrowElement} style={arrowStyle} />
-          {notificationBox}
+          <NotificationBox headerProps={headerProps} />
         </div>
       )}
-      <Toaster />
+      <Toaster {...toastProps} />
     </div>
   )
 }
