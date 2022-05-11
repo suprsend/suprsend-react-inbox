@@ -1,4 +1,4 @@
 import Toast from './Toast'
-export { default as toast } from 'react-hot-toast'
+export { notify } from './Toast'
 
 export default Toast
