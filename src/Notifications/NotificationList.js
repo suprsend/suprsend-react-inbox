@@ -4,9 +4,9 @@ import ClickableNotification from './ClickableNotification'
 const notificationData = [
   {
     button: 'Click Here',
-    header: 'Notification Header',
+    header: 'Buy Back offer sale is on',
     image: '',
-    text: 'This is notification body',
+    text: 'This diwali buy any item above 500rs and get 2000rs cashback only on suprsend',
     url: ''
   },
   {

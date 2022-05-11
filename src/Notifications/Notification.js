@@ -1,29 +1,14 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/react'
-import { useState } from 'react'
-import { usePopper } from 'react-popper'
-import useClickOutside from '../utils/useClickOutside'
-import MenuIcon from './MenuIcon'
+import { ColorConfig, CText } from '../utils/styles'
 
-export default function Notification({ notificationData, isRead = true }) {
-  const [openMenu, toggleMenu] = useState(false)
-  const [referenceElement, setReferenceElement] = useState(null)
-  const [popperElement, setPopperElement] = useState(null)
-
-  useClickOutside({ current: popperElement }, () => {
-    toggleMenu((prev) => !prev)
-  })
-
-  const { styles, attributes } = usePopper(referenceElement, popperElement, {
-    placement: 'left'
-  })
-
+export default function Notification({ notificationData, isRead = false }) {
   return (
     <div
       css={css`
         padding: 7px 14px;
-        border-radius: 5px;
         cursor: pointer;
+        border-bottom: 1px solid #f0f0f0;
         &:hover {
           background-color: #f0f0f0;
         }
@@ -33,7 +18,8 @@ export default function Notification({ notificationData, isRead = true }) {
         css={css`
           display: flex;
           align-items: center;
-          flexdirection: row;
+          flex-direction: row;
+          justify-content: flex-start;
         `}
       >
         <div
@@ -42,41 +28,48 @@ export default function Notification({ notificationData, isRead = true }) {
             margin-right: 15px;
           `}
         >
-          <p
+          <CText
             css={css`
               font-size: 16px;
               margin: 10px 0px;
             `}
           >
             {notificationData.header}
-          </p>
-          <p
+          </CText>
+          <CText
             css={css`
               font-size: 14px;
               margin: 10px 0px;
             `}
           >
             {notificationData.text}
-          </p>
+          </CText>
           {notificationData.button && (
-            <p
-              css={css`
-                background-color: #358adf;
-                color: #fff;
-                border-radius: 5px;
-                text-align: center;
-                margin: 10px 0px;
-                padding: 1px 0px;
-                font-size: 14px;
-              `}
-              onClick={(e) => {
-                e.stopPropagation()
-                console.log('button clicked')
-                // redirect to notificationData.url
-              }}
-            >
-              {notificationData.button}
-            </p>
+            <div>
+              <CText
+                css={css`
+                  background-color: #358adf;
+                  color: #fff;
+                  border-radius: 5px;
+                  text-align: center;
+                  margin: 10px 0px;
+                  padding: 4px 0px;
+                  font-size: 14px;
+                  @media (min-width: 425px) {
+                    width: fit-content;
+                    padding: 6px;
+                    min-width: 100px;
+                  }
+                `}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  console.log('button clicked')
+                  // redirect to notificationData.url
+                }}
+              >
+                {notificationData.button}
+              </CText>
+            </div>
           )}
         </div>
         <div
@@ -84,6 +77,8 @@ export default function Notification({ notificationData, isRead = true }) {
             display: flex;
             align-items: center;
             flex-direction: row;
+            align-self: flex-start;
+            margin-top: 16px;
           `}
         >
           {!isRead ? (
@@ -101,68 +96,18 @@ export default function Notification({ notificationData, isRead = true }) {
                 `}
               />
             </div>
-          ) : (
-            <div
-              css={css`
-                position: relative;
-              `}
-            >
-              <div
-                ref={setReferenceElement}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  toggleMenu((prev) => !prev)
-                }}
-              >
-                <MenuIcon />
-              </div>
-              {openMenu && (
-                <div
-                  css={css`
-                    background-color: #fff;
-                    position: absolute;
-                    border: 1px solid #f0f0f0;
-                    border-radius: 5px;
-                    box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2),
-                      0 6px 20px 0 rgba(0, 0, 0, 0.19);
-                  `}
-                  ref={setPopperElement}
-                  style={styles.popper}
-                  {...attributes.popper}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    console.log('Mark as unread')
-                  }}
-                  onMouseLeave={(e) => {
-                    e.stopPropagation()
-                    toggleMenu(false)
-                  }}
-                >
-                  <p
-                    css={css`
-                      font-size: 12px;
-                      padding: 6px;
-                      width: 100%;
-                      margin: 0px;
-                    `}
-                  >
-                    UnRead
-                  </p>
-                </div>
-              )}
-            </div>
-          )}
+          ) : null}
         </div>
       </div>
-      <p
+      <CText
         css={css`
           font-size: 12px;
           margin: 0px;
-          color: #2c394b;
+          color: ${ColorConfig.lightGray1};
         `}
       >
         Yesterday at 2:35pm
-      </p>
+      </CText>
     </div>
   )
 }

@@ -19,12 +19,15 @@ export default function Badge({
           position: absolute;
           padding: 3px 6px;
           border-radius: 50%;
-          background-color: gray;
+          background-color: red;
           color: white;
           text-align: center;
           display: inline-block;
           right: -3px;
           top: -7px;
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+            Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+            'Segoe UI Symbol';
           ${badgeStyle}
         `}
       >

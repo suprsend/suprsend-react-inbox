@@ -8,7 +8,7 @@ export default function NotificationContainer({ headerProps }) {
     <div
       css={css`
         min-height: 100px;
-        max-height: 500px;
+        max-height: 400px;
         width: 350px;
         border-radius: 5px;
         background-color: '#fff';
@@ -17,10 +17,9 @@ export default function NotificationContainer({ headerProps }) {
         overflow: scroll;
         box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2),
           0 6px 20px 0 rgba(0, 0, 0, 0.19);
-        @media (max-width: 350px) {
-          width: 90vw;
+        @media (max-width: 425px) {
+          width: 100vw;
         }
-        background-color: #fff;
       `}
     >
       <Header {...headerProps} />

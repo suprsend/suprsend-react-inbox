@@ -52,6 +52,7 @@
   ],
   "dependencies": {
     "@emotion/react": "^11.9.0",
+    "@emotion/styled": "^11.8.1",
     "@popperjs/core": "^2.11.5",
     "react-hot-toast": "^2.2.0",
     "react-popper": "^2.3.0"
