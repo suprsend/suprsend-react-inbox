@@ -1,12 +1,15 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/react'
+import { useContext } from 'react'
+import { InboxContext } from '../index'
 
 export default function Badge({
-  count,
   badgeStyle = '',
   badgeComponent,
   ...otherProps
 }) {
+  const { unread: count } = useContext(InboxContext)
+
   if (count > 0) {
     if (badgeComponent) {
       const BadgeComponent = badgeComponent

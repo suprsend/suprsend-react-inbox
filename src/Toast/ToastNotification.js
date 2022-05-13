@@ -1,8 +1,11 @@
 /** @jsx jsx */
+import { useContext } from 'react'
 import { css, jsx } from '@emotion/react'
-import { CText } from '../utils/styles'
+import { CText, SubHeadingText } from '../utils/styles'
+import { InboxContext } from '../index'
+import { toast } from 'react-hot-toast'
 
-export default function ToastNotification({ notificationData }) {
+export function ToastNotification({ notificationData: { message }, toastId }) {
   return (
     <div
       css={css`
@@ -12,7 +15,13 @@ export default function ToastNotification({ notificationData }) {
         margin-right: 15px;
         border-radius: 5px;
         max-width: 450px;
+        box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2),
+          0 2px 1px 0 rgba(0, 0, 0, 0.1);
       `}
+      onClick={() => {
+        console.log('mark as read')
+        toast.dismiss(toastId)
+      }}
     >
       <CText
         css={css`
@@ -20,7 +29,7 @@ export default function ToastNotification({ notificationData }) {
           margin: 10px 0px;
         `}
       >
-        {notificationData.header}
+        {message.header}
       </CText>
       <CText
         css={css`
@@ -28,9 +37,9 @@ export default function ToastNotification({ notificationData }) {
           margin: 10px 0px;
         `}
       >
-        {notificationData.text}
+        {message.text}
       </CText>
-      {notificationData.button && (
+      {message.button && (
         <div>
           <CText
             css={css`
@@ -53,10 +62,30 @@ export default function ToastNotification({ notificationData }) {
               // redirect to notificationData.url
             }}
           >
-            {notificationData.button}
+            {message.button}
           </CText>
         </div>
       )}
     </div>
+  )
+}
+
+export function ManyNotificationsToast({ notificationCount, toastId }) {
+  const { toggleInbox } = useContext(InboxContext)
+
+  return (
+    <SubHeadingText
+      onClick={() => {
+        toggleInbox(true)
+        toast.dismiss(toastId)
+      }}
+      css={css`
+        box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2),
+          0 2px 1px 0 rgba(0, 0, 0, 0.1);
+        padding: 20px 30px;
+        border-radius: 5px;
+        cursor: pointer;
+      `}
+    >{`You have ${notificationCount} new notifications`}</SubHeadingText>
   )
 }

@@ -1,8 +1,14 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/react'
 import { ColorConfig, CText } from '../utils/styles'
+import dayjs from 'dayjs'
+import calendar from 'dayjs/plugin/calendar'
 
-export default function Notification({ notificationData, isRead = false }) {
+dayjs.extend(calendar)
+
+export default function Notification({
+  notificationData: { message, seen_on: seenOn, created_on: createdOn }
+}) {
   return (
     <div
       css={css`
@@ -34,7 +40,7 @@ export default function Notification({ notificationData, isRead = false }) {
               margin: 10px 0px;
             `}
           >
-            {notificationData.header}
+            {message.header}
           </CText>
           <CText
             css={css`
@@ -42,9 +48,9 @@ export default function Notification({ notificationData, isRead = false }) {
               margin: 10px 0px;
             `}
           >
-            {notificationData.text}
+            {message.text}
           </CText>
-          {notificationData.button && (
+          {message.button && (
             <div>
               <CText
                 css={css`
@@ -67,7 +73,7 @@ export default function Notification({ notificationData, isRead = false }) {
                   // redirect to notificationData.url
                 }}
               >
-                {notificationData.button}
+                {message.button}
               </CText>
             </div>
           )}
@@ -81,7 +87,7 @@ export default function Notification({ notificationData, isRead = false }) {
             margin-top: 16px;
           `}
         >
-          {!isRead ? (
+          {!seenOn ? (
             <div
               css={css`
                 margin-left: 10px;
@@ -106,7 +112,14 @@ export default function Notification({ notificationData, isRead = false }) {
           color: ${ColorConfig.lightGray1};
         `}
       >
-        Yesterday at 2:35pm
+        {dayjs(createdOn).calendar(null, {
+          sameDay: '[Today at] h:mm A',
+          nextDay: '[Tomorrow at] h:mm A',
+          nextWeek: 'dddd [at] h:mm A',
+          lastDay: '[Yesterday at] h:mm A',
+          lastWeek: '[Last] dddd [at] h:mm A',
+          sameElse: 'DD/MM/YYYY [at] h:mm A'
+        })}
       </CText>
     </div>
   )
