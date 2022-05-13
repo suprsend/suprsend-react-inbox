@@ -4,8 +4,57 @@ import { css, jsx } from '@emotion/react'
 import { CText, SubHeadingText } from '../utils/styles'
 import { InboxContext } from '../index'
 import { toast } from 'react-hot-toast'
+import { uuid, epochMilliseconds } from '../utils'
+import { markSeen } from '../utils/api'
 
-export function ToastNotification({ notificationData: { message }, toastId }) {
+export function ToastNotification({ notificationData, toastId }) {
+  const { workspaceKey, setNotificationData, notifications } =
+    useContext(InboxContext)
+
+  const handleClick = (e) => {
+    e.stopPropagation()
+    if (!notificationData.seen_on) {
+      const body = {
+        event: '$notification_clicked',
+        env: workspaceKey,
+        $insert_id: uuid(),
+        $time: epochMilliseconds(),
+        properties: { id: notificationData.id }
+      }
+      markSeen(workspaceKey, body)
+        .then((res) => res.json())
+        .then((json) => {
+          console.log('RESPONSE', json)
+          for (const notification of notifications) {
+            if (notification.n_id === notificationData.n_id) {
+              notification.seen_on = Date.now()
+            }
+          }
+          setNotificationData((prev) => ({
+            ...prev,
+            unread: prev.unread - 1,
+            notifications
+          }))
+          toast.dismiss(toastId)
+        })
+        .catch((err) => {
+          console.log('ERROR', err)
+          // // -------------------- //
+          // for (const notification of notifications) {
+          //   if (notification.n_id === notificationData.n_id) {
+          //     notification.seen_on = Date.now()
+          //   }
+          // }
+          // setNotificationData((prev) => ({
+          //   ...prev,
+          //   unread: prev.unread - 1,
+          //   notifications
+          // }))
+          // // --------------------- //
+        })
+    }
+  }
+  const { message } = notificationData
   return (
     <div
       css={css`
@@ -18,10 +67,7 @@ export function ToastNotification({ notificationData: { message }, toastId }) {
         box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2),
           0 2px 1px 0 rgba(0, 0, 0, 0.1);
       `}
-      onClick={() => {
-        console.log('mark as read')
-        toast.dismiss(toastId)
-      }}
+      onClick={handleClick}
     >
       <CText
         css={css`
