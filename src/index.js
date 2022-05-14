@@ -13,59 +13,6 @@ import { getNotifications } from './utils/api'
 import { InboxContext } from './utils'
 export { default as NotificationBox } from './NotificationContainer'
 
-const mockData = {
-  unread: 10,
-  results: [
-    {
-      created_on: 1343105158102,
-      n_category: 'transactional',
-      n_id: 'dsdskjdk',
-      message: {
-        header: 'Welcome to SuprSend',
-        text: 'This diwali buy any item above 500rs and get 2000rs cashback only on suprsend'
-      }
-    },
-    {
-      created_on: 1643105158102,
-      n_category: 'transactional',
-      n_id: 'dsdskjl',
-      seen_on: 1643101796876,
-      message: {
-        header: 'Welcome to SuprSend',
-        text: 'This diwali buy any item above 500rs and get 2000rs cashback only on suprsend',
-        image: '',
-        button: 'Click Me',
-        url: ''
-      }
-    },
-    {
-      created_on: 1643105148102,
-      n_category: 'transactional',
-      n_id: 'dsdskjm',
-      message: {
-        header: 'Welcome to SuprSend',
-        text: 'This diwali buy any item above 500rs and get 2000rs cashback only on suprsend',
-        image: '',
-        button: 'Click Me',
-        url: ''
-      }
-    },
-    {
-      created_on: 1643105198102,
-      n_category: 'transactional',
-      n_id: 'dsdskjln',
-      seen_on: 1643101796876,
-      message: {
-        header: 'Welcome to SuprSend',
-        text: 'This diwali buy any item above 500rs and get 2000rs cashback only on suprsend',
-        image: '',
-        button: 'Click Me',
-        url: 'https://google.com'
-      }
-    }
-  ]
-}
-
 function processNotificationData({
   currentFetchingOn,
   response,
@@ -138,15 +85,6 @@ function getNotificationsApi(
     })
     .catch((err) => {
       console.log('ERROR', err)
-      // ----------------------- //
-      // const response = mockData
-      // processNotificationData({
-      //   response,
-      //   setNotificationData,
-      //   currentFetchingOn,
-      //   notificationData
-      // })
-      // ----------------------- //
     })
 }
 
@@ -242,7 +180,7 @@ function SuprsendInbox({
         css={css`
           position: relative;
           display: inline-block;
-          background-color: #fff;
+          background-color: transparent;
         `}
       >
         <div
