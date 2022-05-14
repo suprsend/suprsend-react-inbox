@@ -1,13 +1,9 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/react'
 import { useContext } from 'react'
-import { InboxContext } from '../index'
+import { InboxContext } from '../utils'
 
-export default function Badge({
-  badgeStyle = '',
-  badgeComponent,
-  ...otherProps
-}) {
+export default function Badge({ style = {}, badgeComponent, ...otherProps }) {
   const { unread: count } = useContext(InboxContext)
 
   if (count > 0) {
@@ -31,7 +27,7 @@ export default function Badge({
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
             Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
             'Segoe UI Symbol';
-          ${badgeStyle}
+          ${style}
         `}
       >
         {count}

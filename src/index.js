@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/react'
-import { useState, useEffect, createContext } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { usePopper } from 'react-popper'
 import Bell from './Bell'
 import Badge from './Badge'
@@ -10,6 +10,8 @@ import useClickOutside from './utils/useClickOutside'
 import useLocalStorage from './utils/useLocalStorage'
 import config from './config'
 import { getNotifications } from './utils/api'
+import { InboxContext } from './utils'
+export { default as NotificationBox } from './NotificationContainer'
 
 const mockData = {
   unread: 10,
@@ -58,7 +60,7 @@ const mockData = {
         text: 'This diwali buy any item above 500rs and get 2000rs cashback only on suprsend',
         image: '',
         button: 'Click Me',
-        url: ''
+        url: 'https://google.com'
       }
     }
   ]
@@ -70,6 +72,7 @@ function processNotificationData({
   setNotificationData,
   notificationData
 }) {
+  let newNotifications
   const storageObject = {
     last_fetched: currentFetchingOn
   }
@@ -79,6 +82,7 @@ function processNotificationData({
       config.BATCH_SIZE + 1
     )
     storageObject.unread = config.BATCH_SIZE
+    newNotifications = storageObject.notifications
   } else {
     const allNotifications = [
       ...response.results,
@@ -86,44 +90,39 @@ function processNotificationData({
     ]
 
     // get new notifications
-    const newNotifications = response.results.filter((el) => {
+    newNotifications = response.results.filter((el) => {
       return !notificationData.notifications.find((obj) => {
         return el.n_id === obj.n_id
       })
     })
-    const notificationCount = newNotifications.length
-    if (notificationCount > 0) {
-      notify({ notificationCount, notificationData: newNotifications[0] })
-    }
-
-    // // ------------------- //
-    // const notificationCount = allNotifications.length
-    // if (notificationCount > 0) {
-    //   notify({ notificationCount: 1, notificationData: allNotifications[0] })
-    // }
-    // // ------------------- //
 
     // remove dupicates and get first 25 notifications
     const formattedNotifications = allNotifications
       .filter((v, i, a) => a.findIndex((v2) => v2.n_id === v.n_id) === i)
       .slice(0, config.BATCH_SIZE + 1)
-    // get count of unread notificationst
+
+    // get count of unread notifications
     const unread = formattedNotifications.reduce(
       (acc, item) => (!item.seen_on ? acc + 1 : acc),
       0
     )
+
     storageObject.notifications = formattedNotifications
     storageObject.unread = unread
+  }
+  // show toast for new notifications
+  const notificationCount = newNotifications.length
+  if (notificationCount > 0) {
+    notify({ notificationCount, notificationData: newNotifications[0] })
   }
   setNotificationData(storageObject)
 }
 
-function getNotificationsApi({
-  distinctId,
-  workspaceKey,
-  notificationData,
-  setNotificationData
-}) {
+function getNotificationsApi(
+  { distinctId, workspaceKey, setNotificationData },
+  dataRef
+) {
+  const notificationData = dataRef.current
   const after = notificationData.last_fetched
   const currentFetchingOn = Date.now()
   getNotifications({ distinctId, workspaceKey, after })
@@ -139,7 +138,7 @@ function getNotificationsApi({
     })
     .catch((err) => {
       console.log('ERROR', err)
-      // // ----------------------- //
+      // ----------------------- //
       // const response = mockData
       // processNotificationData({
       //   response,
@@ -147,11 +146,9 @@ function getNotificationsApi({
       //   currentFetchingOn,
       //   notificationData
       // })
-      // // ----------------------- //
+      // ----------------------- //
     })
 }
-
-export const InboxContext = createContext({})
 
 function SuprsendInbox({
   workspaceKey = '',
@@ -161,7 +158,7 @@ function SuprsendInbox({
   bellProps,
   badgeProps,
   headerProps,
-  notificationProps
+  buttonClickHandler
 }) {
   const [isOpen, toggleOpen] = useState(false)
   const [referenceElement, setReferenceElement] = useState(null)
@@ -175,6 +172,7 @@ function SuprsendInbox({
       last_fetched: Date.now() - 30 * 24 * 60 * 60 * 1000
     }
   )
+  const dataRef = useRef(notificationData)
 
   useEffect(() => {
     const props = {
@@ -183,11 +181,18 @@ function SuprsendInbox({
       notificationData,
       setNotificationData
     }
-    getNotificationsApi(props)
-    setInterval(() => {
-      getNotificationsApi(props)
+    getNotificationsApi(props, dataRef)
+    const timerId = setInterval(() => {
+      getNotificationsApi(props, dataRef)
     }, config.DELAY)
+    return () => {
+      clearInterval(timerId)
+    }
   }, [])
+
+  useEffect(() => {
+    dataRef.current = notificationData
+  }, [notificationData])
 
   useClickOutside({ current: popperElement }, () => {
     toggleOpen((prev) => !prev)
@@ -228,13 +233,16 @@ function SuprsendInbox({
         notifications: notificationData.notifications,
         unread: notificationData.unread,
         setNotificationData,
-        toggleInbox: toggleOpen
+        toggleInbox: toggleOpen,
+        notificationData,
+        buttonClickHandler
       }}
     >
       <div
         css={css`
           position: relative;
           display: inline-block;
+          background-color: #fff;
         `}
       >
         <div

@@ -2,7 +2,7 @@ import config from '../config'
 
 export function getNotifications({ distinctId, workspaceKey, after = 0 }) {
   return window.fetch(
-    `${config.API_BASE_URL}/fetch/?distinct_id=${distinctId}&after=${after}`,
+    `${config.API_BASE_URL}/fetch?distinct_id=${distinctId}&after=${after}`,
     {
       method: 'GET',
       headers: {
@@ -13,7 +13,7 @@ export function getNotifications({ distinctId, workspaceKey, after = 0 }) {
 }
 
 export function markSeen(workspaceKey, body) {
-  return window.fetch(`${config.API_BASE_URL}/event/`, {
+  return window.fetch(`${config.CLICK_API_BASE_URL}/event/`, {
     method: 'POST',
     body: JSON.stringify(body),
     headers: {

@@ -1,3 +1,5 @@
+import { createContext } from 'react'
+
 export function uuid() {
   var dt = new Date().getTime()
   var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
@@ -14,3 +16,5 @@ export function uuid() {
 export function epochMilliseconds() {
   return Math.round(Date.now())
 }
+
+export const InboxContext = createContext({})
