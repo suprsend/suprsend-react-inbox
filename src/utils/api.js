@@ -2,7 +2,7 @@ import config from '../config'
 
 export function getNotifications({ distinctId, workspaceKey, after = 0 }) {
   return window.fetch(
-    `${config.API_BASE_URL}/fetch?distinct_id=${distinctId}&after=${after}`,
+    `${config.API_BASE_URL}/fetch/?distinct_id=${distinctId}&after=${after}`,
     {
       method: 'GET',
       headers: {

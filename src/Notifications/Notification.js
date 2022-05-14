@@ -47,14 +47,16 @@ export default function Notification({ notificationData, buttonClickHandler }) {
         .catch((err) => {
           console.log('MARK SEEN ERROR ', err)
         })
-    }
-    // redirect after mark seen logic
-    if (typeof buttonClickHandler === 'function') {
-      buttonClickHandler(notificationData)
-    } else {
-      if (notificationData?.message?.url) {
-        window.location.href = notificationData.message.url
-      }
+        .finally(() => {
+          // redirect after mark seen logic
+          if (typeof buttonClickHandler === 'function') {
+            buttonClickHandler(notificationData)
+          } else {
+            if (notificationData?.message?.url) {
+              window.location.href = notificationData.message.url
+            }
+          }
+        })
     }
   }
 
