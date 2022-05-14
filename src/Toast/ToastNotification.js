@@ -15,7 +15,7 @@ export function ToastNotification({ notificationData, toastId }) {
     buttonClickHandler
   } = useContext(InboxContext)
 
-  const handleClick = (e) => {
+  const handleClick = (e, isButtonClick) => {
     e.stopPropagation()
     if (!notificationData.seen_on) {
       const body = {
@@ -39,20 +39,24 @@ export function ToastNotification({ notificationData, toastId }) {
               notifications
             })
           }
-          toast.dismiss(toastId)
+          if (!isButtonClick) {
+            toast.dismiss(toastId)
+          }
         })
         .catch((err) => {
           console.log('ERROR', err)
         })
-    }
-    if (e.target.getAttribute('data-toast-button') === 'true') {
-      if (typeof buttonClickHandler === 'function') {
-        buttonClickHandler(notificationData)
-      } else {
-        if (notificationData?.message?.url) {
-          window.location.href = notificationData.message.url
-        }
-      }
+        .finally(() => {
+          if (isButtonClick) {
+            if (typeof buttonClickHandler === 'function') {
+              buttonClickHandler(notificationData)
+            } else {
+              if (notificationData?.message?.url) {
+                window.location.href = notificationData.message.url
+              }
+            }
+          }
+        })
     }
   }
   const { message } = notificationData
@@ -89,7 +93,9 @@ export function ToastNotification({ notificationData, toastId }) {
       </CText>
       {message.button && (
         <CText
-          data-toast-button='true'
+          onClick={(e) => {
+            handleClick(e, true)
+          }}
           css={css`
             background-color: #358adf;
             color: #fff;
