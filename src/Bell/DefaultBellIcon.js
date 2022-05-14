@@ -1,20 +1,16 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/react'
 
-const DefaultBellIcon = ({
-  bellHeight = '24px',
-  bellWidth = '24px',
-  bellColor = 'black',
-  bellType = 'outline'
-}) => {
-  if (bellType === 'solid') {
+const DefaultBellIcon = ({ style }) => {
+  if (style?.bellType === 'solid') {
     return (
       <svg
         xmlns='http://www.w3.org/2000/svg'
         css={css`
-          height: ${bellHeight};
-          width: ${bellWidth};
-          color: ${bellColor};
+          height: 24px;
+          width: 24;
+          color: #000;
+          ${style}
         `}
         viewBox='0 0 20 20'
         fill='currentColor'
@@ -27,9 +23,10 @@ const DefaultBellIcon = ({
     <svg
       xmlns='http://www.w3.org/2000/svg'
       css={css`
-        height: ${bellHeight};
-        width: ${bellWidth};
-        color: ${bellColor};
+        height: 24px;
+        width: 24;
+        color: #000;
+        ${style}
       `}
       fill='none'
       viewBox='0 0 24 24'

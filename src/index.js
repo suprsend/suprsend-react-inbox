@@ -1,29 +1,140 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/react'
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { usePopper } from 'react-popper'
 import Bell from './Bell'
 import Badge from './Badge'
-import Toaster from './Toast'
+import Toaster, { notify } from './Toast'
 import NotificationContainer from './NotificationContainer'
 import useClickOutside from './utils/useClickOutside'
+import useLocalStorage from './utils/useLocalStorage'
+import config from './config'
+import { getNotifications } from './utils/api'
+import { InboxContext } from './utils'
+export { default as NotificationBox } from './NotificationContainer'
 
-const count = 5
+function processNotificationData({
+  currentFetchingOn,
+  response,
+  setNotificationData,
+  notificationData
+}) {
+  let newNotifications
+  const storageObject = {
+    last_fetched: currentFetchingOn
+  }
+  if (response.results.length > config.BATCH_SIZE) {
+    storageObject.notifications = response.results.slice(
+      0,
+      config.BATCH_SIZE + 1
+    )
+    storageObject.unread = config.BATCH_SIZE
+    newNotifications = storageObject.notifications
+  } else {
+    const allNotifications = [
+      ...response.results,
+      ...notificationData.notifications
+    ]
+
+    // get new notifications
+    newNotifications = response.results.filter((el) => {
+      return !notificationData.notifications.find((obj) => {
+        return el.n_id === obj.n_id
+      })
+    })
+
+    // remove dupicates and get first 25 notifications
+    const formattedNotifications = allNotifications
+      .filter((v, i, a) => a.findIndex((v2) => v2.n_id === v.n_id) === i)
+      .slice(0, config.BATCH_SIZE + 1)
+
+    // get count of unread notifications
+    const unread = formattedNotifications.reduce(
+      (acc, item) => (!item.seen_on ? acc + 1 : acc),
+      0
+    )
+
+    storageObject.notifications = formattedNotifications
+    storageObject.unread = unread
+  }
+  // show toast for new notifications
+  const notificationCount = newNotifications.length
+  if (notificationCount > 0) {
+    notify({ notificationCount, notificationData: newNotifications[0] })
+  }
+  setNotificationData(storageObject)
+}
+
+function getNotificationsApi(
+  { distinctId, workspaceKey, setNotificationData },
+  dataRef
+) {
+  const notificationData = dataRef.current
+  const after = notificationData.last_fetched
+  const currentFetchingOn = Date.now()
+  getNotifications({ distinctId, workspaceKey, after })
+    .then((res) => res.json())
+    .then((response) => {
+      console.log('RESPONSE', response)
+      processNotificationData({
+        response,
+        setNotificationData,
+        currentFetchingOn,
+        notificationData
+      })
+    })
+    .catch((err) => {
+      console.log('ERROR', err)
+    })
+}
 
 function SuprsendInbox({
+  workspaceKey = '',
+  distinctId = '',
   children,
   toastProps,
   bellProps,
   badgeProps,
   headerProps,
-  notificationProps
+  buttonClickHandler
 }) {
   const [isOpen, toggleOpen] = useState(false)
   const [referenceElement, setReferenceElement] = useState(null)
   const [popperElement, setPopperElement] = useState(null)
   const [arrowElement, setArrowElement] = useState(null)
+  const [notificationData, setNotificationData] = useLocalStorage(
+    '_suprsend_inbox',
+    {
+      notifications: [],
+      unread: 0,
+      last_fetched: Date.now() - 30 * 24 * 60 * 60 * 1000
+    }
+  )
+  const dataRef = useRef(notificationData)
 
-  const NotificationBox = children ? children : NotificationContainer
+  useEffect(() => {
+    const props = {
+      distinctId,
+      workspaceKey,
+      notificationData,
+      setNotificationData
+    }
+    getNotificationsApi(props, dataRef)
+    const timerId = setInterval(() => {
+      getNotificationsApi(props, dataRef)
+    }, config.DELAY)
+    return () => {
+      clearInterval(timerId)
+    }
+  }, [])
+
+  useEffect(() => {
+    dataRef.current = notificationData
+  }, [notificationData])
+
+  useClickOutside({ current: popperElement }, () => {
+    toggleOpen((prev) => !prev)
+  })
 
   const { styles, attributes } = usePopper(referenceElement, popperElement, {
     placement: 'bottom',
@@ -38,10 +149,6 @@ function SuprsendInbox({
     ]
   })
 
-  useClickOutside({ current: popperElement }, () => {
-    toggleOpen((prev) => !prev)
-  })
-
   const arrowStyle = {
     ...styles.arrow,
     ...{
@@ -54,40 +161,56 @@ function SuprsendInbox({
     }
   }
 
+  const NotificationBox = children ? children : NotificationContainer
+
   return (
-    <div
-      css={css`
-        position: relative;
-        display: inline-block;
-      `}
+    <InboxContext.Provider
+      value={{
+        distinctId,
+        workspaceKey,
+        notifications: notificationData.notifications,
+        unread: notificationData.unread,
+        setNotificationData,
+        toggleInbox: toggleOpen,
+        notificationData,
+        buttonClickHandler
+      }}
     >
       <div
-        onClick={() => {
-          toggleOpen((prev) => !prev)
-        }}
-        ref={setReferenceElement}
         css={css`
           position: relative;
-          margin-top: 12px;
-          margin-right: 12px;
-          cursor: pointer;
+          display: inline-block;
+          background-color: transparent;
         `}
       >
-        <Badge count={count} {...badgeProps} />
-        <Bell {...bellProps} />
-      </div>
-      {isOpen && (
         <div
-          ref={setPopperElement}
-          style={styles.popper}
-          {...attributes.popper}
+          onClick={() => {
+            toggleOpen((prev) => !prev)
+          }}
+          ref={setReferenceElement}
+          css={css`
+            position: relative;
+            margin-top: 12px;
+            margin-right: 12px;
+            cursor: pointer;
+          `}
         >
-          <div ref={setArrowElement} style={arrowStyle} />
-          <NotificationBox headerProps={headerProps} />
+          <Badge {...badgeProps} />
+          <Bell {...bellProps} />
         </div>
-      )}
-      <Toaster {...toastProps} />
-    </div>
+        {isOpen && (
+          <div
+            ref={setPopperElement}
+            style={styles.popper}
+            {...attributes.popper}
+          >
+            <div ref={setArrowElement} style={arrowStyle} />
+            <NotificationBox headerProps={headerProps} />
+          </div>
+        )}
+        <Toaster {...toastProps} />
+      </div>
+    </InboxContext.Provider>
   )
 }
 

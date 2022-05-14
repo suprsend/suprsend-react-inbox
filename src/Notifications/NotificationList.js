@@ -1,67 +1,27 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { InboxContext } from '../utils'
 import ClickableNotification from './ClickableNotification'
+import { HelperText } from '../utils/styles'
+import styled from '@emotion/styled'
 
-const notificationData = [
-  {
-    button: 'Click Here',
-    header: 'Buy Back offer sale is on',
-    image: '',
-    text: 'This diwali buy any item above 500rs and get 2000rs cashback only on suprsend',
-    url: ''
-  },
-  {
-    button: 'Click Here',
-    header: 'Notification Header',
-    image: '',
-    text: 'This is notification body',
-    url: ''
-  },
-  {
-    button: 'Click Here',
-    header: 'Notification Header',
-    image: '',
-    text: 'This is notification body',
-    url: ''
-  },
-  {
-    button: 'Click Here',
-    header: 'Notification Header',
-    image: '',
-    text: 'This is notification body',
-    url: ''
-  },
-  {
-    button: 'Click Here',
-    header: 'Notification Header',
-    image: '',
-    text: 'This is notification body',
-    url: ''
-  },
-  {
-    button: 'Click Here',
-    header: 'Notification Header',
-    image: '',
-    text: 'This is notification body',
-    url: ''
-  },
-  {
-    button: 'Click Here',
-    header: 'Notification Header',
-    image: '',
-    text: 'This is notification body',
-    url: ''
-  },
-  {
-    button: 'Click Here',
-    header: 'Notification Header',
-    image: '',
-    text: 'This is notification body',
-    url: ''
+export default function NotificationsList({ buttonClickHandler }) {
+  const { notifications } = useContext(InboxContext)
+
+  if (notifications.length <= 0) {
+    return <EmptyText>No Notifications</EmptyText>
   }
-]
-
-export default function NotificationsList() {
-  return notificationData.map((notification, index) => (
-    <ClickableNotification notificationData={notification} key={index} />
+  return notifications.map((notification, index) => (
+    <ClickableNotification
+      notificationData={notification}
+      key={index}
+      buttonClickHandler={buttonClickHandler}
+    />
   ))
 }
+
+const EmptyText = styled(HelperText)`
+  text-align: center;
+  font-style: italic;
+  margin: 20px 0px;
+  background-color: #fff;
+`

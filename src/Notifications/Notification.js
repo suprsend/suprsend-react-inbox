@@ -1,13 +1,69 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/react'
+import { useContext } from 'react'
 import { ColorConfig, CText } from '../utils/styles'
+import dayjs from 'dayjs'
+import calendar from 'dayjs/plugin/calendar'
+import { markSeen } from '../utils/api'
+import { uuid, epochMilliseconds, InboxContext } from '../utils'
 
-export default function Notification({ notificationData, isRead = false }) {
+dayjs.extend(calendar)
+
+export default function Notification({ notificationData, buttonClickHandler }) {
+  const { message, seen_on: seenOn, created_on: createdOn } = notificationData
+
+  const {
+    workspaceKey,
+    setNotificationData,
+    notifications,
+    notificationData: storeData
+  } = useContext(InboxContext)
+
+  const handleClick = (e) => {
+    e.stopPropagation()
+    if (!notificationData.seen_on) {
+      const body = {
+        event: '$notification_clicked',
+        env: workspaceKey,
+        $insert_id: uuid(),
+        $time: epochMilliseconds(),
+        properties: { id: notificationData.n_id }
+      }
+      markSeen(workspaceKey, body)
+        .then((res) => {
+          if (res.status === 202) {
+            for (const notification of notifications) {
+              if (notification.n_id === notificationData.n_id) {
+                notification.seen_on = Date.now()
+              }
+            }
+            setNotificationData({
+              ...storeData,
+              unread: storeData.unread - 1,
+              notifications
+            })
+          }
+        })
+        .catch((err) => {
+          console.log('MARK SEEN ERROR ', err)
+        })
+    }
+    // redirect after mark seen logic
+    if (typeof buttonClickHandler === 'function') {
+      buttonClickHandler(notificationData)
+    } else {
+      if (notificationData?.message?.url) {
+        window.location.href = notificationData.message.url
+      }
+    }
+  }
+
   return (
     <div
       css={css`
         padding: 7px 14px;
         cursor: pointer;
+        background-color: #fff;
         border-bottom: 1px solid #f0f0f0;
         &:hover {
           background-color: #f0f0f0;
@@ -34,7 +90,7 @@ export default function Notification({ notificationData, isRead = false }) {
               margin: 10px 0px;
             `}
           >
-            {notificationData.header}
+            {message.header}
           </CText>
           <CText
             css={css`
@@ -42,9 +98,9 @@ export default function Notification({ notificationData, isRead = false }) {
               margin: 10px 0px;
             `}
           >
-            {notificationData.text}
+            {message.text}
           </CText>
-          {notificationData.button && (
+          {message.button && (
             <div>
               <CText
                 css={css`
@@ -61,13 +117,9 @@ export default function Notification({ notificationData, isRead = false }) {
                     min-width: 100px;
                   }
                 `}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  console.log('button clicked')
-                  // redirect to notificationData.url
-                }}
+                onClick={handleClick}
               >
-                {notificationData.button}
+                {message.button}
               </CText>
             </div>
           )}
@@ -81,7 +133,7 @@ export default function Notification({ notificationData, isRead = false }) {
             margin-top: 16px;
           `}
         >
-          {!isRead ? (
+          {!seenOn && (
             <div
               css={css`
                 margin-left: 10px;
@@ -96,7 +148,7 @@ export default function Notification({ notificationData, isRead = false }) {
                 `}
               />
             </div>
-          ) : null}
+          )}
         </div>
       </div>
       <CText
@@ -106,7 +158,14 @@ export default function Notification({ notificationData, isRead = false }) {
           color: ${ColorConfig.lightGray1};
         `}
       >
-        Yesterday at 2:35pm
+        {dayjs(createdOn).calendar(null, {
+          sameDay: '[Today at] h:mm A',
+          nextDay: '[Tomorrow at] h:mm A',
+          nextWeek: 'dddd [at] h:mm A',
+          lastDay: '[Yesterday at] h:mm A',
+          lastWeek: '[Last] dddd [at] h:mm A',
+          sameElse: 'DD/MM/YYYY [at] h:mm A'
+        })}
       </CText>
     </div>
   )

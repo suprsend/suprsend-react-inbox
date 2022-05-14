@@ -3,7 +3,10 @@ import { css, jsx } from '@emotion/react'
 import NotificationList from '../Notifications/NotificationList'
 import Header from './Header'
 
-export default function NotificationContainer({ headerProps }) {
+export default function NotificationContainer({
+  headerProps,
+  buttonClickHandler = {}
+}) {
   return (
     <div
       css={css`
@@ -11,7 +14,7 @@ export default function NotificationContainer({ headerProps }) {
         max-height: 400px;
         width: 350px;
         border-radius: 5px;
-        background-color: '#fff';
+        background-color: #fff;
         border: 1px solid #f0f0f0;
         display: inline-block;
         overflow: scroll;
@@ -23,7 +26,7 @@ export default function NotificationContainer({ headerProps }) {
       `}
     >
       <Header {...headerProps} />
-      <NotificationList />
+      <NotificationList buttonClickHandler={buttonClickHandler} />
     </div>
   )
 }
