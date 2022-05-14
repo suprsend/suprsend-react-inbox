@@ -24,10 +24,7 @@ function processNotificationData({
     last_fetched: currentFetchingOn
   }
   if (response.results.length > config.BATCH_SIZE) {
-    storageObject.notifications = response.results.slice(
-      0,
-      config.BATCH_SIZE + 1
-    )
+    storageObject.notifications = response.results.slice(0, config.BATCH_SIZE)
     storageObject.unread = config.BATCH_SIZE
     newNotifications = storageObject.notifications
   } else {
@@ -46,7 +43,7 @@ function processNotificationData({
     // remove dupicates and get first 25 notifications
     const formattedNotifications = allNotifications
       .filter((v, i, a) => a.findIndex((v2) => v2.n_id === v.n_id) === i)
-      .slice(0, config.BATCH_SIZE + 1)
+      .slice(0, config.BATCH_SIZE)
 
     // get count of unread notifications
     const unread = formattedNotifications.reduce(
