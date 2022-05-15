@@ -204,7 +204,7 @@ function SuprsendInbox({
         {isOpen && (
           <div
             ref={setPopperElement}
-            style={styles.popper}
+            style={{ ...styles.popper, zIndex: 999 }}
             {...attributes.popper}
           >
             <div ref={setArrowElement} style={arrowStyle} />

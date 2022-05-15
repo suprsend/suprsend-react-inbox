@@ -13,6 +13,7 @@ export default function NotificationContainer({
         min-height: 100px;
         max-height: 400px;
         width: 350px;
+        margin: 0px 15px;
         border-radius: 5px;
         background-color: #fff;
         border: 1px solid #f0f0f0;
