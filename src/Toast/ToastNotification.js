@@ -6,7 +6,7 @@ import { toast } from 'react-hot-toast'
 import { uuid, epochMilliseconds, InboxContext } from '../utils'
 import { markSeen } from '../utils/api'
 
-export function ToastNotification({ notificationData, toastId }) {
+export function ToastNotification({ notificationData }) {
   const {
     workspaceKey,
     setNotificationData,
@@ -15,7 +15,18 @@ export function ToastNotification({ notificationData, toastId }) {
     buttonClickHandler
   } = useContext(InboxContext)
 
-  const handleClick = (e, isButtonClick) => {
+  const navigateUser = () => {
+    // redirect after mark seen logic
+    if (typeof buttonClickHandler === 'function') {
+      buttonClickHandler(notificationData)
+    } else {
+      if (notificationData?.message?.url) {
+        window.location.href = notificationData.message.url
+      }
+    }
+  }
+
+  const handleClick = (e) => {
     e.stopPropagation()
     if (!notificationData.seen_on) {
       const body = {
@@ -39,38 +50,29 @@ export function ToastNotification({ notificationData, toastId }) {
               notifications
             })
           }
-          if (!isButtonClick) {
-            toast.dismiss(toastId)
-          }
         })
         .catch((err) => {
           console.log('ERROR', err)
         })
         .finally(() => {
-          if (isButtonClick) {
-            if (typeof buttonClickHandler === 'function') {
-              buttonClickHandler(notificationData)
-            } else {
-              if (notificationData?.message?.url) {
-                window.location.href = notificationData.message.url
-              }
-            }
-          }
+          navigateUser()
         })
     }
   }
+
   const { message } = notificationData
+
   return (
     <div
       css={css`
-        padding: 7px 14px;
+        max-width: 450px;
+        min-width: 300px;
         background-color: #fff;
         cursor: pointer;
+        padding: 7px 14px;
         border: 1px solid #f0f0f0;
         margin: 15px;
         border-radius: 5px;
-        max-width: 450px;
-        min-width: 300px;
         box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2),
           0 2px 1px 0 rgba(0, 0, 0, 0.1);
       `}
@@ -92,29 +94,6 @@ export function ToastNotification({ notificationData, toastId }) {
       >
         {message.text}
       </CText>
-      {message.button && (
-        <CText
-          onClick={(e) => {
-            handleClick(e, true)
-          }}
-          css={css`
-            background-color: #358adf;
-            color: #fff;
-            border-radius: 5px;
-            text-align: center;
-            margin: 10px 0px;
-            padding: 4px 0px;
-            font-size: 14px;
-            @media (min-width: 425px) {
-              width: fit-content;
-              padding: 6px;
-              min-width: 100px;
-            }
-          `}
-        >
-          {message.button}
-        </CText>
-      )}
     </div>
   )
 }
@@ -129,12 +108,15 @@ export function ManyNotificationsToast({ notificationCount, toastId }) {
         toast.dismiss(toastId)
       }}
       css={css`
-        box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2),
-          0 2px 1px 0 rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+        cursor: pointer;
         padding: 20px 30px;
         border-radius: 5px;
-        cursor: pointer;
-        background-color: #fff;
+        box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2),
+          0 2px 1px 0 rgba(0, 0, 0, 0.1);
+        @media (max-width: 425px) {
+          flex: 1;
+        }
       `}
     >{`You have ${notificationCount} new notifications`}</SubHeadingText>
   )

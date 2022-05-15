@@ -14,6 +14,17 @@ export default function ClickableNotification({
     notificationData: storeData
   } = useContext(InboxContext)
 
+  const navigateUser = () => {
+    // redirect after mark seen logic
+    if (typeof buttonClickHandler === 'function') {
+      buttonClickHandler(notificationData)
+    } else {
+      if (notificationData?.message?.url) {
+        window.location.href = notificationData.message.url
+      }
+    }
+  }
+
   const handleClick = (e) => {
     e.stopPropagation()
     if (!notificationData.seen_on) {
@@ -42,6 +53,11 @@ export default function ClickableNotification({
         .catch((err) => {
           console.log('MARK SEEN ERROR ', err)
         })
+        .finally(() => {
+          navigateUser()
+        })
+    } else {
+      navigateUser()
     }
   }
 
