@@ -19,7 +19,7 @@ function processNotificationData({
   setNotificationData,
   notificationData
 }) {
-  let newNotifications
+  let newNotifications = []
   const storageObject = {
     last_fetched: currentFetchingOn
   }
@@ -54,10 +54,16 @@ function processNotificationData({
     storageObject.notifications = formattedNotifications
     storageObject.unread = unread
   }
+
+  // filter unseen notification from new notifications
+  const newSeenNotifications = newNotifications.filter((notification) => {
+    return !notification.seen_on
+  })
+
   // show toast for new notifications
-  const notificationCount = newNotifications.length
+  const notificationCount = newSeenNotifications.length
   if (notificationCount > 0) {
-    notify({ notificationCount, notificationData: newNotifications[0] })
+    notify({ notificationCount, notificationData: newSeenNotifications[0] })
   }
   setNotificationData(storageObject)
 }
