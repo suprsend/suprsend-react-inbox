@@ -23,6 +23,7 @@ export default function NotificationContainer({
           0 6px 20px 0 rgba(0, 0, 0, 0.19);
         @media (max-width: 425px) {
           width: 100vw;
+          margin: 0px;
         }
       `}
     >
