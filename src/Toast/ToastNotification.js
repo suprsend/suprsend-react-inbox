@@ -67,9 +67,10 @@ export function ToastNotification({ notificationData, toastId }) {
         background-color: #fff;
         cursor: pointer;
         border: 1px solid #f0f0f0;
-        margin-right: 15px;
+        margin: 15px;
         border-radius: 5px;
         max-width: 450px;
+        min-width: 300px;
         box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2),
           0 2px 1px 0 rgba(0, 0, 0, 0.1);
       `}
