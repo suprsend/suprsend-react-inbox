@@ -56,14 +56,14 @@ function processNotificationData({
   }
 
   // filter unseen notification from new notifications
-  const newSeenNotifications = newNotifications.filter((notification) => {
+  const newUnseenNotification = newNotifications.filter((notification) => {
     return !notification.seen_on
   })
 
   // show toast for new notifications
-  const notificationCount = newSeenNotifications.length
+  const notificationCount = newUnseenNotification.length
   if (notificationCount > 0) {
-    notify({ notificationCount, notificationData: newSeenNotifications[0] })
+    notify({ notificationCount, notificationData: newUnseenNotification[0] })
   }
   setNotificationData(storageObject)
 }
