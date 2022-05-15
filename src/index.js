@@ -10,7 +10,7 @@ import useClickOutside from './utils/useClickOutside'
 import useLocalStorage from './utils/useLocalStorage'
 import config from './config'
 import { getNotifications } from './utils/api'
-import { InboxContext } from './utils'
+import { InboxContext, formatWorkspaceKey } from './utils'
 export { default as NotificationBox } from './NotificationContainer'
 
 function processNotificationData({
@@ -101,15 +101,17 @@ function SuprsendInbox({
   headerProps,
   buttonClickHandler
 }) {
+  const formattedWorkspaceKey = formatWorkspaceKey(workspaceKey)
   const [isOpen, toggleOpen] = useState(false)
   const [referenceElement, setReferenceElement] = useState(null)
   const [popperElement, setPopperElement] = useState(null)
   const [arrowElement, setArrowElement] = useState(null)
   const [notificationData, setNotificationData] = useLocalStorage(
-    '_suprsend_inbox',
+    `_suprsend_inbox_${formattedWorkspaceKey}`,
     {
       notifications: [],
       unread: 0,
+      distinct_id: distinctId,
       last_fetched: Date.now() - 30 * 24 * 60 * 60 * 1000
     }
   )
