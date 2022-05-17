@@ -5,7 +5,9 @@ import { HelperText } from '../utils/styles'
 import styled from '@emotion/styled'
 
 export default function NotificationsList({ buttonClickHandler }) {
-  const { notifications } = useContext(InboxContext)
+  const {
+    notificationData: { notifications }
+  } = useContext(InboxContext)
 
   if (notifications.length <= 0) {
     return <EmptyText>No Notifications</EmptyText>

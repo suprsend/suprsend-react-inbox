@@ -4,7 +4,9 @@ import { useContext } from 'react'
 import { InboxContext } from '../utils'
 
 export default function Badge({ style = {}, badgeComponent, ...otherProps }) {
-  const { unread: count } = useContext(InboxContext)
+  const {
+    notificationData: { count }
+  } = useContext(InboxContext)
 
   if (count > 0) {
     if (badgeComponent) {

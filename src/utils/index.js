@@ -19,10 +19,29 @@ export function epochMilliseconds() {
 
 export const InboxContext = createContext({})
 
-export function formatWorkspaceKey(str) {
+export function getStorageKey(str) {
   let newStr = ''
   for (let i = 0; i < str.length; i = i + 2) {
     newStr += str[i].toLowerCase()
   }
-  return newStr
+  return `_suprsend_inbox_${newStr}`
+}
+
+export function getStorageData(key) {
+  try {
+    const item = window.localStorage.getItem(key)
+    if (item) {
+      return JSON.parse(item)
+    }
+  } catch (error) {
+    console.log('ERROR LOCAL_STORAGE:', error)
+  }
+}
+
+export function setStorageData(key, value) {
+  try {
+    window.localStorage.setItem(key, JSON.stringify(value))
+  } catch (error) {
+    console.log('ERROR LOCAL_STORAGE:', error)
+  }
 }

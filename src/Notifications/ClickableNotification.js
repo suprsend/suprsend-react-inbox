@@ -9,9 +9,8 @@ export default function ClickableNotification({
 }) {
   const {
     workspaceKey,
-    setNotificationData,
-    notifications,
-    notificationData: storeData
+    notificationData: { notifications },
+    setNotificationData
   } = useContext(InboxContext)
 
   const navigateUser = () => {
@@ -43,11 +42,10 @@ export default function ClickableNotification({
                 notification.seen_on = Date.now()
               }
             }
-            setNotificationData({
-              ...storeData,
-              unread: storeData.unread - 1,
+            setNotificationData((prev) => ({
+              ...prev,
               notifications
-            })
+            }))
           }
         })
         .catch((err) => {
@@ -63,10 +61,7 @@ export default function ClickableNotification({
 
   return (
     <div onClick={handleClick}>
-      <Notification
-        notificationData={notificationData}
-        buttonClickHandler={buttonClickHandler}
-      />
+      <Notification notificationData={notificationData} />
     </div>
   )
 }

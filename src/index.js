@@ -7,83 +7,105 @@ import Badge from './Badge'
 import Toaster, { notify } from './Toast'
 import NotificationContainer from './NotificationContainer'
 import useClickOutside from './utils/useClickOutside'
-import useLocalStorage from './utils/useLocalStorage'
 import config from './config'
 import { getNotifications } from './utils/api'
-import { InboxContext, formatWorkspaceKey } from './utils'
+import {
+  InboxContext,
+  getStorageKey,
+  getStorageData,
+  setStorageData
+} from './utils'
 export { default as NotificationBox } from './NotificationContainer'
 
 function processNotificationData({
-  currentFetchingOn,
   response,
+  notificationData,
   setNotificationData,
-  notificationData
+  currentFetchingOn,
+  storageKey,
+  distinctId
 }) {
-  let newNotifications = []
-  const storageObject = {
-    last_fetched: currentFetchingOn
-  }
-  if (response.results.length > config.BATCH_SIZE) {
-    storageObject.notifications = response.results.slice(0, config.BATCH_SIZE)
-    storageObject.unread = config.BATCH_SIZE
-    newNotifications = storageObject.notifications
-  } else {
-    const allNotifications = [
-      ...response.results,
-      ...notificationData.notifications
-    ]
+  const firstCall = !notificationData.last_after
+  let newNotificationsList = [] // actual and final notification list
+  let newlyFetchedNotifications = [] // for showing toast
+  const badgeCount = response.results.reduce((acc, item) => {
+    return !item.seen_on ? acc + 1 : acc
+  }, 0)
 
-    // get new notifications
-    newNotifications = response.results.filter((el) => {
+  if (response.results.length > config.BATCH_SIZE) {
+    newNotificationsList = response.results.slice(0, config.BATCH_SIZE)
+    newlyFetchedNotifications = newNotificationsList
+  } else {
+    let allNotifications = []
+    if (firstCall) {
+      allNotifications = response.results
+    } else {
+      allNotifications = [
+        ...response.results,
+        ...notificationData.notifications
+      ]
+    }
+    // remove dupicates and get first 20 notifications
+    newNotificationsList = allNotifications
+      .filter((v, i, a) => a.findIndex((v2) => v2.n_id === v.n_id) === i)
+      .slice(0, config.BATCH_SIZE)
+    newlyFetchedNotifications = response.results.filter((el) => {
       return !notificationData.notifications.find((obj) => {
         return el.n_id === obj.n_id
       })
     })
-
-    // remove dupicates and get first 25 notifications
-    const formattedNotifications = allNotifications
-      .filter((v, i, a) => a.findIndex((v2) => v2.n_id === v.n_id) === i)
-      .slice(0, config.BATCH_SIZE)
-
-    // get count of unread notifications
-    const unread = formattedNotifications.reduce(
-      (acc, item) => (!item.seen_on ? acc + 1 : acc),
-      0
-    )
-
-    storageObject.notifications = formattedNotifications
-    storageObject.unread = unread
   }
 
   // filter unseen notification from new notifications
-  const newUnseenNotification = newNotifications.filter((notification) => {
-    return !notification.seen_on
-  })
+  const newUnseenNotification = newlyFetchedNotifications.filter(
+    (notification) => !notification.seen_on
+  )
 
   // show toast for new notifications
   const notificationCount = newUnseenNotification.length
-  if (notificationCount > 0) {
-    notify({ notificationCount, notificationData: newUnseenNotification[0] })
+  if (notificationCount > 0 && !firstCall) {
+    notify({
+      notificationCount,
+      notificationData: newUnseenNotification[0]
+    })
   }
-  setNotificationData(storageObject)
+
+  const totalNewNotificationCount = notificationData.count + badgeCount
+  // set in state and local storage
+  setNotificationData(() => ({
+    notifications: newNotificationsList,
+    last_after: currentFetchingOn,
+    count:
+      totalNewNotificationCount > config.BATCH_SIZE
+        ? config.BATCH_SIZE
+        : totalNewNotificationCount
+  }))
+  setStorageData(storageKey, {
+    notifications: newNotificationsList,
+    distinct_id: distinctId
+  })
 }
 
 function getNotificationsApi(
-  { distinctId, workspaceKey, setNotificationData },
+  { distinctId, workspaceKey, setNotificationData, storageKey },
   dataRef
 ) {
   const notificationData = dataRef.current
-  const after = notificationData.last_fetched
+  const newAfter = notificationData.last_after
+    ? notificationData.last_after
+    : Date.now() - 30 * 24 * 60 * 60 * 1000
   const currentFetchingOn = Date.now()
-  getNotifications({ distinctId, workspaceKey, after })
+
+  getNotifications({ distinctId, workspaceKey, after: newAfter })
     .then((res) => res.json())
     .then((response) => {
-      console.log('RESPONSE', response)
       processNotificationData({
         response,
+        notificationData,
         setNotificationData,
         currentFetchingOn,
-        notificationData
+        storageKey,
+        distinctId
       })
     })
     .catch((err) => {
@@ -101,28 +123,40 @@ function SuprsendInbox({
   headerProps,
   buttonClickHandler
 }) {
-  const formattedWorkspaceKey = formatWorkspaceKey(workspaceKey)
-  const [isOpen, toggleOpen] = useState(false)
+  const storageKey = getStorageKey(workspaceKey)
+  const storedData = getStorageData(storageKey)
+  const isSameUser = storedData?.distinct_id === distinctId
+
+  const [openInbox, toggleInbox] = useState(false)
   const [referenceElement, setReferenceElement] = useState(null)
   const [popperElement, setPopperElement] = useState(null)
   const [arrowElement, setArrowElement] = useState(null)
-  const [notificationData, setNotificationData] = useLocalStorage(
-    `_suprsend_inbox_${formattedWorkspaceKey}`,
-    {
-      notifications: [],
-      unread: 0,
-      distinct_id: distinctId,
-      last_fetched: Date.now() - 30 * 24 * 60 * 60 * 1000
-    }
-  )
+  const [notificationData, setNotificationData] = useState({
+    notifications: isSameUser ? storedData?.notifications || [] : [],
+    count: 0,
+    last_after: null
+  })
   const dataRef = useRef(notificationData)
 
   useEffect(() => {
+    dataRef.current = notificationData
+  }, [notificationData])
+
+  useEffect(() => {
+    const storedData = getStorageData(storageKey)
+    const resetData = {
+      notifications: isSameUser ? storedData?.notifications || [] : [],
+      count: 0,
+      last_after: null
+    }
+    setNotificationData(resetData)
+    dataRef.current = resetData
     const props = {
       distinctId,
       workspaceKey,
       notificationData,
-      setNotificationData
+      setNotificationData,
+      storageKey
     }
     getNotificationsApi(props, dataRef)
     const timerId = setInterval(() => {
@@ -131,14 +165,10 @@ function SuprsendInbox({
     return () => {
       clearInterval(timerId)
     }
-  }, [])
-
-  useEffect(() => {
-    dataRef.current = notificationData
-  }, [notificationData])
+  }, [distinctId, workspaceKey])
 
   useClickOutside({ current: popperElement }, () => {
-    toggleOpen((prev) => !prev)
+    toggleInbox((prev) => !prev)
   })
 
   const { styles, attributes } = usePopper(referenceElement, popperElement, {
@@ -173,11 +203,9 @@ function SuprsendInbox({
       value={{
         distinctId,
         workspaceKey,
-        notifications: notificationData.notifications,
-        unread: notificationData.unread,
-        setNotificationData,
-        toggleInbox: toggleOpen,
         notificationData,
+        setNotificationData,
+        toggleInbox,
         buttonClickHandler
       }}
     >
@@ -190,7 +218,8 @@ function SuprsendInbox({
       >
         <div
           onClick={() => {
-            toggleOpen((prev) => !prev)
+            setNotificationData((prev) => ({ ...prev, count: 0 }))
+            toggleInbox((prev) => !prev)
           }}
           ref={setReferenceElement}
           css={css`
@@ -203,7 +232,7 @@ function SuprsendInbox({
           <Badge {...badgeProps} />
           <Bell {...bellProps} />
         </div>
-        {isOpen && (
+        {openInbox && (
           <div
             ref={setPopperElement}
             style={{ ...styles.popper, zIndex: 999 }}

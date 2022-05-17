@@ -9,9 +9,8 @@ import { markSeen } from '../utils/api'
 export function ToastNotification({ notificationData }) {
   const {
     workspaceKey,
+    notificationData: { notifications },
     setNotificationData,
-    notifications,
-    notificationData: storeData,
     buttonClickHandler
   } = useContext(InboxContext)
 
@@ -44,11 +43,11 @@ export function ToastNotification({ notificationData }) {
                 notification.seen_on = Date.now()
               }
             }
-            setNotificationData({
-              ...storeData,
-              unread: storeData.unread - 1,
-              notifications
-            })
+            setNotificationData((prev) => ({
+              ...prev,
+              notifications,
+              count: 0
+            }))
           }
         })
         .catch((err) => {
@@ -99,11 +98,12 @@ export function ToastNotification({ notificationData }) {
 }
 
 export function ManyNotificationsToast({ notificationCount, toastId }) {
-  const { toggleInbox } = useContext(InboxContext)
+  const { setNotificationData, toggleInbox } = useContext(InboxContext)
 
   return (
     <SubHeadingText
       onClick={() => {
+        setNotificationData((prev) => ({ ...prev, count: 0 }))
         toggleInbox(true)
         toast.dismiss(toastId)
       }}
