@@ -3,10 +3,7 @@ import { css, jsx } from '@emotion/react'
 import NotificationList from '../Notifications/NotificationList'
 import Header from './Header'
 
-export default function NotificationContainer({
-  headerProps,
-  buttonClickHandler = {}
-}) {
+export default function NotificationContainer({ headerProps }) {
   return (
     <div
       css={css`
@@ -28,7 +25,7 @@ export default function NotificationContainer({
       `}
     >
       <Header {...headerProps} />
-      <NotificationList buttonClickHandler={buttonClickHandler} />
+      <NotificationList />
     </div>
   )
 }

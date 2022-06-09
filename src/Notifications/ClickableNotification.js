@@ -3,14 +3,12 @@ import Notification from './Notification'
 import { markSeen } from '../utils/api'
 import { uuid, epochMilliseconds, InboxContext } from '../utils'
 
-export default function ClickableNotification({
-  notificationData,
-  buttonClickHandler
-}) {
+export default function ClickableNotification({ notificationData }) {
   const {
     workspaceKey,
     notificationData: { notifications },
-    setNotificationData
+    setNotificationData,
+    buttonClickHandler
   } = useContext(InboxContext)
 
   const navigateUser = () => {

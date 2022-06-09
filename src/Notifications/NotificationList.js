@@ -4,7 +4,7 @@ import ClickableNotification from './ClickableNotification'
 import { HelperText } from '../utils/styles'
 import styled from '@emotion/styled'
 
-export default function NotificationsList({ buttonClickHandler }) {
+export default function NotificationsList() {
   const {
     notificationData: { notifications }
   } = useContext(InboxContext)
@@ -13,11 +13,7 @@ export default function NotificationsList({ buttonClickHandler }) {
     return <EmptyText>No Notifications</EmptyText>
   }
   return notifications.map((notification, index) => (
-    <ClickableNotification
-      notificationData={notification}
-      key={index}
-      buttonClickHandler={buttonClickHandler}
-    />
+    <ClickableNotification notificationData={notification} key={index} />
   ))
 }
 

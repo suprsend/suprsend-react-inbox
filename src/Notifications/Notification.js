@@ -1,14 +1,21 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/react'
+import { useContext } from 'react'
 import { ColorConfig, CText } from '../utils/styles'
 import dayjs from 'dayjs'
 import calendar from 'dayjs/plugin/calendar'
+import { InboxContext } from '../utils'
 
 dayjs.extend(calendar)
 
 export default function Notification({ notificationData }) {
   const { message, seen_on: seenOn, created_on: createdOn } = notificationData
+  const { notificationProps } = useContext(InboxContext)
 
+  if (notificationProps?.notificationComponent) {
+    const NotificationComponent = notificationProps.notificationComponent
+    return <NotificationComponent notificationData={notificationData} />
+  }
   return (
     <div
       css={css`

@@ -16,6 +16,7 @@ import {
   setStorageData
 } from './utils'
 export { default as NotificationBox } from './NotificationContainer'
+export { default as NotificationList } from './Notifications/NotificationList'
 
 function processNotificationData({
   response,
@@ -121,6 +122,7 @@ function SuprsendInbox({
   bellProps,
   badgeProps,
   headerProps,
+  notificationProps,
   buttonClickHandler
 }) {
   const storageKey = getStorageKey(workspaceKey)
@@ -206,7 +208,8 @@ function SuprsendInbox({
         notificationData,
         setNotificationData,
         toggleInbox,
-        buttonClickHandler
+        buttonClickHandler,
+        notificationProps
       }}
     >
       <div
