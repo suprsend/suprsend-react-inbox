@@ -8,19 +8,20 @@ const App = () => {
         workspaceKey='kfWdrPL1nFqs7OUihiBn'
         workspaceSecret=''
         distinctId='katta.sivaram@suprsend.co'
-        // containerStyle={{ display: 'none' }}
-        // toastProps={{
-        //   toastComponent: ({ notificationData, markClicked, dismissToast }) => (
-        //     <h1
-        //       onClick={async (e) => {
-        //         await markClicked(e, notificationData)
-        //         dismissToast()
-        //       }}
-        //     >
-        //       Hello world
-        //     </h1>
-        //   )
-        // }}
+        containerStyle={{ display: 'none' }}
+        toastProps={{
+          stackMultipleNotifications: true,
+          toastComponent: ({ notificationData, markClicked, dismissToast }) => (
+            <h1
+              onClick={async (e) => {
+                await markClicked(e, notificationData)
+                dismissToast()
+              }}
+            >
+              Hello world
+            </h1>
+          )
+        }}
       />
     </div>
   )

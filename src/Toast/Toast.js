@@ -15,7 +15,7 @@ export default function Toast({ position, ...otherProps }) {
     <Toaster
       position={toastPosition}
       gutter={8}
-      toastOptions={{ duration: 3000, animation: 'none' }}
+      toastOptions={{ duration: 3000 }}
       {...otherProps}
     />
   )
