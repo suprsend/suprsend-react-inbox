@@ -6,7 +6,7 @@ import styled from '@emotion/styled'
 
 export default function NotificationsList() {
   const {
-    notificationData: { notifications }
+    notificationsData: { notifications }
   } = useContext(InboxContext)
 
   if (notifications.length <= 0) {

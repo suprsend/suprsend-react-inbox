@@ -5,7 +5,7 @@ import { InboxContext } from '../utils'
 
 export default function Badge({ style = {}, badgeComponent, ...otherProps }) {
   const {
-    notificationData: { count }
+    notificationsData: { count }
   } = useContext(InboxContext)
 
   if (count > 0) {

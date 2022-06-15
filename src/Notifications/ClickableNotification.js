@@ -1,15 +1,11 @@
 import React, { useContext } from 'react'
 import Notification from './Notification'
 import { markSeen } from '../utils/api'
-import { uuid, epochMilliseconds, InboxContext } from '../utils'
+import { InboxContext } from '../utils'
 
 export default function ClickableNotification({ notificationData }) {
-  const {
-    workspaceKey,
-    notificationData: { notifications },
-    setNotificationData,
-    buttonClickHandler
-  } = useContext(InboxContext)
+  const { workspaceKey, setNotificationsData, buttonClickHandler } =
+    useContext(InboxContext)
 
   const navigateUser = () => {
     // redirect after mark seen logic
@@ -24,26 +20,20 @@ export default function ClickableNotification({ notificationData }) {
 
   const handleClick = (e) => {
     e.stopPropagation()
-    if (!notificationData.seen_on) {
-      const body = {
-        event: '$notification_clicked',
-        env: workspaceKey,
-        $insert_id: uuid(),
-        $time: epochMilliseconds(),
-        properties: { id: notificationData.n_id }
-      }
-      markSeen(workspaceKey, body)
+    if (notificationData.seen_on) {
+      navigateUser()
+    } else {
+      markSeen(workspaceKey, notificationData.n_id)
         .then((res) => {
           if (res.status === 202) {
-            for (const notification of notifications) {
-              if (notification.n_id === notificationData.n_id) {
-                notification.seen_on = Date.now()
+            setNotificationsData((prev) => {
+              for (const notificationItem of prev.notifications) {
+                if (notificationItem.n_id === notificationData.n_id) {
+                  notificationItem.seen_on = Date.now()
+                }
               }
-            }
-            setNotificationData((prev) => ({
-              ...prev,
-              notifications
-            }))
+              return { ...prev }
+            })
           }
         })
         .catch((err) => {
@@ -52,8 +42,6 @@ export default function ClickableNotification({ notificationData }) {
         .finally(() => {
           navigateUser()
         })
-    } else {
-      navigateUser()
     }
   }
 

@@ -6,7 +6,21 @@ const App = () => {
     <div style={{ marginLeft: 50 }}>
       <SuprsendInbox
         workspaceKey='kfWdrPL1nFqs7OUihiBn'
-        distinctId='katta.sivaram@suprsend.com'
+        workspaceSecret=''
+        distinctId='katta.sivaram@suprsend.co'
+        // containerStyle={{ display: 'none' }}
+        // toastProps={{
+        //   toastComponent: ({ notificationData, markClicked, dismissToast }) => (
+        //     <h1
+        //       onClick={async (e) => {
+        //         await markClicked(e, notificationData)
+        //         dismissToast()
+        //       }}
+        //     >
+        //       Hello world
+        //     </h1>
+        //   )
+        // }}
       />
     </div>
   )

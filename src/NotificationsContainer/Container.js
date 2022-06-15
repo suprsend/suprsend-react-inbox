@@ -1,9 +1,9 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/react'
-import NotificationList from '../Notifications/NotificationList'
+import NotificationsList from '../Notifications/NotificationsList'
 import Header from './Header'
 
-export default function NotificationContainer({ headerProps }) {
+export default function NotificationsContainer({ headerProps }) {
   return (
     <div
       css={css`
@@ -25,7 +25,7 @@ export default function NotificationContainer({ headerProps }) {
       `}
     >
       <Header {...headerProps} />
-      <NotificationList />
+      <NotificationsList />
     </div>
   )
 }
