@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/react'
-import { Toaster, resolveValue, toast } from 'react-hot-toast'
+import { Toaster, toast } from 'react-hot-toast'
 import { ToastNotification } from './ToastNotification'
 import { markSeen } from '../utils/api'
 
@@ -12,9 +12,12 @@ export default function Toast({ position, ...otherProps }) {
     : position
 
   return (
-    <Toaster position={toastPosition} {...otherProps}>
-      {(t) => resolveValue(t.message, t)}
-    </Toaster>
+    <Toaster
+      position={toastPosition}
+      gutter={8}
+      toastOptions={{ duration: 3000, animation: 'none' }}
+      {...otherProps}
+    />
   )
 }
 
@@ -25,12 +28,12 @@ export function notify({
   buttonClickHandler,
   setNotificationsData
 }) {
-  const navigateUser = () => {
+  const navigateUser = (notificationData) => {
     if (typeof buttonClickHandler === 'function') {
-      buttonClickHandler(notificationsData)
+      buttonClickHandler(notificationData)
     } else {
-      if (notificationsData?.message?.url) {
-        window.location.href = notificationsData.message.url
+      if (notificationData?.message?.url) {
+        window.location.href = notificationData.message.url
       }
     }
   }
@@ -53,21 +56,21 @@ export function notify({
       })
       .catch(() => {})
       .finally(() => {
-        navigateUser()
+        navigateUser(notificationData)
       })
   }
 
-  const NotificationComponent = toastProps
-    ? toastProps.toastComponent
-    : ToastNotification
+  const ToastNotificationComponent =
+    toastProps?.toastComponent || ToastNotification
 
   notificationsData.map((item) => {
-    const toastId = toast(() => (
-      <NotificationComponent
+    toast.custom((t) => (
+      <ToastNotificationComponent
+        t={t}
         notificationData={item}
         markClicked={handleClick}
         dismissToast={() => {
-          toast.dismiss(toastId)
+          toast.dismiss(t.id)
         }}
       />
     ))

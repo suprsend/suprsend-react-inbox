@@ -16,7 +16,6 @@ export function ToastNotification({ notificationData, markClicked }) {
         cursor: pointer;
         padding: 7px 14px;
         border: 1px solid #f0f0f0;
-        margin: 15px;
         border-radius: 5px;
         box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2),
           0 2px 1px 0 rgba(0, 0, 0, 0.1);
