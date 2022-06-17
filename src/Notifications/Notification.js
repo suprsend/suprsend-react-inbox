@@ -10,12 +10,19 @@ dayjs.extend(calendar)
 
 export default function Notification({ notificationData }) {
   const { message, seen_on: seenOn, created_on: createdOn } = notificationData
-  const { notificationProps } = useContext(InboxContext)
+  const { notificationProps = {} } = useContext(InboxContext)
 
   if (notificationProps?.notificationComponent) {
     const NotificationComponent = notificationProps.notificationComponent
     return <NotificationComponent notificationData={notificationData} />
   }
+
+  const {
+    containerStyle = {},
+    headerTextStyle = {},
+    bodyTextStyle = {},
+    unseenDotStyle = {}
+  } = notificationProps
   return (
     <div
       css={css`
@@ -26,6 +33,7 @@ export default function Notification({ notificationData }) {
         &:hover {
           background-color: #f0f0f0;
         }
+        ${containerStyle}
       `}
     >
       <div
@@ -41,6 +49,7 @@ export default function Notification({ notificationData }) {
             css={css`
               font-size: 16px;
               margin: 10px 0px;
+              ${headerTextStyle}
             `}
           >
             {message.header}
@@ -49,6 +58,7 @@ export default function Notification({ notificationData }) {
             css={css`
               font-size: 14px;
               margin: 10px 0px;
+              ${bodyTextStyle}
             `}
           >
             {message.text}
@@ -62,6 +72,7 @@ export default function Notification({ notificationData }) {
               width: 7px;
               height: 7px;
               margin-top: 18px;
+              ${unseenDotStyle}
             `}
           />
         )}

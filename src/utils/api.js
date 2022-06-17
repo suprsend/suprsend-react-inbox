@@ -1,13 +1,28 @@
 import config from '../config'
 import { epochMilliseconds, uuid } from '../utils'
+import createSignature from './encryption'
 
-export function getNotifications({ distinctId, workspaceKey, after = 0 }) {
+export async function getNotifications({
+  distinctId,
+  workspaceKey,
+  workspaceSecret,
+  after = 0
+}) {
+  const requestedDate = new Date().toGMTString()
+  const body = JSON.stringify({ distinct_id: distinctId, env: workspaceKey })
+  const signature = await createSignature({
+    workspaceSecret,
+    date: requestedDate,
+    method: 'GET',
+    body,
+    route: '/fetch/'
+  })
   return window.fetch(
     `${config.API_BASE_URL}/fetch/?distinct_id=${distinctId}&after=${after}`,
     {
       method: 'GET',
       headers: {
-        Authorization: workspaceKey + ':'
+        Authorization: `${workspaceKey}:${signature}`
       }
     }
   )

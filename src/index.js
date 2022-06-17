@@ -118,9 +118,10 @@ function SuprsendInbox({
   containerStyle,
   bellProps,
   badgeProps,
-  toastProps,
+  notificationContainerProps,
   headerProps,
   notificationProps,
+  toastProps,
   buttonClickHandler
 }) {
   const storageKey = getStorageKey(workspaceKey)
@@ -150,10 +151,22 @@ function SuprsendInbox({
     ]
   })
 
+  // listen to click outside inbox container
+  useClickOutside({ current: popperElement }, () => {
+    toggleInbox((prev) => !prev)
+  })
+
   useEffect(() => {
     notificationsDataRef.current = notificationsData
   }, [notificationsData])
 
+  useEffect(() => {
+    if (openInbox) {
+      console.log('make post request')
+    }
+  }, [openInbox])
+
+  // get notifications and start polling for new ones
   useEffect(() => {
     const storedData = getStorageData(storageKey)
     const resetData = {
@@ -181,9 +194,10 @@ function SuprsendInbox({
     }
   }, [distinctId, workspaceKey])
 
-  useClickOutside({ current: popperElement }, () => {
+  const handleBellClick = () => {
+    setNotificationsData((prev) => ({ ...prev, count: 0 }))
     toggleInbox((prev) => !prev)
-  })
+  }
 
   const arrowStyle = {
     ...styles.arrow,
@@ -194,6 +208,9 @@ function SuprsendInbox({
       borderRight: '10px solid transparent',
       borderBottom: '10px solid white',
       top: -8
+    },
+    ...{
+      borderBottomColor: headerProps?.containerStyle?.backgroundColor || 'white'
     }
   }
   const NotificationsBox = children || NotificationsContainer
@@ -215,20 +232,17 @@ function SuprsendInbox({
           position: relative;
           display: inline-block;
           background-color: transparent;
+          ${containerStyle}
         `}
       >
         <div
-          onClick={() => {
-            setNotificationsData((prev) => ({ ...prev, count: 0 }))
-            toggleInbox((prev) => !prev)
-          }}
+          onClick={handleBellClick}
           ref={setReferenceElement}
           css={css`
             position: relative;
             margin-top: 12px;
             margin-right: 12px;
             cursor: pointer;
-            ${containerStyle}
           `}
         >
           <Badge {...badgeProps} />
@@ -241,7 +255,10 @@ function SuprsendInbox({
             {...attributes.popper}
           >
             <div ref={setArrowElement} style={arrowStyle} />
-            <NotificationsBox headerProps={headerProps} />
+            <NotificationsBox
+              headerProps={headerProps}
+              notificationContainerProps={notificationContainerProps}
+            />
           </div>
         )}
       </div>

@@ -3,7 +3,10 @@ import { css, jsx } from '@emotion/react'
 import NotificationsList from '../Notifications/NotificationsList'
 import Header from './Header'
 
-export default function NotificationsContainer({ headerProps }) {
+export default function NotificationsContainer({
+  headerProps,
+  notificationContainerProps = {}
+}) {
   return (
     <div
       css={css`
@@ -22,10 +25,11 @@ export default function NotificationsContainer({ headerProps }) {
           width: 100vw;
           margin: 0px;
         }
+        ${notificationContainerProps.containerStyle}
       `}
     >
       <Header {...headerProps} />
-      <NotificationsList />
+      <NotificationsList {...notificationContainerProps} />
     </div>
   )
 }
