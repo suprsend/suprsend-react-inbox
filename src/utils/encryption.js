@@ -8,11 +8,12 @@ export default async function createSignature({
   workspaceSecret,
   date,
   method,
-  body,
-  route
+  body = '',
+  route,
+  contentType = ''
 }) {
   if (!window.crypto) return
-  const message = `${method}\n${body}\n${date}\n/${route}`
+  const message = `${method}\n${body}\n${contentType}\n${date}\n${route}`
   const keyBytes = getUtf8Bytes(workspaceSecret)
   const messageBytes = getUtf8Bytes(message)
   const cryptoKey = await window.crypto.subtle.importKey(

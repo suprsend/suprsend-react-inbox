@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import Notification from './Notification'
-import { markSeen } from '../utils/api'
+import { markClicked } from '../utils/api'
 import { InboxContext } from '../utils'
 
 export default function ClickableNotification({ notificationData }) {
@@ -23,7 +23,7 @@ export default function ClickableNotification({ notificationData }) {
     if (notificationData.seen_on) {
       navigateUser()
     } else {
-      markSeen(workspaceKey, notificationData.n_id)
+      markClicked(workspaceKey, notificationData.n_id)
         .then((res) => {
           if (res.status === 202) {
             setNotificationsData((prev) => {

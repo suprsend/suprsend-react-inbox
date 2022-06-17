@@ -2,7 +2,7 @@
 import { jsx } from '@emotion/react'
 import { Toaster, toast } from 'react-hot-toast'
 import { ToastNotification } from './ToastNotification'
-import { markSeen } from '../utils/api'
+import { markClicked } from '../utils/api'
 
 export default function Toast({ position, ...otherProps }) {
   const toastPosition = !position
@@ -41,7 +41,7 @@ export function notify({
   const handleClick = (e, notificationData) => {
     e.stopPropagation()
     if (notificationData.seen_on) return
-    markSeen(workspaceKey, notificationData.n_id)
+    markClicked(workspaceKey, notificationData.n_id)
       .then((res) => {
         if (res.status === 202) {
           setNotificationsData((prev) => {

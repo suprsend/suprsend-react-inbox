@@ -3,25 +3,11 @@ import SuprsendInbox from '@suprsend/react-inbox'
 
 const App = () => {
   return (
-    <div style={{ marginLeft: 50 }}>
+    <div style={{ marginLeft: 50, display: 'flex' }}>
       <SuprsendInbox
         workspaceKey='kfWdrPL1nFqs7OUihiBn'
-        workspaceSecret=''
-        distinctId='katta.sivaram@suprsend.co'
-        containerStyle={{ display: 'none' }}
-        toastProps={{
-          stackMultipleNotifications: true,
-          toastComponent: ({ notificationData, markClicked, dismissToast }) => (
-            <h1
-              onClick={async (e) => {
-                await markClicked(e, notificationData)
-                dismissToast()
-              }}
-            >
-              Hello world
-            </h1>
-          )
-        }}
+        workspaceSecret='From1HA1ZiSXs3ofBHXh'
+        subscriberId='2t8r9WtUZhK8G97Kb0Bb96rr1PkJdmZQyrnLnfcVE4w'
       />
     </div>
   )
