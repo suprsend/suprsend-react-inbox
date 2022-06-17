@@ -63,16 +63,18 @@ export function notify({
   const ToastNotificationComponent =
     toastProps?.toastComponent || ToastNotification
 
-  notificationsData.map((item) => {
-    toast.custom((t) => (
-      <ToastNotificationComponent
-        t={t}
-        notificationData={item}
-        markClicked={handleClick}
-        dismissToast={() => {
-          toast.dismiss(t.id)
-        }}
-      />
-    ))
-  })
+  for (let i = 0; i < notificationsData.length; i++) {
+    setTimeout(() => {
+      toast.custom((t) => (
+        <ToastNotificationComponent
+          t={t}
+          notificationData={notificationsData[i]}
+          markClicked={handleClick}
+          dismissToast={() => {
+            toast.dismiss(t.id)
+          }}
+        />
+      ))
+    }, i * 1000)
+  }
 }

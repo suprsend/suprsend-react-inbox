@@ -3,29 +3,27 @@ import { epochMilliseconds, uuid } from '../utils'
 import createSignature from './encryption'
 
 export async function getNotifications({
-  distinctId,
+  subscriberId,
   workspaceKey,
   workspaceSecret,
   after = 0
 }) {
   const requestedDate = new Date().toGMTString()
-  const body = JSON.stringify({ distinct_id: distinctId, env: workspaceKey })
+  const requestPath = `/fetch/?subscriber_id=${subscriberId}&after=${after}`
   const signature = await createSignature({
     workspaceSecret,
     date: requestedDate,
     method: 'GET',
-    body,
-    route: '/fetch/'
+    body: '',
+    route: requestPath
   })
-  return window.fetch(
-    `${config.API_BASE_URL}/fetch/?distinct_id=${distinctId}&after=${after}`,
-    {
-      method: 'GET',
-      headers: {
-        Authorization: `${workspaceKey}:${signature}`
-      }
+  return window.fetch(`${config.API_BASE_URL}${requestPath}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `${workspaceKey}:${signature}`,
+      'x-amz-date': requestedDate
     }
-  )
+  })
 }
 
 export function markSeen(workspaceKey, nId) {

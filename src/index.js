@@ -20,7 +20,7 @@ export { default as NotificationsList } from './Notifications/NotificationsList'
 
 function processNotifications(props) {
   const {
-    distinctId,
+    subscriberId,
     response,
     notificationsData,
     setNotificationsData,
@@ -78,12 +78,12 @@ function processNotifications(props) {
   // set in localstorage
   setStorageData(storageKey, {
     notifications: newNotificationsList,
-    distinct_id: distinctId
+    subscriber_id: subscriberId
   })
 }
 
 function getNotificationsApi(props, notificationsDataRef) {
-  const { workspaceKey, workspaceSecret, distinctId } = props
+  const { workspaceKey, workspaceSecret, subscriberId } = props
   const notificationsData = notificationsDataRef.current
   const newAfter = notificationsData.last_after
     ? notificationsData.last_after
@@ -93,7 +93,7 @@ function getNotificationsApi(props, notificationsDataRef) {
   getNotifications({
     workspaceKey,
     workspaceSecret,
-    distinctId,
+    subscriberId,
     after: newAfter
   })
     .then((res) => res.json())
@@ -113,7 +113,7 @@ function getNotificationsApi(props, notificationsDataRef) {
 function SuprsendInbox({
   workspaceKey = '',
   workspaceSecret = '',
-  distinctId = '',
+  subscriberId = '',
   children,
   containerStyle,
   bellProps,
@@ -126,7 +126,7 @@ function SuprsendInbox({
 }) {
   const storageKey = getStorageKey(workspaceKey)
   const storedData = getStorageData(storageKey)
-  const isSameUser = storedData?.distinct_id === distinctId
+  const isSameUser = storedData?.subscriber_id === subscriberId
 
   const [openInbox, toggleInbox] = useState(false)
   const [referenceElement, setReferenceElement] = useState(null)
@@ -168,6 +168,7 @@ function SuprsendInbox({
 
   // get notifications and start polling for new ones
   useEffect(() => {
+    if (!subscriberId) return
     const storedData = getStorageData(storageKey)
     const resetData = {
       notifications: isSameUser ? storedData?.notifications || [] : [],
@@ -179,7 +180,7 @@ function SuprsendInbox({
     const props = {
       workspaceKey,
       workspaceSecret,
-      distinctId,
+      subscriberId,
       setNotificationsData,
       storageKey,
       toastProps,
@@ -192,7 +193,7 @@ function SuprsendInbox({
     return () => {
       clearInterval(timerId)
     }
-  }, [distinctId, workspaceKey])
+  }, [subscriberId, workspaceKey])
 
   const handleBellClick = () => {
     setNotificationsData((prev) => ({ ...prev, count: 0 }))
@@ -218,7 +219,7 @@ function SuprsendInbox({
   return (
     <InboxContext.Provider
       value={{
-        distinctId,
+        subscriberId,
         workspaceKey,
         notificationsData,
         setNotificationsData,
