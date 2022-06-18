@@ -49,6 +49,7 @@ export default function Notification({ notificationData }) {
             css={css`
               font-size: 16px;
               margin: 10px 0px;
+              white-space: pre-line;
               ${headerTextStyle}
             `}
           >
@@ -58,6 +59,7 @@ export default function Notification({ notificationData }) {
             css={css`
               font-size: 14px;
               margin: 10px 0px;
+              white-space: pre-line;
               ${bodyTextStyle}
             `}
           >
@@ -65,16 +67,18 @@ export default function Notification({ notificationData }) {
           </CText>
         </div>
         {!seenOn && (
-          <div
-            css={css`
-              background: #358adf;
-              border-radius: 50%;
-              width: 7px;
-              height: 7px;
-              margin-top: 18px;
-              ${unseenDotStyle}
-            `}
-          />
+          <div>
+            <div
+              css={css`
+                background: #358adf;
+                border-radius: 50%;
+                width: 7px;
+                height: 7px;
+                margin-top: 18px;
+                ${unseenDotStyle}
+              `}
+            />
+          </div>
         )}
       </div>
       <CText
