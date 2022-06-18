@@ -1,27 +1,27 @@
 # @suprsend/react-inbox
 
-> SuprSend SDK for integrating inbox functionality in React applications
+SuprSend SDK for integrating Inbox, and Toast notifications in React applications
 
-[![NPM](https://img.shields.io/npm/v/@suprsend/react-inbox.svg)](https://www.npmjs.com/package/@suprsend/react-inbox) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
-
-## Install
+## Installation
 
 ```bash
 npm install --save @suprsend/react-inbox
 ```
 
-## Usage
+## Integration
 
 ```jsx
-import React, { Component } from 'react'
+import SuprSendInbox from '@suprsend/react-inbox'
 
-import MyComponent from '@suprsend/react-inbox'
-import '@suprsend/react-inbox/dist/index.css'
-
-class Example extends Component {
-  render() {
-    return <MyComponent />
-  }
+function Example() {
+  return (
+    <SuprsendInbox
+      workspaceKey='<workspace_key>'
+      workspaceSecret='<workspace_secret>'
+      subscriberId='<subscriber_id>'
+      distinctId='<distinct_id>'
+    />
+  )
 }
 ```
 

@@ -3,12 +3,12 @@ import SuprsendInbox from '@suprsend/react-inbox'
 
 const App = () => {
   return (
-    <div style={{ marginLeft: 50, display: 'flex' }}>
+    <div style={{ marginLeft: 50 }}>
       <SuprsendInbox
-        workspaceKey='kfWdrPL1nFqs7OUihiBn'
-        workspaceSecret='From1HA1ZiSXs3ofBHXh'
-        subscriberId='2t8r9WtUZhK8G97Kb0Bb96rr1PkJdmZQyrnLnfcVE4w'
-        distinctId='skme902902@gmail.com'
+        workspaceKey={process.env.REACT_APP_WORKSPACE_KEY}
+        workspaceSecret={process.env.REACT_APP_WORKSPACE_SECRET}
+        subscriberId={process.env.REACT_APP_SUBSCRIBER_ID}
+        distinctId={process.env.REACT_APP_DISTINCT_ID}
       />
     </div>
   )
