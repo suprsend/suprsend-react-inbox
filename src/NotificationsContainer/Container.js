@@ -1,11 +1,11 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/react'
-import NotificationList from '../Notifications/NotificationList'
+import NotificationsList from '../Notifications/NotificationsList'
 import Header from './Header'
 
-export default function NotificationContainer({
+export default function NotificationsContainer({
   headerProps,
-  buttonClickHandler = {}
+  notificationContainerProps = {}
 }) {
   return (
     <div
@@ -22,13 +22,15 @@ export default function NotificationContainer({
         box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2),
           0 6px 20px 0 rgba(0, 0, 0, 0.19);
         @media (max-width: 425px) {
-          width: 100vw;
+          width: 99.5vw;
           margin: 0px;
+          border-radius: 0px;
         }
+        ${notificationContainerProps.containerStyle}
       `}
     >
       <Header {...headerProps} />
-      <NotificationList buttonClickHandler={buttonClickHandler} />
+      <NotificationsList {...notificationContainerProps} />
     </div>
   )
 }

@@ -1,80 +1,28 @@
 /** @jsx jsx */
 import { useContext } from 'react'
 import { css, jsx } from '@emotion/react'
-import { CText, SubHeadingText } from '../utils/styles'
 import { toast } from 'react-hot-toast'
-import { uuid, epochMilliseconds, InboxContext } from '../utils'
-import { markSeen } from '../utils/api'
+import { InboxContext } from '../utils'
+import { CText, SubHeadingText } from '../utils/styles'
 
-export function ToastNotification({ notificationData, toastId }) {
-  const {
-    workspaceKey,
-    setNotificationData,
-    notifications,
-    notificationData: storeData,
-    buttonClickHandler
-  } = useContext(InboxContext)
-
-  const handleClick = (e, isButtonClick) => {
-    e.stopPropagation()
-    if (!notificationData.seen_on) {
-      const body = {
-        event: '$notification_clicked',
-        env: workspaceKey,
-        $insert_id: uuid(),
-        $time: epochMilliseconds(),
-        properties: { id: notificationData.n_id }
-      }
-      markSeen(workspaceKey, body)
-        .then((res) => {
-          if (res.status === 202) {
-            for (const notification of notifications) {
-              if (notification.n_id === notificationData.n_id) {
-                notification.seen_on = Date.now()
-              }
-            }
-            setNotificationData({
-              ...storeData,
-              unread: storeData.unread - 1,
-              notifications
-            })
-          }
-          if (!isButtonClick) {
-            toast.dismiss(toastId)
-          }
-        })
-        .catch((err) => {
-          console.log('ERROR', err)
-        })
-        .finally(() => {
-          if (isButtonClick) {
-            if (typeof buttonClickHandler === 'function') {
-              buttonClickHandler(notificationData)
-            } else {
-              if (notificationData?.message?.url) {
-                window.location.href = notificationData.message.url
-              }
-            }
-          }
-        })
-    }
-  }
+export function ToastNotification({ notificationData, markClicked }) {
   const { message } = notificationData
   return (
     <div
+      onClick={(e) => {
+        markClicked(e, notificationData)
+      }}
       css={css`
-        padding: 7px 14px;
-        background-color: #fff;
-        cursor: pointer;
-        border: 1px solid #f0f0f0;
-        margin: 15px;
-        border-radius: 5px;
         max-width: 450px;
         min-width: 300px;
+        background-color: #fff;
+        cursor: pointer;
+        padding: 7px 14px;
+        border: 1px solid #f0f0f0;
+        border-radius: 5px;
         box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2),
           0 2px 1px 0 rgba(0, 0, 0, 0.1);
       `}
-      onClick={handleClick}
     >
       <CText
         css={css`
@@ -92,49 +40,30 @@ export function ToastNotification({ notificationData, toastId }) {
       >
         {message.text}
       </CText>
-      {message.button && (
-        <CText
-          onClick={(e) => {
-            handleClick(e, true)
-          }}
-          css={css`
-            background-color: #358adf;
-            color: #fff;
-            border-radius: 5px;
-            text-align: center;
-            margin: 10px 0px;
-            padding: 4px 0px;
-            font-size: 14px;
-            @media (min-width: 425px) {
-              width: fit-content;
-              padding: 6px;
-              min-width: 100px;
-            }
-          `}
-        >
-          {message.button}
-        </CText>
-      )}
     </div>
   )
 }
 
 export function ManyNotificationsToast({ notificationCount, toastId }) {
-  const { toggleInbox } = useContext(InboxContext)
+  const { setNotificationsData, toggleInbox } = useContext(InboxContext)
 
   return (
     <SubHeadingText
       onClick={() => {
+        setNotificationsData((prev) => ({ ...prev, count: 0 }))
         toggleInbox(true)
         toast.dismiss(toastId)
       }}
       css={css`
-        box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2),
-          0 2px 1px 0 rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+        cursor: pointer;
         padding: 20px 30px;
         border-radius: 5px;
-        cursor: pointer;
-        background-color: #fff;
+        box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2),
+          0 2px 1px 0 rgba(0, 0, 0, 0.1);
+        @media (max-width: 425px) {
+          flex: 1;
+        }
       `}
     >{`You have ${notificationCount} new notifications`}</SubHeadingText>
   )

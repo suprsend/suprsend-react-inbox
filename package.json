@@ -1,8 +1,8 @@
 {
   "name": "@suprsend/react-inbox",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "SuprSend SDK for integrating inbox functionality in React applications",
-  "author": "https://github.com/suprsend",
+  "author": "SuprSend Developers",
   "license": "MIT",
   "repository": "https://github.com/suprsend/suprsend-react-inbox",
   "main": "dist/index.js",
@@ -27,7 +27,7 @@
     "deploy": "gh-pages -d example/build"
   },
   "peerDependencies": {
-    "react": "^16.0.0"
+    "react": ">= 16.8.0"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.3",
