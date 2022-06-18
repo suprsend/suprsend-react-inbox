@@ -1,26 +1,58 @@
 import config from '../config'
-import { epochMilliseconds, uuid } from '../utils'
+import { epochNow, uuid, utcNow } from '../utils'
 import createSignature from './encryption'
 
 export async function getNotifications({
   subscriberId,
   workspaceKey,
   workspaceSecret,
+  distinctId,
   after = 0
 }) {
-  const requestedDate = new Date().toGMTString()
-  const requestPath = `/inbox/fetch/?subscriber_id=${subscriberId}&after=${after}`
+  const date = utcNow()
+  const route = `/inbox/fetch/?subscriber_id=${subscriberId}&after=${after}&distinct_id=${distinctId}`
   const signature = await createSignature({
     workspaceSecret,
-    date: requestedDate,
+    date,
     method: 'GET',
-    route: requestPath
+    route
   })
-  return window.fetch(`${config.API_BASE_URL}${requestPath}`, {
+  return window.fetch(`${config.API_BASE_URL}${route}`, {
     method: 'GET',
     headers: {
       Authorization: `${workspaceKey}:${signature}`,
-      'x-amz-date': requestedDate
+      'x-amz-date': date
+    }
+  })
+}
+
+export async function markBellClicked({
+  subscriberId,
+  workspaceKey,
+  workspaceSecret,
+  distinctId
+}) {
+  const date = utcNow()
+  const route = '/inbox/bell-clicked/'
+  const body = JSON.stringify({
+    time: epochNow(),
+    distinct_id: distinctId,
+    subscriber_id: subscriberId
+  })
+  const signature = await createSignature({
+    workspaceSecret,
+    date,
+    route,
+    method: 'POST',
+    contentType: 'application/json',
+    body
+  })
+  return window.fetch(`${config.API_BASE_URL}${route}`, {
+    method: 'POST',
+    body,
+    headers: {
+      Authorization: `${workspaceKey}:${signature}`,
+      'x-amz-date': date
     }
   })
 }
@@ -30,7 +62,7 @@ export function markClicked(workspaceKey, nId) {
     event: '$notification_clicked',
     env: workspaceKey,
     $insert_id: uuid(),
-    $time: epochMilliseconds(),
+    $time: epochNow(),
     properties: { id: nId }
   }
   return window.fetch(`${config.API_BASE_URL}/event/`, {
@@ -38,7 +70,7 @@ export function markClicked(workspaceKey, nId) {
     body: JSON.stringify(body),
     headers: {
       'Content-Type': 'application/json',
-      'x-amz-date': new Date().toGMTString()
+      'x-amz-date': utcNow()
     }
   })
 }

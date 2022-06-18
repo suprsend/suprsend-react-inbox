@@ -22,8 +22,9 @@ export default function NotificationsContainer({
         box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2),
           0 6px 20px 0 rgba(0, 0, 0, 0.19);
         @media (max-width: 425px) {
-          width: 100vw;
+          width: 99.5vw;
           margin: 0px;
+          border-radius: 0px;
         }
         ${notificationContainerProps.containerStyle}
       `}

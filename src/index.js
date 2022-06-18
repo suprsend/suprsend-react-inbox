@@ -8,7 +8,7 @@ import Toast, { notify } from './Toast'
 import NotificationsContainer from './NotificationsContainer'
 import useClickOutside from './utils/useClickOutside'
 import config from './config'
-import { getNotifications } from './utils/api'
+import { getNotifications, markBellClicked } from './utils/api'
 import {
   InboxContext,
   getStorageKey,
@@ -31,9 +31,6 @@ function processNotifications(props) {
   let newNotificationsList = [] // final notifications list after adding old and new notifications
   let newFetchedNotificationsList = [] // only new notifications, used for showing toast
   const firstCall = !notificationsData.last_after
-  const badgeCount = response.results.reduce((acc, item) => {
-    return !item.seen_on ? acc + 1 : acc
-  }, 0)
 
   if (response.results.length > config.BATCH_SIZE) {
     newNotificationsList = response.results.slice(0, config.BATCH_SIZE)
@@ -51,11 +48,8 @@ function processNotifications(props) {
     (notification) => !notification.seen_on
   )
 
-  const newFetchedUnseenNotificationsCount =
-    newFetchedUnseenNotifications.length
-
   // show toast for new notifications
-  if (!firstCall && newFetchedUnseenNotificationsCount > 0) {
+  if (!firstCall && newFetchedUnseenNotifications.length > 0) {
     notify({
       notificationsData: newFetchedUnseenNotifications,
       setNotificationsData,
@@ -63,16 +57,11 @@ function processNotifications(props) {
     })
   }
 
-  const totalNewNotificationCount = notificationsData.count + badgeCount
-
   // set in state
   setNotificationsData(() => ({
     notifications: newNotificationsList,
     last_after: currentFetchingOn,
-    count:
-      totalNewNotificationCount > config.BATCH_SIZE
-        ? config.BATCH_SIZE
-        : totalNewNotificationCount
+    count: notificationsData.count + response.unread
   }))
 
   // set in localstorage
@@ -83,7 +72,7 @@ function processNotifications(props) {
 }
 
 function getNotificationsApi(props, notificationsDataRef) {
-  const { workspaceKey, workspaceSecret, subscriberId } = props
+  const { workspaceKey, workspaceSecret, subscriberId, distinctId } = props
   const notificationsData = notificationsDataRef.current
   const newAfter = notificationsData.last_after
     ? notificationsData.last_after
@@ -94,6 +83,7 @@ function getNotificationsApi(props, notificationsDataRef) {
     workspaceKey,
     workspaceSecret,
     subscriberId,
+    distinctId,
     after: newAfter
   })
     .then((res) => res.json())
@@ -113,6 +103,7 @@ function getNotificationsApi(props, notificationsDataRef) {
 function SuprsendInbox({
   workspaceKey = '',
   workspaceSecret = '',
+  distinctId = '',
   subscriberId = '',
   children,
   containerStyle,
@@ -161,10 +152,15 @@ function SuprsendInbox({
   }, [notificationsData])
 
   useEffect(() => {
-    if (openInbox) {
-      console.log('make post request')
+    if (openInbox && subscriberId) {
+      markBellClicked({
+        distinctId,
+        workspaceKey,
+        workspaceSecret,
+        subscriberId
+      })
     }
-  }, [openInbox])
+  }, [openInbox, subscriberId])
 
   // get notifications and start polling for new ones
   useEffect(() => {
@@ -181,6 +177,7 @@ function SuprsendInbox({
       workspaceKey,
       workspaceSecret,
       subscriberId,
+      distinctId,
       setNotificationsData,
       storageKey,
       toastProps,

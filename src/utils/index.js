@@ -13,8 +13,12 @@ export function uuid() {
   return uuid
 }
 
-export function epochMilliseconds() {
+export function epochNow() {
   return Math.round(Date.now())
+}
+
+export function utcNow() {
+  return new Date().toGMTString()
 }
 
 export const InboxContext = createContext({})

@@ -8,6 +8,7 @@ const App = () => {
         workspaceKey='kfWdrPL1nFqs7OUihiBn'
         workspaceSecret='From1HA1ZiSXs3ofBHXh'
         subscriberId='2t8r9WtUZhK8G97Kb0Bb96rr1PkJdmZQyrnLnfcVE4w'
+        distinctId='skme902902@gmail.com'
       />
     </div>
   )
