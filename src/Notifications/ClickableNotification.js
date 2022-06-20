@@ -4,13 +4,13 @@ import { markClicked } from '../utils/api'
 import { InboxContext } from '../utils'
 
 export default function ClickableNotification({ notificationData }) {
-  const { workspaceKey, setNotificationsData, buttonClickHandler } =
+  const { workspaceKey, setNotificationsData, notificationClickHandler } =
     useContext(InboxContext)
 
   const navigateUser = () => {
     // redirect after mark seen logic
-    if (typeof buttonClickHandler === 'function') {
-      buttonClickHandler(notificationData)
+    if (typeof notificationClickHandler === 'function') {
+      notificationClickHandler(notificationData)
     } else {
       if (notificationData?.message?.url) {
         window.location.href = notificationData.message.url

@@ -25,12 +25,12 @@ export function notify({
   workspaceKey,
   notificationsData,
   toastProps,
-  buttonClickHandler,
+  notificationClickHandler,
   setNotificationsData
 }) {
   const navigateUser = (notificationData) => {
-    if (typeof buttonClickHandler === 'function') {
-      buttonClickHandler(notificationData)
+    if (typeof notificationClickHandler === 'function') {
+      notificationClickHandler(notificationData)
     } else {
       if (notificationData?.message?.url) {
         window.location.href = notificationData.message.url

@@ -2,7 +2,7 @@
 import { css, jsx } from '@emotion/react'
 import { HeadingText } from '../utils/styles'
 
-export default function Header({ containerStyle = {}, textStyle = {} }) {
+export default function Header({ containerStyle = {}, headerTextStyle = {} }) {
   return (
     <div
       css={css`
@@ -20,7 +20,7 @@ export default function Header({ containerStyle = {}, textStyle = {} }) {
     >
       <HeadingText
         css={css`
-          ${textStyle}
+          ${headerTextStyle}
         `}
       >
         Notifications

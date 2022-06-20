@@ -113,7 +113,7 @@ function SuprsendInbox({
   headerProps,
   notificationProps,
   toastProps,
-  buttonClickHandler
+  notificationClickHandler
 }) {
   const storageKey = getStorageKey(workspaceKey)
   const storedData = getStorageData(storageKey)
@@ -181,7 +181,7 @@ function SuprsendInbox({
       setNotificationsData,
       storageKey,
       toastProps,
-      buttonClickHandler
+      notificationClickHandler
     }
     getNotificationsApi(props, notificationsDataRef)
     const timerId = setInterval(() => {
@@ -221,7 +221,7 @@ function SuprsendInbox({
         notificationsData,
         setNotificationsData,
         toggleInbox,
-        buttonClickHandler,
+        notificationClickHandler,
         notificationProps
       }}
     >
