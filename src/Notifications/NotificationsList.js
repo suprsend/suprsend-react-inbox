@@ -1,6 +1,5 @@
-import React, { useContext } from 'react'
-import { css } from '@emotion/react'
-import { InboxContext } from '../utils'
+import React from 'react'
+import { useInbox } from '../utils/context'
 import ClickableNotification from './ClickableNotification'
 import { HelperText } from '../utils/styles'
 import styled from '@emotion/styled'
@@ -11,22 +10,14 @@ export default function NotificationsList({
 }) {
   const {
     notificationsData: { notifications }
-  } = useContext(InboxContext)
+  } = useInbox()
 
   if (notifications.length <= 0) {
     if (emptyComponent) {
       const EmptyComponent = emptyComponent
       return <EmptyComponent />
     }
-    return (
-      <EmptyText
-        css={css`
-          ${emptyTextStyle}
-        `}
-      >
-        No Notifications
-      </EmptyText>
-    )
+    return <EmptyText style={emptyTextStyle}>No Notifications</EmptyText>
   }
   return notifications.map((notification, index) => (
     <ClickableNotification notificationData={notification} key={index} />
