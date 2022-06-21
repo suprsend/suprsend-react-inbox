@@ -1,11 +1,11 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import Notification from './Notification'
 import { markClicked } from '../utils/api'
-import { InboxContext } from '../utils'
+import { useInbox } from '../utils/context'
 
 export default function ClickableNotification({ notificationData }) {
   const { workspaceKey, setNotificationsData, notificationClickHandler } =
-    useContext(InboxContext)
+    useInbox()
 
   const navigateUser = () => {
     // redirect after mark seen logic

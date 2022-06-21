@@ -1,5 +1,3 @@
-import { createContext } from 'react'
-
 export function uuid() {
   var dt = new Date().getTime()
   var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
@@ -20,8 +18,6 @@ export function epochNow() {
 export function utcNow() {
   return new Date().toGMTString()
 }
-
-export const InboxContext = createContext({})
 
 export function getStorageKey(str) {
   let newStr = ''

@@ -1,12 +1,14 @@
 import React from 'react'
 import DefaultBellIcon from './DefaultBellIcon'
+import { useInbox, useTheme } from '../utils/context'
 
-function Bell({ style = {}, bellComponent, ...otherProps }) {
+export default function Bell() {
+  const { bellComponent } = useInbox()
+  const { bell } = useTheme()
+
   if (bellComponent) {
     const BellComponent = bellComponent
-    return <BellComponent {...otherProps} />
+    return <BellComponent />
   }
-  return <DefaultBellIcon style={style} />
+  return <DefaultBellIcon style={bell} />
 }
-
-export default Bell

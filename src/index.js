@@ -1,22 +1,10 @@
-/** @jsx jsx */
-import { css, jsx } from '@emotion/react'
-import { useState, useEffect, useRef } from 'react'
-import { usePopper } from 'react-popper'
-import Bell from './Bell'
-import Badge from './Badge'
+import React, { useState, useEffect, useRef } from 'react'
+import Inbox from './Inbox'
 import Toast, { notify } from './Toast'
-import NotificationsContainer from './NotificationsContainer'
-import useClickOutside from './utils/useClickOutside'
 import config from './config'
 import { getNotifications, markBellClicked } from './utils/api'
-import {
-  InboxContext,
-  getStorageKey,
-  getStorageData,
-  setStorageData
-} from './utils'
-export { default as NotificationsBox } from './NotificationsContainer'
-export { default as NotificationsList } from './Notifications/NotificationsList'
+import { getStorageKey, getStorageData, setStorageData } from './utils'
+import { InboxContext, InboxThemeContext } from './utils/context'
 
 function processNotifications(props) {
   const {
@@ -105,47 +93,27 @@ function SuprsendInbox({
   workspaceSecret = '',
   distinctId = '',
   subscriberId = '',
-  children,
-  containerStyle,
-  bellProps,
-  badgeProps,
-  notificationContainerProps,
-  headerProps,
-  notificationProps,
   toastProps,
-  notificationClickHandler
+  notificationClickHandler,
+  theme,
+  bellComponent,
+  badgeComponent,
+  notificationComponent,
+  noNotificationsComponent,
+  hideInbox,
+  hideToast
 }) {
   const storageKey = getStorageKey(workspaceKey)
   const storedData = getStorageData(storageKey)
   const isSameUser = storedData?.subscriber_id === subscriberId
 
   const [openInbox, toggleInbox] = useState(false)
-  const [referenceElement, setReferenceElement] = useState(null)
-  const [popperElement, setPopperElement] = useState(null)
-  const [arrowElement, setArrowElement] = useState(null)
   const [notificationsData, setNotificationsData] = useState({
     notifications: isSameUser ? storedData?.notifications || [] : [],
     count: 0,
     last_after: null
   })
   const notificationsDataRef = useRef(notificationsData)
-  const { styles, attributes } = usePopper(referenceElement, popperElement, {
-    placement: 'bottom',
-    modifiers: [
-      { name: 'arrow', options: { element: arrowElement } },
-      {
-        name: 'offset',
-        options: {
-          offset: [0, 5]
-        }
-      }
-    ]
-  })
-
-  // listen to click outside inbox container
-  useClickOutside({ current: popperElement }, () => {
-    toggleInbox((prev) => !prev)
-  })
 
   useEffect(() => {
     notificationsDataRef.current = notificationsData
@@ -192,76 +160,26 @@ function SuprsendInbox({
     }
   }, [subscriberId, workspaceKey])
 
-  const handleBellClick = () => {
-    setNotificationsData((prev) => ({ ...prev, count: 0 }))
-    toggleInbox((prev) => !prev)
-  }
-
-  const arrowStyle = {
-    ...styles.arrow,
-    ...{
-      width: 0,
-      height: 0,
-      borderLeft: '10px solid transparent',
-      borderRight: '10px solid transparent',
-      borderBottom: '10px solid white',
-      top: -8
-    },
-    ...{
-      borderBottomColor: headerProps?.containerStyle?.backgroundColor || 'white'
-    }
-  }
-  const NotificationsBox = children || NotificationsContainer
-
   return (
-    <InboxContext.Provider
-      value={{
-        subscriberId,
-        workspaceKey,
-        notificationsData,
-        setNotificationsData,
-        toggleInbox,
-        notificationClickHandler,
-        notificationProps
-      }}
-    >
-      <div
-        css={css`
-          position: relative;
-          display: inline-block;
-          background-color: transparent;
-          ${containerStyle}
-        `}
+    <InboxThemeContext.Provider value={theme || {}}>
+      <InboxContext.Provider
+        value={{
+          workspaceKey,
+          notificationsData,
+          setNotificationsData,
+          notificationClickHandler,
+          bellComponent,
+          badgeComponent,
+          notificationComponent,
+          noNotificationsComponent
+        }}
       >
-        <div
-          onClick={handleBellClick}
-          ref={setReferenceElement}
-          css={css`
-            position: relative;
-            margin-top: 12px;
-            margin-right: 12px;
-            cursor: pointer;
-          `}
-        >
-          <Badge {...badgeProps} />
-          <Bell {...bellProps} />
-        </div>
-        {openInbox && (
-          <div
-            ref={setPopperElement}
-            style={{ ...styles.popper, zIndex: 999 }}
-            {...attributes.popper}
-          >
-            <div ref={setArrowElement} style={arrowStyle} />
-            <NotificationsBox
-              headerProps={headerProps}
-              notificationContainerProps={notificationContainerProps}
-            />
-          </div>
+        {!hideInbox && (
+          <Inbox openInbox={openInbox} toggleInbox={toggleInbox} />
         )}
-      </div>
-      <Toast {...toastProps} />
-    </InboxContext.Provider>
+        {!hideToast && <Toast {...toastProps} />}
+      </InboxContext.Provider>
+    </InboxThemeContext.Provider>
   )
 }
 

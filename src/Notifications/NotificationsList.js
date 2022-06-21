@@ -1,29 +1,23 @@
-import React, { useContext } from 'react'
-import { css } from '@emotion/react'
-import { InboxContext } from '../utils'
+import React from 'react'
+import { useInbox, useTheme } from '../utils/context'
 import ClickableNotification from './ClickableNotification'
 import { HelperText } from '../utils/styles'
 import styled from '@emotion/styled'
 
-export default function NotificationsList({
-  emptyComponent,
-  emptyTextStyle = {}
-}) {
+export default function NotificationsList() {
   const {
-    notificationsData: { notifications }
-  } = useContext(InboxContext)
+    notificationsData: { notifications },
+    noNotificationsComponent
+  } = useInbox()
+  const { notificationsContainer } = useTheme()
 
   if (notifications.length <= 0) {
-    if (emptyComponent) {
-      const EmptyComponent = emptyComponent
-      return <EmptyComponent />
+    if (noNotificationsComponent) {
+      const NoNotificationsComponent = noNotificationsComponent
+      return <NoNotificationsComponent />
     }
     return (
-      <EmptyText
-        css={css`
-          ${emptyTextStyle}
-        `}
-      >
+      <EmptyText style={notificationsContainer?.noNotificationsText}>
         No Notifications
       </EmptyText>
     )
