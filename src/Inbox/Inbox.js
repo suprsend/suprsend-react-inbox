@@ -5,19 +5,14 @@ import Bell from '../Bell'
 import Badge from '../Badge'
 import NotificationsContainer from '../NotificationsContainer'
 import useClickOutside from '../utils/useClickOutside'
-import { useInbox } from '../utils/context'
+import { useInbox, useTheme } from '../utils/context'
 
-export default function Inbox() {
+export default function Inbox({ openInbox, toggleInbox }) {
   const [referenceElement, setReferenceElement] = useState(null)
   const [popperElement, setPopperElement] = useState(null)
   const [arrowElement, setArrowElement] = useState(null)
-  const {
-    toggleInbox,
-    setNotificationsData,
-    headerProps,
-    openInbox,
-    notificationContainerProps
-  } = useInbox()
+  const { setNotificationsData } = useInbox()
+  const { header } = useTheme()
   const { styles, attributes } = usePopper(referenceElement, popperElement, {
     placement: 'bottom',
     modifiers: [
@@ -41,14 +36,9 @@ export default function Inbox() {
 
   const arrowStyle = {
     ...styles.arrow,
+    ...customArrowStyle,
     ...{
-      width: 0,
-      height: 0,
-      borderLeft: '10px solid transparent',
-      borderRight: '10px solid transparent',
-      borderBottom: '10px solid white',
-      top: -8,
-      borderBottomColor: headerProps?.containerStyle?.backgroundColor || 'white'
+      borderBottomColor: header?.container?.backgroundColor || 'white'
     }
   }
 
@@ -65,14 +55,20 @@ export default function Inbox() {
           {...attributes.popper}
         >
           <div ref={setArrowElement} style={arrowStyle} />
-          <NotificationsContainer
-            headerProps={headerProps}
-            notificationContainerProps={notificationContainerProps}
-          />
+          <NotificationsContainer />
         </div>
       )}
     </Container>
   )
+}
+
+const customArrowStyle = {
+  width: 0,
+  height: 0,
+  borderLeft: '10px solid transparent',
+  borderRight: '10px solid transparent',
+  borderBottom: '10px solid white',
+  top: -8
 }
 
 const Container = styled.div`

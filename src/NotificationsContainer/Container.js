@@ -2,16 +2,14 @@ import React from 'react'
 import styled from '@emotion/styled'
 import NotificationsList from '../Notifications/NotificationsList'
 import Header from './Header'
+import { useTheme } from '../utils/context'
 
-export default function NotificationsContainer({
-  headerProps,
-  notificationContainerProps = {}
-}) {
-  const { containerStyle } = notificationContainerProps
+export default function NotificationsContainer() {
+  const { notificationsContainer } = useTheme()
   return (
-    <Container style={containerStyle}>
-      <Header {...headerProps} />
-      <NotificationsList {...notificationContainerProps} />
+    <Container style={notificationsContainer?.container}>
+      <Header />
+      <NotificationsList />
     </Container>
   )
 }

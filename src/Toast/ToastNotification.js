@@ -1,17 +1,20 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { CText } from '../utils/styles'
+import { useTheme } from '../utils/context'
 
 export function ToastNotification({ notificationData, markClicked }) {
+  const { toast } = useTheme()
   const { message } = notificationData
   return (
     <Container
+      style={toast?.container}
       onClick={(e) => {
         markClicked(e, notificationData)
       }}
     >
-      <HeaderText>{message.header}</HeaderText>
-      <BodyText>{message.text}</BodyText>
+      <HeaderText style={toast?.headerText}>{message.header}</HeaderText>
+      <BodyText style={toast?.bodyText}>{message.text}</BodyText>
     </Container>
   )
 }

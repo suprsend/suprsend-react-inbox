@@ -1,11 +1,14 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { HeadingText } from '../utils/styles'
+import { useTheme } from '../utils/context'
 
-export default function Header({ containerStyle = {}, headerTextStyle = {} }) {
+export default function Header() {
+  const { header } = useTheme()
+
   return (
-    <Container style={containerStyle}>
-      <HeadingText style={headerTextStyle}>Notifications</HeadingText>
+    <Container style={header?.container}>
+      <HeadingText style={header?.headerText}>Notifications</HeadingText>
     </Container>
   )
 }

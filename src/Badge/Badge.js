@@ -1,20 +1,20 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import { useInbox } from '../utils/context'
+import { useInbox, useTheme } from '../utils/context'
 
 export default function Badge() {
   const {
     notificationsData: { count },
-    badgeProps
+    badgeComponent
   } = useInbox()
-  const { style = {}, badgeComponent } = badgeProps || {}
+  const { badge } = useTheme()
 
   if (count > 0) {
     if (badgeComponent) {
       const BagdeComponent = badgeComponent
       return <BagdeComponent count={count} />
     }
-    return <CountText style={style}>{count}</CountText>
+    return <CountText style={badge}>{count}</CountText>
   }
   return null
 }

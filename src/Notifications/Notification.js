@@ -3,35 +3,32 @@ import styled from '@emotion/styled'
 import { ColorConfig, CText } from '../utils/styles'
 import dayjs from 'dayjs'
 import calendar from 'dayjs/plugin/calendar'
-import { useInbox } from '../utils/context'
+import { useInbox, useTheme } from '../utils/context'
 
 dayjs.extend(calendar)
 
 export default function Notification({ notificationData }) {
   const { message, seen_on: seenOn, created_on: createdOn } = notificationData
-  const { notificationProps = {} } = useInbox()
+  const { notificationComponent } = useInbox()
+  const { notification } = useTheme()
 
-  if (notificationProps?.notificationComponent) {
-    const NotificationComponent = notificationProps.notificationComponent
+  if (notificationComponent) {
+    const NotificationComponent = notificationComponent
     return <NotificationComponent notificationData={notificationData} />
   }
 
-  const {
-    containerStyle = {},
-    headerTextStyle = {},
-    bodyTextStyle = {},
-    unseenDotStyle = {}
-  } = notificationProps
   return (
-    <Container style={containerStyle}>
+    <Container style={notification?.container}>
       <NotificationView>
         <div>
-          <HeaderText style={headerTextStyle}>{message.header}</HeaderText>
-          <BodyText style={bodyTextStyle}>{message.text}</BodyText>
+          <HeaderText style={notification?.headerText}>
+            {message.header}
+          </HeaderText>
+          <BodyText style={notification?.bodyText}>{message.text}</BodyText>
         </div>
         {!seenOn && (
           <div>
-            <UnseenDot style={unseenDotStyle} />
+            <UnseenDot style={notification?.unseenDot} />
           </div>
         )}
       </NotificationView>

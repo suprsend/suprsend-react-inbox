@@ -4,7 +4,7 @@ import Toast, { notify } from './Toast'
 import config from './config'
 import { getNotifications, markBellClicked } from './utils/api'
 import { getStorageKey, getStorageData, setStorageData } from './utils'
-import { InboxContext } from './utils/context'
+import { InboxContext, InboxThemeContext } from './utils/context'
 
 function processNotifications(props) {
   const {
@@ -93,14 +93,15 @@ function SuprsendInbox({
   workspaceSecret = '',
   distinctId = '',
   subscriberId = '',
-  containerStyle,
-  bellProps,
-  badgeProps,
-  notificationContainerProps,
-  headerProps,
-  notificationProps,
   toastProps,
-  notificationClickHandler
+  notificationClickHandler,
+  theme,
+  bellComponent,
+  badgeComponent,
+  notificationComponent,
+  noNotificationsComponent,
+  hideInbox,
+  hideToast
 }) {
   const storageKey = getStorageKey(workspaceKey)
   const storedData = getStorageData(storageKey)
@@ -160,26 +161,25 @@ function SuprsendInbox({
   }, [subscriberId, workspaceKey])
 
   return (
-    <InboxContext.Provider
-      value={{
-        subscriberId,
-        workspaceKey,
-        notificationsData,
-        setNotificationsData,
-        openInbox,
-        toggleInbox,
-        notificationClickHandler,
-        headerProps,
-        badgeProps,
-        bellProps,
-        notificationProps,
-        notificationContainerProps,
-        containerStyle
-      }}
-    >
-      <Inbox />
-      <Toast {...toastProps} />
-    </InboxContext.Provider>
+    <InboxThemeContext.Provider value={theme || {}}>
+      <InboxContext.Provider
+        value={{
+          workspaceKey,
+          notificationsData,
+          setNotificationsData,
+          notificationClickHandler,
+          bellComponent,
+          badgeComponent,
+          notificationComponent,
+          noNotificationsComponent
+        }}
+      >
+        {!hideInbox && (
+          <Inbox openInbox={openInbox} toggleInbox={toggleInbox} />
+        )}
+        {!hideToast && <Toast {...toastProps} />}
+      </InboxContext.Provider>
+    </InboxThemeContext.Provider>
   )
 }
 
