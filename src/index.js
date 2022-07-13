@@ -101,7 +101,8 @@ function SuprsendInbox({
   notificationComponent,
   noNotificationsComponent,
   hideInbox,
-  hideToast
+  hideToast,
+  collapseToastNotifications
 }) {
   const storageKey = getStorageKey(workspaceKey)
   const storedData = getStorageData(storageKey)
@@ -149,7 +150,8 @@ function SuprsendInbox({
       setNotificationsData,
       storageKey,
       toastProps,
-      notificationClickHandler
+      notificationClickHandler,
+      collapseToastNotifications
     }
     getNotificationsApi(props, notificationsDataRef)
     const timerId = setInterval(() => {
@@ -171,7 +173,8 @@ function SuprsendInbox({
           bellComponent,
           badgeComponent,
           notificationComponent,
-          noNotificationsComponent
+          noNotificationsComponent,
+          toggleInbox
         }}
       >
         {!hideInbox && (

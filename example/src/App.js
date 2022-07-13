@@ -11,6 +11,7 @@ const App = () => {
         distinctId={process.env.REACT_APP_DISTINCT_ID}
         // hideInbox={false}
         // hideToast={false}
+        // collapseToastNotifications={true}
         // bellComponent={() => <p>Hello world</p>}
         // badgeComponent={({ count }) => <p>{count}</p>}
         // notificationComponent={({ notificationData }) => (
@@ -46,7 +47,8 @@ const App = () => {
         //     container: { backgroundColor: 'red' },
         //     headerText: { color: 'white' },
         //     bodyText: { color: 'white' }
-        //   }
+        //   },
+        //   collapseToastNotification: { backgroundColor: 'red' }
         // }}
       />
     </div>
