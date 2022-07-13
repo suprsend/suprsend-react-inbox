@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/react'
 import { Toaster, toast } from 'react-hot-toast'
-import { ToastNotification } from './ToastNotification'
+import { ToastNotification, MultipleNotifications } from './ToastNotification'
 import { markClicked } from '../utils/api'
 
 export default function Toast({ position, ...otherProps }) {
@@ -26,7 +26,8 @@ export function notify({
   notificationsData,
   toastProps,
   notificationClickHandler,
-  setNotificationsData
+  setNotificationsData,
+  collapseToastNotifications
 }) {
   const navigateUser = (notificationData) => {
     if (typeof notificationClickHandler === 'function') {
@@ -63,18 +64,30 @@ export function notify({
   const ToastNotificationComponent =
     toastProps?.toastComponent || ToastNotification
 
-  for (let i = 0; i < notificationsData.length; i++) {
-    setTimeout(() => {
-      toast.custom((t) => (
-        <ToastNotificationComponent
-          t={t}
-          notificationData={notificationsData[i]}
-          markClicked={handleClick}
-          dismissToast={() => {
-            toast.dismiss(t.id)
-          }}
-        />
-      ))
-    }, i * 1000)
+  if (collapseToastNotifications && notificationsData.length > 1) {
+    toast.custom((t) => (
+      <MultipleNotifications
+        t={t}
+        notificationsCount={notificationsData.length}
+        dismissToast={() => {
+          toast.dismiss(t.id)
+        }}
+      />
+    ))
+  } else {
+    for (let i = 0; i < notificationsData.length; i++) {
+      setTimeout(() => {
+        toast.custom((t) => (
+          <ToastNotificationComponent
+            t={t}
+            notificationData={notificationsData[i]}
+            markClicked={handleClick}
+            dismissToast={() => {
+              toast.dismiss(t.id)
+            }}
+          />
+        ))
+      }, i * 1000)
+    }
   }
 }
