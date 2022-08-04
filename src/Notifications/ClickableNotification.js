@@ -18,8 +18,7 @@ export default function ClickableNotification({ notificationData }) {
     }
   }
 
-  const handleClick = (e) => {
-    e.stopPropagation()
+  const markNotificationClicked = () => {
     if (notificationData.seen_on) {
       navigateUser()
     } else {
@@ -39,15 +38,21 @@ export default function ClickableNotification({ notificationData }) {
         .catch((err) => {
           console.log('MARK SEEN ERROR ', err)
         })
-        .finally(() => {
-          navigateUser()
-        })
     }
+  }
+
+  const handleClick = async (e) => {
+    e.stopPropagation()
+    await markNotificationClicked()
+    navigateUser()
   }
 
   return (
     <div onClick={handleClick}>
-      <Notification notificationData={notificationData} />
+      <Notification
+        notificationData={notificationData}
+        markClicked={markNotificationClicked}
+      />
     </div>
   )
 }
