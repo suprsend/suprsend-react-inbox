@@ -131,6 +131,7 @@ const ButtonView = styled.a`
   width: 150px;
   background: #358adf;
   border-radius: 5px;
+  text-decoration: none;
 `
 
 const ButtonText = styled(CText)`
