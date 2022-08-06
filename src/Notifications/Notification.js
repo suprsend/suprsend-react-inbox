@@ -138,6 +138,7 @@ const ButtonText = styled(CText)`
   color: ${ColorConfig.white};
   padding: 5px 0px;
   text-align: center;
+  word-break: break-all;
 `
 
 const ButtonOutlineView = styled(ButtonView)`
