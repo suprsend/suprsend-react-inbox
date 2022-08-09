@@ -7,11 +7,13 @@ import { useInbox, useTheme } from '../utils/context'
 
 dayjs.extend(calendar)
 
-export default function Notification({ notificationData }) {
+export default function Notification({ notificationData, markClicked }) {
   const { message, seen_on: seenOn, created_on: createdOn } = notificationData
   const { notificationComponent } = useInbox()
   const { notification } = useTheme()
 
+  const actionOne = message?.actions?.[0]
+  const actionTwo = message?.actions?.[1]
   if (notificationComponent) {
     const NotificationComponent = notificationComponent
     return <NotificationComponent notificationData={notificationData} />
@@ -32,6 +34,36 @@ export default function Notification({ notificationData }) {
           </div>
         )}
       </NotificationView>
+      <ButtonContainer>
+        {actionOne && (
+          <ButtonView
+            key={actionOne.id}
+            onClick={(e) => {
+              e.stopPropagation()
+              markClicked()
+              if (actionOne?.url) {
+                window.location.href = actionOne.url
+              }
+            }}
+          >
+            <ButtonText>{actionOne.name}</ButtonText>
+          </ButtonView>
+        )}
+        {actionTwo && (
+          <ButtonOutlineView
+            key={actionTwo.id}
+            onClick={(e) => {
+              e.stopPropagation()
+              markClicked()
+              if (actionTwo?.url) {
+                window.location.href = actionTwo.url
+              }
+            }}
+          >
+            <ButtonOutlineText>{actionTwo.name}</ButtonOutlineText>
+          </ButtonOutlineView>
+        )}
+      </ButtonContainer>
       <CreatedText>
         {dayjs(createdOn).calendar(null, {
           sameDay: '[Today at] h:mm A',
@@ -86,4 +118,36 @@ const CreatedText = styled(CText)`
   font-size: 12px;
   margin: 0px;
   color: ${ColorConfig.lightGray1};
+`
+
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  margin-bottom: 5px;
+`
+
+const ButtonView = styled.a`
+  width: 150px;
+  background: #358adf;
+  border-radius: 5px;
+  text-decoration: none;
+`
+
+const ButtonText = styled(CText)`
+  color: ${ColorConfig.white};
+  padding: 5px 0px;
+  text-align: center;
+  word-break: break-all;
+`
+
+const ButtonOutlineView = styled(ButtonView)`
+  background: ${ColorConfig.white};
+  border-color: #358adf;
+  border-style: solid;
+  border-width: 1px;
+`
+
+const ButtonOutlineText = styled(ButtonText)`
+  color: #358adf;
 `
