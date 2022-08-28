@@ -10,7 +10,7 @@ export async function getNotifications({
   after = 0
 }) {
   const date = utcNow()
-  const route = `/inbox/fetch/?subscriber_id=${subscriberId}&after=${after}&distinct_id=${distinctId}`
+  const route = `/fetch/?subscriber_id=${subscriberId}&after=${after}&distinct_id=${distinctId}`
   const signature = await createSignature({
     workspaceSecret,
     date,
@@ -33,7 +33,7 @@ export async function markBellClicked({
   distinctId
 }) {
   const date = utcNow()
-  const route = '/inbox/bell-clicked/'
+  const route = '/bell-clicked/'
   const body = JSON.stringify({
     time: epochNow(),
     distinct_id: distinctId,
@@ -65,7 +65,7 @@ export function markClicked(workspaceKey, nId) {
     $time: epochNow(),
     properties: { id: nId }
   }
-  return window.fetch(`${config.API_BASE_URL}/event/`, {
+  return window.fetch(`${config.COLLECTOR_API_BASE_URL}/event/`, {
     method: 'POST',
     body: JSON.stringify(body),
     headers: {
