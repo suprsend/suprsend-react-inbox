@@ -69,7 +69,7 @@ export function markClicked(workspaceKey, nId) {
     method: 'POST',
     body: JSON.stringify(body),
     headers: {
-      Authorization: `${workspaceKey}`,
+      Authorization: `${workspaceKey}:`,
       'Content-Type': 'application/json',
       'x-amz-date': utcNow()
     }
