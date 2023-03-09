@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import { HeadingText } from '../utils/styles'
+import { CText, lightColors } from '../utils/styles'
 import { useTheme } from '../utils/context'
 
 export default function Header() {
@@ -8,7 +8,7 @@ export default function Header() {
 
   return (
     <Container style={header?.container}>
-      <HeadingText style={header?.headerText}>Notifications</HeadingText>
+      <HeaderText style={header?.headerText}>Notifications</HeaderText>
     </Container>
   )
 }
@@ -19,8 +19,11 @@ const Container = styled.div`
   align-items: center;
   position: sticky;
   top: 0;
-  background-color: #fff;
-  padding: 12px;
-  border-bottom: 1px solid #f0f0f0;
+  padding: 14px;
   z-index: 1000;
+  background-color: ${lightColors.main};
+  border-bottom: 1px solid ${lightColors.border};
+`
+const HeaderText = styled(CText)`
+  font-weight: 600;
 `

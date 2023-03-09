@@ -8,7 +8,7 @@ const DefaultBellIcon = ({ style }) => {
         xmlns='http://www.w3.org/2000/svg'
         css={css`
           height: 24px;
-          width: 24;
+          width: 24px;
           color: #000;
           ${style}
         `}
@@ -24,7 +24,7 @@ const DefaultBellIcon = ({ style }) => {
       xmlns='http://www.w3.org/2000/svg'
       css={css`
         height: 24px;
-        width: 24;
+        width: 24px;
         color: #000;
         ${style}
       `}

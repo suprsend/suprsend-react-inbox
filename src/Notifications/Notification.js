@@ -1,11 +1,30 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import { ColorConfig, CText } from '../utils/styles'
+import { CText, HelperText, lightColors } from '../utils/styles'
 import dayjs from 'dayjs'
-import calendar from 'dayjs/plugin/calendar'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import updateLocale from 'dayjs/plugin/updateLocale'
 import { useInbox, useTheme } from '../utils/context'
+import AvatarIcon from './AvatarIcon'
 
-dayjs.extend(calendar)
+dayjs.extend(relativeTime)
+dayjs.extend(updateLocale)
+dayjs.updateLocale('en', {
+  relativeTime: {
+    past: '%ss',
+    s: '1m',
+    m: '1m',
+    mm: '%dm',
+    h: '1h',
+    hh: '%dh',
+    d: '1d',
+    dd: '%dd',
+    M: '1m',
+    MM: '%dm',
+    y: '1y',
+    yy: '%dy'
+  }
+})
 
 export default function Notification({ notificationData, markClicked }) {
   const { message, seen_on: seenOn, created_on: createdOn } = notificationData
@@ -20,23 +39,45 @@ export default function Notification({ notificationData, markClicked }) {
   }
 
   return (
-    <Container style={notification?.container}>
+    <Container style={notification?.container} read={!!seenOn}>
       <NotificationView>
-        <div>
-          <HeaderText style={notification?.headerText}>
-            {message.header}
-          </HeaderText>
-          <BodyText style={notification?.bodyText}>{message.text}</BodyText>
-        </div>
-        {!seenOn && (
+        <LeftView>
+          <AvatarView href={message?.avatar?.action_url}>
+            {message?.avatar?.avatar_url ? (
+              <AvatarImage src={message.avatar.avatar_url} alt='avatar' />
+            ) : (
+              <AvatarIcon />
+            )}
+          </AvatarView>
           <div>
-            <UnseenDot style={notification?.unseenDot} />
+            <HeaderText style={notification?.headerText}>
+              {message.header}
+            </HeaderText>
+            <BodyText style={notification?.bodyText}>{message.text}</BodyText>
           </div>
-        )}
+        </LeftView>
+        <RightView>
+          <CreatedText style={notification?.createdOnText}>
+            {dayjs(createdOn).fromNow(true)}
+          </CreatedText>
+          {!seenOn && (
+            <div>
+              <UnseenDot style={notification?.unseenDot} />
+            </div>
+          )}
+        </RightView>
       </NotificationView>
+      {message?.subtext?.text && (
+        <SubTextView href={message?.subtext?.action_url}>
+          <SubText style={notification?.subtext}>
+            {message.subtext.text}
+          </SubText>
+        </SubTextView>
+      )}
       <ButtonContainer>
         {actionOne && (
           <ButtonView
+            style={notification?.actions?.[0]?.container}
             key={actionOne.id}
             onClick={(e) => {
               e.stopPropagation()
@@ -46,12 +87,15 @@ export default function Notification({ notificationData, markClicked }) {
               }
             }}
           >
-            <ButtonText>{actionOne.name}</ButtonText>
+            <ButtonText style={notification?.actions?.[0]?.text}>
+              {actionOne.name}
+            </ButtonText>
           </ButtonView>
         )}
         {actionTwo && (
           <ButtonOutlineView
             key={actionTwo.id}
+            style={notification?.actions?.[1]?.container}
             onClick={(e) => {
               e.stopPropagation()
               markClicked()
@@ -60,20 +104,12 @@ export default function Notification({ notificationData, markClicked }) {
               }
             }}
           >
-            <ButtonOutlineText>{actionTwo.name}</ButtonOutlineText>
+            <ButtonOutlineText style={notification?.actions?.[1]?.text}>
+              {actionTwo.name}
+            </ButtonOutlineText>
           </ButtonOutlineView>
         )}
       </ButtonContainer>
-      <CreatedText>
-        {dayjs(createdOn).calendar(null, {
-          sameDay: '[Today at] h:mm A',
-          nextDay: '[Tomorrow at] h:mm A',
-          nextWeek: 'dddd [at] h:mm A',
-          lastDay: '[Yesterday at] h:mm A',
-          lastWeek: '[Last] dddd [at] h:mm A',
-          sameElse: 'DD/MM/YYYY [at] h:mm A'
-        })}
-      </CreatedText>
     </Container>
   )
 }
@@ -81,11 +117,28 @@ export default function Notification({ notificationData, markClicked }) {
 const Container = styled.div`
   padding: 7px 14px;
   cursor: pointer;
-  background-color: #fff;
-  border-bottom: 1px solid #f0f0f0;
+  background-color: ${(props) => {
+    return props.read
+      ? props?.style?.readBackgroundColor || '#FFF'
+      : props?.style?.unreadBackgroundColor || '#F4F9FF'
+  }};
+  border-bottom: 0.5px solid ${lightColors.border};
   &:hover {
-    background-color: #f0f0f0;
+    background-color: ${(props) =>
+      props.read
+        ? props?.style?.readHoverBackgroundColor || '#F6F6F6'
+        : props?.style?.unreadHoverBackgroundColor || '#DFECFF'};
   }
+`
+
+const SubText = styled(HelperText)`
+  font-size: 11px;
+  margin-left: 40px;
+  color: ${lightColors.secondaryText};
+`
+
+const SubTextView = styled.a`
+  text-decoration: none;
 `
 
 const NotificationView = styled.div`
@@ -94,30 +147,36 @@ const NotificationView = styled.div`
   align-items: flex-start;
   justify-content: space-between;
 `
+
 const HeaderText = styled(CText)`
-  font-size: 16px;
+  font-size: 13px;
   margin: 10px 0px;
   white-space: pre-line;
+  line-height: 16px;
+  font-weight: 700;
+  color: ${lightColors.primaryText};
 `
 
 const BodyText = styled(CText)`
-  font-size: 14px;
-  margin: 10px 0px;
+  font-size: 12px;
+  line-height: 18px;
+  margin: 10px 0px 5px 0px;
   white-space: pre-line;
+  color: ${lightColors.primaryText};
 `
 
 const UnseenDot = styled.div`
-  background: #358adf;
+  background-color: ${lightColors.primary};
   border-radius: 50%;
   width: 7px;
   height: 7px;
-  margin-top: 18px;
+  margin-top: 10px;
 `
 
 const CreatedText = styled(CText)`
   font-size: 12px;
   margin: 0px;
-  color: ${ColorConfig.lightGray1};
+  color: ${lightColors.secondaryText};
 `
 
 const ButtonContainer = styled.div`
@@ -125,29 +184,54 @@ const ButtonContainer = styled.div`
   flex-direction: row;
   gap: 10px;
   margin-bottom: 5px;
+  margin-left: 40px;
+  margin-top: 10px;
 `
 
 const ButtonView = styled.a`
-  width: 150px;
-  background: #358adf;
+  max-width: 50%;
+  background: #066af3;
   border-radius: 5px;
   text-decoration: none;
+  padding: 4px 16px;
 `
 
-const ButtonText = styled(CText)`
-  color: ${ColorConfig.white};
-  padding: 5px 0px;
+const ButtonText = styled(HelperText)`
+  color: #fff;
   text-align: center;
   word-break: break-all;
+  font-weight: 600;
 `
 
 const ButtonOutlineView = styled(ButtonView)`
-  background: ${ColorConfig.white};
-  border-color: #358adf;
+  background: #fff;
+  border-color: ${lightColors.border};
   border-style: solid;
-  border-width: 1px;
+  border-width: 0.5px;
 `
 
 const ButtonOutlineText = styled(ButtonText)`
-  color: #358adf;
+  color: #434343;
+`
+
+const LeftView = styled.div`
+  display: flex;
+`
+
+const AvatarView = styled.a`
+  margin-top: 10px;
+  margin-right: 10px;
+`
+
+const RightView = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 5px;
+`
+
+const AvatarImage = styled.img`
+  height: 32px;
+  width: 32px;
+  border-radius: 100px;
 `

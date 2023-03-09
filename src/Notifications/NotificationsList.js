@@ -1,8 +1,9 @@
 import React from 'react'
-import { useInbox, useTheme } from '../utils/context'
-import ClickableNotification from './ClickableNotification'
-import { HelperText } from '../utils/styles'
 import styled from '@emotion/styled'
+import ClickableNotification from './ClickableNotification'
+import EmptyNotificationIcon from './EmptyNotificationIcon'
+import { useInbox, useTheme } from '../utils/context'
+import { CText, HeadingText, lightColors } from '../utils/styles'
 
 export default function NotificationsList() {
   const {
@@ -17,19 +18,42 @@ export default function NotificationsList() {
       return <NoNotificationsComponent />
     }
     return (
-      <EmptyText style={notificationsContainer?.noNotificationsText}>
-        No Notifications
-      </EmptyText>
+      <EmptyNotificationsContainer>
+        <EmptyNotificationIcon />
+        <EmptyText style={notificationsContainer?.noNotificationsText}>
+          No notifications yet
+        </EmptyText>
+        <EmptySubText style={notificationsContainer?.noNotificationsSubtext}>
+          We'll let you know when we've got something new for you.
+        </EmptySubText>
+      </EmptyNotificationsContainer>
     )
   }
+
   return notifications.map((notification, index) => (
     <ClickableNotification notificationData={notification} key={index} />
   ))
 }
 
-const EmptyText = styled(HelperText)`
+const EmptyNotificationsContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 32px;
+  margin-top: 40px;
+`
+
+const EmptyText = styled(HeadingText)`
+  font-weight: 600;
   text-align: center;
-  font-style: italic;
-  margin: 20px 0px;
   background-color: transparent;
+  margin: 20px 0px;
+  margin-bottom: 16px;
+  color: ${lightColors.primaryText};
+`
+
+const EmptySubText = styled(CText)`
+  color: ${lightColors.secondaryText};
+  text-align: center;
 `

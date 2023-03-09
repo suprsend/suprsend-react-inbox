@@ -2,9 +2,15 @@ import React, { useState, useEffect, useRef } from 'react'
 import Inbox from './Inbox'
 import Toast, { notify } from './Toast'
 import config from './config'
+import {
+  getStorageKey,
+  getStorageData,
+  setStorageData,
+  mergeDeep
+} from './utils'
 import { getNotifications, markBellClicked } from './utils/api'
-import { getStorageKey, getStorageData, setStorageData } from './utils'
 import { InboxContext, InboxThemeContext } from './utils/context'
+import { darkTheme } from './utils/styles'
 
 function processNotifications(props) {
   const {
@@ -102,7 +108,8 @@ function SuprsendInbox({
   noNotificationsComponent,
   hideInbox,
   hideToast,
-  collapseToastNotifications
+  collapseToastNotifications,
+  themeType = 'light'
 }) {
   const storageKey = getStorageKey(workspaceKey)
   const storedData = getStorageData(storageKey)
@@ -162,8 +169,11 @@ function SuprsendInbox({
     }
   }, [subscriberId, workspaceKey])
 
+  const themeValue =
+    themeType === 'dark' ? mergeDeep(darkTheme, theme) : theme || {}
+
   return (
-    <InboxThemeContext.Provider value={theme || {}}>
+    <InboxThemeContext.Provider value={themeValue}>
       <InboxContext.Provider
         value={{
           workspaceKey,

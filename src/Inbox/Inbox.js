@@ -38,7 +38,7 @@ export default function Inbox({ openInbox, toggleInbox }) {
     ...styles.arrow,
     ...customArrowStyle,
     ...{
-      borderBottomColor: header?.container?.backgroundColor || 'white'
+      borderBottomColor: header?.container?.backgroundColor || '#fff'
     }
   }
 
@@ -76,6 +76,7 @@ const Container = styled.div`
   display: inline-block;
   background-color: transparent;
 `
+
 const BellContainer = styled.div`
   position: relative;
   margin-top: 12px;
