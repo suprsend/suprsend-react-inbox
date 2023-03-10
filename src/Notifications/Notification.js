@@ -154,7 +154,6 @@ const HeaderText = styled(CText)`
   white-space: pre-line;
   line-height: 16px;
   font-weight: 700;
-  color: ${lightColors.primaryText};
 `
 
 const BodyText = styled(CText)`
@@ -162,7 +161,6 @@ const BodyText = styled(CText)`
   line-height: 18px;
   margin: 10px 0px 5px 0px;
   white-space: pre-line;
-  color: ${lightColors.primaryText};
 `
 
 const UnseenDot = styled.div`

@@ -72,5 +72,18 @@ export const darkTheme = {
     createdOnText: { color: darkColors.secondaryText },
     subtext: { color: darkColors.secondaryText },
     actions: [{ container: { backgroundColor: darkColors.primary } }]
+  },
+  toast: {
+    container: {
+      backgroundColor: darkColors.main,
+      borderColor: darkColors.border
+    },
+    headerText: { color: darkColors.primaryText },
+    bodyText: { color: darkColors.primaryText }
+  },
+  collapseToastNotification: {
+    backgroundColor: darkColors.main,
+    borderColor: darkColors.border,
+    color: darkColors.primaryText
   }
 }
