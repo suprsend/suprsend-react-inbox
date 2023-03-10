@@ -49,7 +49,7 @@ export const darkTheme = {
   notificationsContainer: {
     container: {
       backgroundColor: darkColors.main,
-      border: `1px solid ${darkColors.border}`
+      borderColor: darkColors.border
     },
     noNotificationsText: {
       color: darkColors.primaryText

@@ -39,30 +39,28 @@ const App = () => {
         //   }
         // }}
 
-        theme={
-          {
-            // bell: { color: 'blue' }
-            // badge: { backgroundColor: 'pink', color: 'black' }
-            // notificationsContainer: {
-            //   container: { height: 300 },
-            //   noNotificationsText: { color: 'blue' },
-            //   noNotificationsSubtext: { color: 'blue' }
-            // }
-            // header: { container: { backgroundColor: 'gray' }, headertext: {} }
-            // notification: {
-            //   container: { backgroundColor: 'gray' },
-            //   headerText: { color: 'red' },
-            //   bodyText: { color: 'blue' },
-            //   unseenDot: { backgroundColor: 'red' }
-            // },
-            // toast: {
-            //   container: { backgroundColor: 'red' },
-            //   headerText: { color: 'white' },
-            //   bodyText: { color: 'white' }
-            // },
-            // collapseToastNotification: { backgroundColor: 'red' }
-          }
-        }
+        // theme={{
+        //   bell: { color: 'blue' },
+        //   badge: { backgroundColor: 'pink', color: 'black' },
+        //   notificationsContainer: {
+        //     container: { borderColor: 'red', backgroundColor: 'red' },
+        //     noNotificationsText: { color: 'blue' },
+        //     noNotificationsSubtext: { color: 'blue' }
+        //   },
+        //   header: { container: { backgroundColor: 'gray' }, headertext: {} },
+        //   notification: {
+        //     container: { backgroundColor: 'gray' },
+        //     headerText: { color: 'red' },
+        //     bodyText: { color: 'blue' },
+        //     unseenDot: { backgroundColor: 'red' }
+        //   },
+        //   toast: {
+        //     container: { backgroundColor: 'red' },
+        //     headerText: { color: 'white' },
+        //     bodyText: { color: 'white' }
+        //   },
+        //   collapseToastNotification: { backgroundColor: 'red' }
+        // }}
       />
       <div>
         <button

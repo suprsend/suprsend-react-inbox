@@ -6,13 +6,14 @@ import Badge from '../Badge'
 import NotificationsContainer from '../NotificationsContainer'
 import useClickOutside from '../utils/useClickOutside'
 import { useInbox, useTheme } from '../utils/context'
+import { lightColors } from '../utils/styles'
 
 export default function Inbox({ openInbox, toggleInbox }) {
   const [referenceElement, setReferenceElement] = useState(null)
   const [popperElement, setPopperElement] = useState(null)
   const [arrowElement, setArrowElement] = useState(null)
   const { setNotificationsData } = useInbox()
-  const { header } = useTheme()
+  const { header, notificationsContainer } = useTheme()
   const { styles, attributes } = usePopper(referenceElement, popperElement, {
     placement: 'bottom',
     modifiers: [
@@ -34,14 +35,6 @@ export default function Inbox({ openInbox, toggleInbox }) {
     toggleInbox((prev) => !prev)
   }
 
-  const arrowStyle = {
-    ...styles.arrow,
-    ...customArrowStyle,
-    ...{
-      borderBottomColor: header?.container?.backgroundColor || '#fff'
-    }
-  }
-
   return (
     <Container>
       <BellContainer onClick={handleBellClick} ref={setReferenceElement}>
@@ -54,7 +47,14 @@ export default function Inbox({ openInbox, toggleInbox }) {
           style={{ ...styles.popper, zIndex: 999 }}
           {...attributes.popper}
         >
-          <div ref={setArrowElement} style={arrowStyle} />
+          <Arrow
+            ref={setArrowElement}
+            style={styles.arrow}
+            customStyles={{
+              backgroundColor: header?.container?.backgroundColor,
+              borderColor: notificationsContainer?.container?.borderColor
+            }}
+          />
           <NotificationsContainer />
         </div>
       )}
@@ -62,14 +62,27 @@ export default function Inbox({ openInbox, toggleInbox }) {
   )
 }
 
-const customArrowStyle = {
-  width: 0,
-  height: 0,
-  borderLeft: '10px solid transparent',
-  borderRight: '10px solid transparent',
-  borderBottom: '10px solid white',
-  top: -8
-}
+const Arrow = styled.div`
+  width: 0;
+  height: 0;
+  border-bottom: ${(props) =>
+    `solid 10px ${props?.customStyles?.borderColor || lightColors.border}`};
+  border-left: solid 10px transparent;
+  border-right: solid 10px transparent;
+  top: -8px;
+  &:before {
+    content: '';
+    width: 0;
+    height: 0;
+    border-bottom: ${(props) =>
+      `solid 12px ${props?.customStyles?.backgroundColor || '#fff'}`};
+    border-left: solid 12px transparent;
+    border-right: solid 12px transparent;
+    position: absolute;
+    left: -12px;
+    top: 1.5px;
+  }
+`
 
 const Container = styled.div`
   position: relative;
