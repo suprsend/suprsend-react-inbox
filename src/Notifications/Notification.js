@@ -33,6 +33,7 @@ export default function Notification({ notificationData, markClicked }) {
 
   const actionOne = message?.actions?.[0]
   const actionTwo = message?.actions?.[1]
+  const hasButtons = actionOne || actionTwo
   if (notificationComponent) {
     const NotificationComponent = notificationComponent
     return <NotificationComponent notificationData={notificationData} />
@@ -74,48 +75,50 @@ export default function Notification({ notificationData, markClicked }) {
           </SubText>
         </SubTextView>
       )}
-      <ButtonContainer>
-        {actionOne && (
-          <ButtonView
-            style={notification?.actions?.[0]?.container}
-            key={actionOne.id}
-            onClick={(e) => {
-              e.stopPropagation()
-              markClicked()
-              if (actionOne?.url) {
-                window.location.href = actionOne.url
-              }
-            }}
-          >
-            <ButtonText style={notification?.actions?.[0]?.text}>
-              {actionOne.name}
-            </ButtonText>
-          </ButtonView>
-        )}
-        {actionTwo && (
-          <ButtonOutlineView
-            key={actionTwo.id}
-            style={notification?.actions?.[1]?.container}
-            onClick={(e) => {
-              e.stopPropagation()
-              markClicked()
-              if (actionTwo?.url) {
-                window.location.href = actionTwo.url
-              }
-            }}
-          >
-            <ButtonOutlineText style={notification?.actions?.[1]?.text}>
-              {actionTwo.name}
-            </ButtonOutlineText>
-          </ButtonOutlineView>
-        )}
-      </ButtonContainer>
+      {hasButtons && (
+        <ButtonContainer>
+          {actionOne && (
+            <ButtonView
+              style={notification?.actions?.[0]?.container}
+              key={actionOne.id}
+              onClick={(e) => {
+                e.stopPropagation()
+                markClicked()
+                if (actionOne?.url) {
+                  window.location.href = actionOne.url
+                }
+              }}
+            >
+              <ButtonText style={notification?.actions?.[0]?.text}>
+                {actionOne.name}
+              </ButtonText>
+            </ButtonView>
+          )}
+          {actionTwo && (
+            <ButtonOutlineView
+              key={actionTwo.id}
+              style={notification?.actions?.[1]?.container}
+              onClick={(e) => {
+                e.stopPropagation()
+                markClicked()
+                if (actionTwo?.url) {
+                  window.location.href = actionTwo.url
+                }
+              }}
+            >
+              <ButtonOutlineText style={notification?.actions?.[1]?.text}>
+                {actionTwo.name}
+              </ButtonOutlineText>
+            </ButtonOutlineView>
+          )}
+        </ButtonContainer>
+      )}
     </Container>
   )
 }
 
 const Container = styled.div`
-  padding: 7px 14px;
+  padding: 12px 14px;
   cursor: pointer;
   background-color: ${(props) => {
     return props.read
@@ -149,7 +152,6 @@ const NotificationView = styled.div`
 `
 
 const HeaderText = styled(CText)`
-  font-size: 13px;
   margin: 10px 0px;
   white-space: pre-line;
   line-height: 16px;
@@ -157,7 +159,7 @@ const HeaderText = styled(CText)`
 `
 
 const BodyText = styled(CText)`
-  font-size: 12px;
+  font-size: 13px;
   line-height: 18px;
   margin: 10px 0px 5px 0px;
   white-space: pre-line;
@@ -171,11 +173,7 @@ const UnseenDot = styled.div`
   margin-top: 10px;
 `
 
-const CreatedText = styled(CText)`
-  font-size: 12px;
-  margin: 0px;
-  color: ${lightColors.secondaryText};
-`
+const CreatedText = styled(HelperText)``
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -194,11 +192,12 @@ const ButtonView = styled.a`
   padding: 4px 16px;
 `
 
-const ButtonText = styled(HelperText)`
+const ButtonText = styled(CText)`
   color: #fff;
   text-align: center;
   word-break: break-all;
   font-weight: 600;
+  font-size: 13px;
 `
 
 const ButtonOutlineView = styled(ButtonView)`
