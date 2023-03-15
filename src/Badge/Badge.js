@@ -26,6 +26,7 @@ const CountText = styled.span`
   top: -7px;
   display: inline-block;
   font-size: 10px;
+  line-height: 1;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
     Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
   padding: 3px 6px;

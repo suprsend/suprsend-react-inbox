@@ -88,6 +88,7 @@ const Container = styled.div`
   position: relative;
   display: inline-block;
   background-color: transparent;
+  line-height: 1;
 `
 
 const BellContainer = styled.div`
