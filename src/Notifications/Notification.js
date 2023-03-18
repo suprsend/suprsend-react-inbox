@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import { CText, HelperText, lightColors } from '../utils/styles'
 import dayjs from 'dayjs'
@@ -26,7 +26,25 @@ dayjs.updateLocale('en', {
   }
 })
 
+const formatActionLink = (link) => {
+  if (link) {
+    return link.startsWith('http') ? link : `https://${link}`
+  }
+}
+
+async function isImgUrl(url) {
+  if (url) {
+    const img = new window.Image()
+    img.src = url
+    return new Promise((resolve) => {
+      img.onerror = () => resolve(false)
+      img.onload = () => resolve(true)
+    })
+  }
+}
+
 export default function Notification({ notificationData, markClicked }) {
+  const [validAvatar, setValidAvatar] = useState(false)
   const { message, seen_on: seenOn, created_on: createdOn } = notificationData
   const { notificationComponent } = useInbox()
   const { notification } = useTheme()
@@ -34,6 +52,12 @@ export default function Notification({ notificationData, markClicked }) {
   const actionOne = message?.actions?.[0]
   const actionTwo = message?.actions?.[1]
   const hasButtons = actionOne || actionTwo
+
+  useEffect(() => {
+    const isValidAvatar = isImgUrl(message?.avatar?.avatar_url)
+    isValidAvatar.then((res) => setValidAvatar(res))
+  }, [notificationData])
+
   if (notificationComponent) {
     const NotificationComponent = notificationComponent
     return <NotificationComponent notificationData={notificationData} />
@@ -43,8 +67,8 @@ export default function Notification({ notificationData, markClicked }) {
     <Container style={notification?.container} read={!!seenOn}>
       <NotificationView>
         <LeftView>
-          <AvatarView href={message?.avatar?.action_url}>
-            {message?.avatar?.avatar_url ? (
+          <AvatarView href={formatActionLink(message?.avatar?.action_url)}>
+            {message?.avatar?.avatar_url && validAvatar ? (
               <AvatarImage src={message.avatar.avatar_url} alt='avatar' />
             ) : (
               <AvatarIcon />
@@ -69,7 +93,7 @@ export default function Notification({ notificationData, markClicked }) {
         </RightView>
       </NotificationView>
       {message?.subtext?.text && (
-        <SubTextView href={message?.subtext?.action_url}>
+        <SubTextView href={formatActionLink(message?.subtext?.action_url)}>
           <SubText style={notification?.subtext}>
             {message.subtext.text}
           </SubText>
@@ -142,6 +166,10 @@ const SubText = styled(HelperText)`
 
 const SubTextView = styled.a`
   text-decoration: none;
+  &:hover {
+    text-decoration: ${(props) => (props.href ? 'underline' : 'none')};
+    text-decoration-color: ${lightColors.secondaryText};
+  }
 `
 
 const NotificationView = styled.div`
