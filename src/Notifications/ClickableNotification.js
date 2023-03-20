@@ -2,6 +2,7 @@ import React from 'react'
 import Notification from './Notification'
 import { markClicked } from '../utils/api'
 import { useInbox } from '../utils/context'
+import { formatActionLink } from '../utils'
 
 export default function ClickableNotification({ notificationData }) {
   const { workspaceKey, setNotificationsData, notificationClickHandler } =
@@ -13,7 +14,7 @@ export default function ClickableNotification({ notificationData }) {
       notificationClickHandler(notificationData)
     } else {
       if (notificationData?.message?.url) {
-        window.location.href = notificationData.message.url
+        window.location.href = formatActionLink(notificationData.message.url)
       }
     }
   }

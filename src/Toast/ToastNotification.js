@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { CText, lightColors } from '../utils/styles'
 import { useTheme, useInbox } from '../utils/context'
 import AvatarIcon from '../Notifications/AvatarIcon'
+import { isImgUrl } from '../utils'
 
 export function ToastNotification({
   notificationData,
@@ -12,6 +13,14 @@ export function ToastNotification({
   const { toast } = useTheme()
   const { toggleInbox } = useInbox()
   const { message } = notificationData
+
+  const [validAvatar, setValidAvatar] = useState(false)
+
+  useEffect(() => {
+    const isValidAvatar = isImgUrl(message?.avatar?.avatar_url)
+    isValidAvatar.then((res) => setValidAvatar(res))
+  }, [notificationData])
+
   return (
     <Container
       style={toast?.container}
@@ -22,7 +31,7 @@ export function ToastNotification({
       }}
     >
       <AvatarView>
-        {message?.avatar?.avatar_url ? (
+        {message?.avatar?.avatar_url && validAvatar ? (
           <AvatarImage src={message.avatar.avatar_url} alt='avatar' />
         ) : (
           <AvatarIcon />

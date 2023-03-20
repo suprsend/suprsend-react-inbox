@@ -6,6 +6,7 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import updateLocale from 'dayjs/plugin/updateLocale'
 import { useInbox, useTheme } from '../utils/context'
 import AvatarIcon from './AvatarIcon'
+import { isImgUrl, formatActionLink } from '../utils'
 
 dayjs.extend(relativeTime)
 dayjs.extend(updateLocale)
@@ -25,23 +26,6 @@ dayjs.updateLocale('en', {
     yy: '%dy'
   }
 })
-
-const formatActionLink = (link) => {
-  if (link) {
-    return link.startsWith('http') ? link : `https://${link}`
-  }
-}
-
-async function isImgUrl(url) {
-  if (url) {
-    const img = new window.Image()
-    img.src = url
-    return new Promise((resolve) => {
-      img.onerror = () => resolve(false)
-      img.onload = () => resolve(true)
-    })
-  }
-}
 
 export default function Notification({ notificationData, markClicked }) {
   const [validAvatar, setValidAvatar] = useState(false)
@@ -109,7 +93,7 @@ export default function Notification({ notificationData, markClicked }) {
                 e.stopPropagation()
                 markClicked()
                 if (actionOne?.url) {
-                  window.location.href = actionOne.url
+                  window.location.href = formatActionLink(actionOne.url)
                 }
               }}
             >
@@ -126,7 +110,7 @@ export default function Notification({ notificationData, markClicked }) {
                 e.stopPropagation()
                 markClicked()
                 if (actionTwo?.url) {
-                  window.location.href = actionTwo.url
+                  window.location.href = formatActionLink(actionTwo.url)
                 }
               }}
             >

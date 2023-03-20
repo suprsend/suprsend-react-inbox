@@ -64,3 +64,20 @@ export function mergeDeep(target, source) {
   }
   return output
 }
+
+export async function isImgUrl(url) {
+  if (url) {
+    const img = new window.Image()
+    img.src = url
+    return new Promise((resolve) => {
+      img.onerror = () => resolve(false)
+      img.onload = () => resolve(true)
+    })
+  }
+}
+
+export function formatActionLink(link) {
+  if (link) {
+    return link.startsWith('http') ? link : `https://${link}`
+  }
+}
