@@ -58,6 +58,8 @@
     "@emotion/styled": "^11.8.1",
     "@popperjs/core": "^2.11.5",
     "dayjs": "^1.11.2",
+    "dompurify": "^3.0.1",
+    "marked": "^4.3.0",
     "react-hot-toast": "^2.2.0",
     "react-popper": "^2.3.0"
   }
