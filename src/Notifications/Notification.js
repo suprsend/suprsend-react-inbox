@@ -10,7 +10,7 @@ import { isImgUrl, formatActionLink } from '../utils'
 import { marked } from 'marked'
 import DOMPurify from 'dompurify'
 
-const renderer = ({ linkColor }) => ({
+const renderer = ({ linkColor, blockquoteColor }) => ({
   link(href, _, text) {
     return `<a href=${href} style="color:${linkColor};text-decoration:none;">${text}</a>`
   },
@@ -23,6 +23,9 @@ const renderer = ({ linkColor }) => ({
     } else {
       return `<ul style="white-space:normal;margin:0px;padding-left:10px">${body}</ul>`
     }
+  },
+  blockquote(src) {
+    return `<blockquote style="margin:0px;padding-left:10px;border-left:3px ${blockquoteColor} solid;margin-top:5px; margin-bottom:5px;">${src}</blockquote>`
   }
 })
 
@@ -52,7 +55,9 @@ export default function Notification({ notificationData, markClicked }) {
   const { notification } = useTheme()
   marked.use({
     renderer: renderer({
-      linkColor: notification?.bodyText?.linkColor || lightColors.primary
+      linkColor: notification?.bodyText?.linkColor || lightColors.primary,
+      blockquoteColor:
+        notification?.bodyText?.blockquoteColor || lightColors.border
     })
   })
 
