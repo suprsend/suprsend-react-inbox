@@ -51,7 +51,15 @@ export default function Notification({ notificationData, markClicked }) {
     <Container style={notification?.container} read={!!seenOn}>
       <NotificationView>
         <LeftView>
-          <AvatarView href={formatActionLink(message?.avatar?.action_url)}>
+          <AvatarView
+            href={formatActionLink(message?.avatar?.action_url)}
+            onClick={(e) => {
+              if (formatActionLink(message?.avatar?.action_url)) {
+                e.stopPropagation()
+                markClicked()
+              }
+            }}
+          >
             {message?.avatar?.avatar_url && validAvatar ? (
               <AvatarImage src={message.avatar.avatar_url} alt='avatar' />
             ) : (
@@ -77,7 +85,15 @@ export default function Notification({ notificationData, markClicked }) {
         </RightView>
       </NotificationView>
       {message?.subtext?.text && (
-        <SubTextView href={formatActionLink(message?.subtext?.action_url)}>
+        <SubTextView
+          href={formatActionLink(message?.subtext?.action_url)}
+          onClick={(e) => {
+            if (formatActionLink(message?.subtext?.action_url)) {
+              e.stopPropagation()
+              markClicked()
+            }
+          }}
+        >
           <SubText style={notification?.subtext}>
             {message.subtext.text}
           </SubText>

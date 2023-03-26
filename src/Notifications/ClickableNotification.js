@@ -20,9 +20,7 @@ export default function ClickableNotification({ notificationData }) {
   }
 
   const markNotificationClicked = () => {
-    if (notificationData.seen_on) {
-      navigateUser()
-    } else {
+    if (!notificationData.seen_on) {
       markClicked(workspaceKey, notificationData.n_id)
         .then((res) => {
           if (res.status === 202) {
