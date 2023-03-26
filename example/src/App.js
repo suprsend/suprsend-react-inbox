@@ -2,13 +2,23 @@ import React from 'react'
 import SuprsendInbox from '@suprsend/react-inbox'
 
 const App = () => {
+  const [themeType, setThemeType] = React.useState('light')
+
   return (
-    <div style={{ marginLeft: 50 }}>
+    <div
+      style={{
+        height: '100vh',
+        width: '100vw',
+        paddingLeft: 50,
+        backgroundColor: themeType === 'light' ? 'white' : 'black'
+      }}
+    >
       <SuprsendInbox
         workspaceKey={process.env.REACT_APP_WORKSPACE_KEY}
         workspaceSecret={process.env.REACT_APP_WORKSPACE_SECRET}
         subscriberId={process.env.REACT_APP_SUBSCRIBER_ID}
         distinctId={process.env.REACT_APP_DISTINCT_ID}
+        themeType={themeType}
         // hideInbox={false}
         // hideToast={false}
         // collapseToastNotifications={true}
@@ -33,8 +43,9 @@ const App = () => {
         //   bell: { color: 'blue' },
         //   badge: { backgroundColor: 'pink', color: 'black' },
         //   notificationsContainer: {
-        //     container: { height: 300 },
-        //     noNotificationsText: { backgroundColor: 'blue' }
+        //     container: { borderColor: 'red', backgroundColor: 'red' },
+        //     noNotificationsText: { color: 'blue' },
+        //     noNotificationsSubtext: { color: 'blue' }
         //   },
         //   header: { container: { backgroundColor: 'gray' }, headertext: {} },
         //   notification: {
@@ -51,6 +62,19 @@ const App = () => {
         //   collapseToastNotification: { backgroundColor: 'red' }
         // }}
       />
+      <div>
+        <button
+          onClick={() => {
+            if (themeType === 'light') {
+              setThemeType('dark')
+            } else {
+              setThemeType('light')
+            }
+          }}
+        >
+          Toggle Theme
+        </button>
+      </div>
     </div>
   )
 }
