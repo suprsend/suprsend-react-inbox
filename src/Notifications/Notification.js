@@ -7,6 +7,27 @@ import updateLocale from 'dayjs/plugin/updateLocale'
 import { useInbox, useTheme } from '../utils/context'
 import AvatarIcon from './AvatarIcon'
 import { isImgUrl, formatActionLink } from '../utils'
+import { marked } from 'marked'
+import DOMPurify from 'dompurify'
+
+const renderer = ({ linkColor, blockquoteColor }) => ({
+  link(href, _, text) {
+    return `<a href=${href} style="color:${linkColor};text-decoration:none;">${text}</a>`
+  },
+  paragraph(text) {
+    return `<p style="margin:0px;"}}>${text}</p>`
+  },
+  list(body, ordered) {
+    if (ordered) {
+      return `<ol style="white-space:normal;margin:0px;padding-left:10px;">${body}</ol>`
+    } else {
+      return `<ul style="white-space:normal;margin:0px;padding-left:10px">${body}</ul>`
+    }
+  },
+  blockquote(src) {
+    return `<blockquote style="margin:0px;padding-left:10px;border-left:3px ${blockquoteColor} solid;margin-top:5px; margin-bottom:5px;">${src}</blockquote>`
+  }
+})
 
 dayjs.extend(relativeTime)
 dayjs.extend(updateLocale)
@@ -32,6 +53,13 @@ export default function Notification({ notificationData, markClicked }) {
   const { message, seen_on: seenOn, created_on: createdOn } = notificationData
   const { notificationComponent } = useInbox()
   const { notification } = useTheme()
+  marked.use({
+    renderer: renderer({
+      linkColor: notification?.bodyText?.linkColor || lightColors.primary,
+      blockquoteColor:
+        notification?.bodyText?.blockquoteColor || lightColors.border
+    })
+  })
 
   const actionOne = message?.actions?.[0]
   const actionTwo = message?.actions?.[1]
@@ -70,7 +98,12 @@ export default function Notification({ notificationData, markClicked }) {
             <HeaderText style={notification?.headerText}>
               {message.header}
             </HeaderText>
-            <BodyText style={notification?.bodyText}>{message.text}</BodyText>
+            <BodyText
+              style={notification?.bodyText}
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(marked(message.text))
+              }}
+            />
           </div>
         </LeftView>
         <RightView>
@@ -186,11 +219,15 @@ const HeaderText = styled(CText)`
   font-weight: 700;
 `
 
-const BodyText = styled(CText)`
+const BodyText = styled.div`
   font-size: 13px;
   line-height: 18px;
   margin: 10px 0px 5px 0px;
   white-space: pre-line;
+  font-weight: 400;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  color: ${lightColors.primaryText};
 `
 
 const UnseenDot = styled.div`

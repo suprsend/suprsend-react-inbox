@@ -68,7 +68,11 @@ export const darkTheme = {
       readHoverBackgroundColor: '#121212'
     },
     headerText: { color: darkColors.primaryText },
-    bodyText: { color: darkColors.primaryText },
+    bodyText: {
+      color: darkColors.primaryText,
+      linkColor: darkColors.primary,
+      blockquoteColor: darkColors.border
+    },
     unseenDot: { backgroundColor: darkColors.primary },
     createdOnText: { color: darkColors.secondaryText },
     subtext: { color: darkColors.secondaryText },
