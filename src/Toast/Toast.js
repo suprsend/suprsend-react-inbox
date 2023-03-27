@@ -3,6 +3,7 @@ import { jsx } from '@emotion/react'
 import { Toaster, toast } from 'react-hot-toast'
 import { ToastNotification, MultipleNotifications } from './ToastNotification'
 import { markClicked } from '../utils/api'
+import { formatActionLink } from '../utils'
 
 export default function Toast({ position, ...otherProps }) {
   const toastPosition = !position
@@ -34,7 +35,7 @@ export function notify({
       notificationClickHandler(notificationData)
     } else {
       if (notificationData?.message?.url) {
-        window.location.href = notificationData.message.url
+        window.location.href = formatActionLink(notificationData.message.url)
       }
     }
   }
