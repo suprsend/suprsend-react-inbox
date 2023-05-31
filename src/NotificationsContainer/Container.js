@@ -8,7 +8,10 @@ import { lightColors } from '../utils/styles'
 export default function NotificationsContainer() {
   const { notificationsContainer } = useTheme()
   return (
-    <Container style={notificationsContainer?.container}>
+    <Container
+      style={notificationsContainer?.container}
+      id='ss-notification-container'
+    >
       <Header />
       <NotificationsList />
     </Container>

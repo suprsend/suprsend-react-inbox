@@ -1,20 +1,25 @@
 import React, { useState, useEffect } from 'react'
 import styled from '@emotion/styled'
+import { marked } from 'marked'
+import DOMPurify from 'dompurify'
 import { CText, lightColors } from '../utils/styles'
 import { useTheme, useInbox } from '../utils/context'
 import AvatarIcon from '../Notifications/AvatarIcon'
-import { isImgUrl } from '../utils'
+import { isImgUrl, markdownRenderer } from '../utils'
 
-export function ToastNotification({
-  notificationData,
-  markClicked,
-  dismissToast
-}) {
+export function ToastNotification({ notificationData, dismissToast }) {
   const { toast } = useTheme()
   const { toggleInbox } = useInbox()
   const { message } = notificationData
 
   const [validAvatar, setValidAvatar] = useState(false)
+
+  marked.use({
+    renderer: markdownRenderer({
+      linkColor: toast?.bodyText?.linkColor || lightColors.primary,
+      blockquoteColor: toast?.bodyText?.blockquoteColor || lightColors.border
+    })
+  })
 
   useEffect(() => {
     const isValidAvatar = isImgUrl(message?.avatar?.avatar_url)
@@ -25,7 +30,6 @@ export function ToastNotification({
     <Container
       style={toast?.container}
       onClick={(e) => {
-        // markClicked(e, notificationData)
         toggleInbox(true)
         dismissToast()
       }}
@@ -39,25 +43,14 @@ export function ToastNotification({
       </AvatarView>
       <div>
         <HeaderText style={toast?.headerText}>{message.header}</HeaderText>
-        <BodyText style={toast?.bodyText}>{message.text}</BodyText>
+        <BodyText
+          style={toast?.bodyText}
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(marked(message.text))
+          }}
+        />
       </div>
     </Container>
-  )
-}
-
-export function MultipleNotifications({ notificationsCount, dismissToast }) {
-  const { collapseToastNotification } = useTheme()
-  const { toggleInbox } = useInbox()
-  return (
-    <CollapseNotification
-      style={collapseToastNotification}
-      onClick={() => {
-        toggleInbox(true)
-        dismissToast()
-      }}
-    >
-      You have {notificationsCount} new notifications
-    </CollapseNotification>
   )
 }
 
@@ -84,17 +77,6 @@ const BodyText = styled(CText)`
   font-size: 12px;
   line-height: 18px;
   margin: 10px 0px;
-`
-
-const CollapseNotification = styled(CText)`
-  max-width: 450px;
-  min-width: 300px;
-  background-color: ${lightColors.main};
-  cursor: pointer;
-  padding: 10px 14px;
-  border: 1px solid ${lightColors.border};
-  border-radius: 5px;
-  box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2), 0 2px 1px 0 rgba(0, 0, 0, 0.1);
 `
 
 const AvatarImage = styled.img`

@@ -6,28 +6,9 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import updateLocale from 'dayjs/plugin/updateLocale'
 import { useInbox, useTheme } from '../utils/context'
 import AvatarIcon from './AvatarIcon'
-import { isImgUrl, formatActionLink } from '../utils'
+import { isImgUrl, formatActionLink, markdownRenderer } from '../utils'
 import { marked } from 'marked'
 import DOMPurify from 'dompurify'
-
-const renderer = ({ linkColor, blockquoteColor }) => ({
-  link(href, _, text) {
-    return `<a href=${href} style="color:${linkColor};text-decoration:none;">${text}</a>`
-  },
-  paragraph(text) {
-    return `<p style="margin:0px;"}}>${text}</p>`
-  },
-  list(body, ordered) {
-    if (ordered) {
-      return `<ol style="white-space:normal;margin:0px;padding-left:10px;">${body}</ol>`
-    } else {
-      return `<ul style="white-space:normal;margin:0px;padding-left:10px">${body}</ul>`
-    }
-  },
-  blockquote(src) {
-    return `<blockquote style="margin:0px;padding-left:10px;border-left:3px ${blockquoteColor} solid;margin-top:5px; margin-bottom:5px;">${src}</blockquote>`
-  }
-})
 
 dayjs.extend(relativeTime)
 dayjs.extend(updateLocale)
@@ -53,8 +34,9 @@ export default function Notification({ notificationData, markClicked }) {
   const { message, seen_on: seenOn, created_on: createdOn } = notificationData
   const { notificationComponent } = useInbox()
   const { notification } = useTheme()
+
   marked.use({
-    renderer: renderer({
+    renderer: markdownRenderer({
       linkColor: notification?.bodyText?.linkColor || lightColors.primary,
       blockquoteColor:
         notification?.bodyText?.blockquoteColor || lightColors.border

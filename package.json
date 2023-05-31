@@ -58,10 +58,12 @@
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "@popperjs/core": "^2.11.5",
+    "@suprsend/js-inbox": "/Users/work/suprsend/suprsend-js-sdk/suprsend-js-inbox-1.0.1.tgz",
     "dayjs": "^1.11.2",
     "dompurify": "^3.0.1",
     "marked": "^4.3.0",
     "react-hot-toast": "^2.2.0",
+    "react-infinite-scroll-component": "^6.1.0",
     "react-popper": "^2.3.0"
   }
 }

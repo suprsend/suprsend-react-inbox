@@ -1,24 +1,3 @@
-export function uuid() {
-  var dt = new Date().getTime()
-  var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
-    /[xy]/g,
-    function (c) {
-      var r = (dt + Math.random() * 16) % 16 | 0
-      dt = Math.floor(dt / 16)
-      return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16)
-    }
-  )
-  return uuid
-}
-
-export function epochNow() {
-  return Math.round(Date.now())
-}
-
-export function utcNow() {
-  return new Date().toGMTString()
-}
-
 export function getStorageKey(str) {
   let newStr = ''
   for (let i = 0; i < str.length; i = i + 2) {
@@ -41,6 +20,14 @@ export function getStorageData(key) {
 export function setStorageData(key, value) {
   try {
     window.localStorage.setItem(key, JSON.stringify(value))
+  } catch (error) {
+    console.log('ERROR LOCAL_STORAGE:', error)
+  }
+}
+
+export function removeStorage(key) {
+  try {
+    window.localStorage.removeItem(key)
   } catch (error) {
     console.log('ERROR LOCAL_STORAGE:', error)
   }
@@ -81,3 +68,22 @@ export function formatActionLink(link) {
     return link.startsWith('http') ? link : `https://${link}`
   }
 }
+
+export const markdownRenderer = ({ linkColor, blockquoteColor }) => ({
+  link(href, _, text) {
+    return `<a href=${href} style="color:${linkColor};text-decoration:none;">${text}</a>`
+  },
+  paragraph(text) {
+    return `<p style="margin:0px;"}}>${text}</p>`
+  },
+  list(body, ordered) {
+    if (ordered) {
+      return `<ol style="white-space:normal;margin:0px;padding-left:10px;">${body}</ol>`
+    } else {
+      return `<ul style="white-space:normal;margin:0px;padding-left:10px">${body}</ul>`
+    }
+  },
+  blockquote(src) {
+    return `<blockquote style="margin:0px;padding-left:10px;border-left:3px ${blockquoteColor} solid;margin-top:5px; margin-bottom:5px;">${src}</blockquote>`
+  }
+})

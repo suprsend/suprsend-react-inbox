@@ -1,15 +1,12 @@
 import React from 'react'
 import Notification from './Notification'
-import { markClicked } from '../utils/api'
 import { useInbox } from '../utils/context'
 import { formatActionLink } from '../utils'
 
 export default function ClickableNotification({ notificationData }) {
-  const { workspaceKey, setNotificationsData, notificationClickHandler } =
-    useInbox()
+  const { notificationClickHandler, inbox } = useInbox()
 
   const navigateUser = () => {
-    // redirect after mark seen logic
     if (typeof notificationClickHandler === 'function') {
       notificationClickHandler(notificationData)
     } else {
@@ -20,29 +17,12 @@ export default function ClickableNotification({ notificationData }) {
   }
 
   const markNotificationClicked = () => {
-    if (!notificationData.seen_on) {
-      markClicked(workspaceKey, notificationData.n_id)
-        .then((res) => {
-          if (res.status === 202) {
-            setNotificationsData((prev) => {
-              for (const notificationItem of prev.notifications) {
-                if (notificationItem.n_id === notificationData.n_id) {
-                  notificationItem.seen_on = Date.now()
-                }
-              }
-              return { ...prev }
-            })
-          }
-        })
-        .catch((err) => {
-          console.log('MARK SEEN ERROR ', err)
-        })
-    }
+    inbox.feed.markClicked(notificationData.n_id)
   }
 
-  const handleClick = async (e) => {
+  const handleClick = (e) => {
     e.stopPropagation()
-    await markNotificationClicked()
+    markNotificationClicked()
     navigateUser()
   }
 

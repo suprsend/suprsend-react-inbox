@@ -57,7 +57,8 @@ export const darkTheme = {
     },
     noNotificationsSubtext: {
       color: darkColors.secondaryText
-    }
+    },
+    loader: { color: darkColors.primary }
   },
   notification: {
     container: {
@@ -84,7 +85,11 @@ export const darkTheme = {
       borderColor: darkColors.border
     },
     headerText: { color: darkColors.primaryText },
-    bodyText: { color: darkColors.primaryText }
+    bodyText: {
+      color: darkColors.primaryText,
+      linkColor: darkColors.primary,
+      blockquoteColor: darkColors.border
+    }
   },
   collapseToastNotification: {
     backgroundColor: darkColors.main,

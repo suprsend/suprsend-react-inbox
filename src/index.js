@@ -1,98 +1,15 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
+import SuprsendJSInbox from '@suprsend/js-inbox'
 import Inbox from './Inbox'
 import Toast, { notify } from './Toast'
-import config from './config'
 import {
   getStorageKey,
   getStorageData,
-  setStorageData,
-  mergeDeep
+  mergeDeep,
+  setStorageData
 } from './utils'
-import { getNotifications, markBellClicked } from './utils/api'
 import { InboxContext, InboxThemeContext } from './utils/context'
 import { darkTheme } from './utils/styles'
-
-function processNotifications(props) {
-  const {
-    subscriberId,
-    response,
-    notificationsData,
-    setNotificationsData,
-    currentFetchingOn,
-    storageKey,
-    ...otherProps
-  } = props
-  let newNotificationsList = [] // final notifications list after adding old and new notifications
-  let newFetchedNotificationsList = [] // only new notifications, used for showing toast
-  const firstCall = !notificationsData.last_after
-
-  if (response.results.length > config.BATCH_SIZE) {
-    newNotificationsList = response.results.slice(0, config.BATCH_SIZE)
-    newFetchedNotificationsList = newNotificationsList
-  } else {
-    newNotificationsList = firstCall
-      ? response.results
-      : [...response.results, ...notificationsData.notifications]
-    newNotificationsList = newNotificationsList.slice(0, config.BATCH_SIZE)
-    newFetchedNotificationsList = response.results
-  }
-
-  // filter unseen notification from new notifications
-  const newFetchedUnseenNotifications = newFetchedNotificationsList.filter(
-    (notification) => !notification.seen_on
-  )
-
-  // show toast for new notifications
-  if (!firstCall && newFetchedUnseenNotifications.length > 0) {
-    notify({
-      notificationsData: newFetchedUnseenNotifications,
-      setNotificationsData,
-      ...otherProps
-    })
-  }
-
-  // set in state
-  setNotificationsData(() => ({
-    notifications: newNotificationsList,
-    last_after: currentFetchingOn,
-    count: notificationsData.count + response.unread
-  }))
-
-  // set in localstorage
-  setStorageData(storageKey, {
-    notifications: newNotificationsList,
-    subscriber_id: subscriberId
-  })
-}
-
-function getNotificationsApi(props, notificationsDataRef) {
-  const { workspaceKey, workspaceSecret, subscriberId, distinctId } = props
-  const notificationsData = notificationsDataRef.current
-  const newAfter = notificationsData.last_after
-    ? notificationsData.last_after
-    : Date.now() - 30 * 24 * 60 * 60 * 1000
-  const currentFetchingOn = Date.now()
-
-  getNotifications({
-    workspaceKey,
-    workspaceSecret,
-    subscriberId,
-    distinctId,
-    after: newAfter
-  })
-    .then((res) => res.json())
-    .then((response) => {
-      processNotifications({
-        response,
-        notificationsData,
-        currentFetchingOn,
-        ...props
-      })
-    })
-    .catch((err) => {
-      console.log('ERROR', err)
-    })
-}
 
 function SuprsendInbox({
   workspaceKey = '',
@@ -108,7 +25,7 @@ function SuprsendInbox({
   noNotificationsComponent,
   hideInbox,
   hideToast,
-  collapseToastNotifications,
+  loaderComponent,
   themeType = 'light'
 }) {
   const storageKey = getStorageKey(workspaceKey)
@@ -116,56 +33,53 @@ function SuprsendInbox({
   const isSameUser = storedData?.subscriber_id === subscriberId
 
   const [openInbox, toggleInbox] = useState(false)
+  const [inbox, setInbox] = useState()
   const [notificationsData, setNotificationsData] = useState({
     notifications: isSameUser ? storedData?.notifications || [] : [],
-    count: 0,
-    last_after: null
+    count: 0
   })
-  const notificationsDataRef = useRef(notificationsData)
 
   useEffect(() => {
-    notificationsDataRef.current = notificationsData
-  }, [notificationsData])
-
-  useEffect(() => {
-    if (openInbox && subscriberId) {
-      markBellClicked({
-        distinctId,
-        workspaceKey,
-        workspaceSecret,
-        subscriberId
-      })
+    if (openInbox && subscriberId && inbox) {
+      inbox.feed.markAllSeen()
     }
-  }, [openInbox, subscriberId])
+  }, [openInbox, subscriberId, inbox])
 
-  // get notifications and start polling for new ones
   useEffect(() => {
     if (!subscriberId) return
     const storedData = getStorageData(storageKey)
     const resetData = {
       notifications: isSameUser ? storedData?.notifications || [] : [],
-      count: 0,
-      last_after: null
+      count: 0
     }
     setNotificationsData(resetData)
-    notificationsDataRef.current = resetData
-    const props = {
-      workspaceKey,
-      workspaceSecret,
-      subscriberId,
-      distinctId,
-      setNotificationsData,
-      storageKey,
-      toastProps,
-      notificationClickHandler,
-      collapseToastNotifications
-    }
-    getNotificationsApi(props, notificationsDataRef)
-    const timerId = setInterval(() => {
-      getNotificationsApi(props, notificationsDataRef)
-    }, config.DELAY)
+    const inboxInst = new SuprsendJSInbox(workspaceKey, workspaceSecret)
+    setInbox(inboxInst)
+    inboxInst.identifyUser(distinctId, subscriberId)
+
+    inboxInst.emitter.on('sync_notif_store', () => {
+      const inboxData = inboxInst.feed.data
+      setNotificationsData({
+        notifications: inboxData?.notifications || [],
+        count: inboxData?.unseenCount || 0,
+        hasNext: inboxData?.hasNext
+      })
+      setStorageData(storageKey, {
+        notifications: inboxData?.notifications?.slice(0, 20),
+        subscriber_id: subscriberId
+      })
+    })
+
+    inboxInst.emitter.on('new_notification', (notification) => {
+      notify({
+        notificationsData: notification,
+        toastProps
+      })
+    })
+
+    inboxInst.feed.fetchNotifications()
     return () => {
-      clearInterval(timerId)
+      inboxInst.resetUser()
     }
   }, [subscriberId, workspaceKey])
 
@@ -184,7 +98,9 @@ function SuprsendInbox({
           badgeComponent,
           notificationComponent,
           noNotificationsComponent,
-          toggleInbox
+          toggleInbox,
+          inbox,
+          loaderComponent
         }}
       >
         {!hideInbox && (

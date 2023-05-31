@@ -1,14 +1,27 @@
 import React from 'react'
 import styled from '@emotion/styled'
+import { keyframes } from '@emotion/react'
 import ClickableNotification from './ClickableNotification'
 import EmptyNotificationIcon from './EmptyNotificationIcon'
 import { useInbox, useTheme } from '../utils/context'
 import { CText, HeadingText, lightColors } from '../utils/styles'
+import InfiniteScroll from 'react-infinite-scroll-component'
+
+function Loader({ style }) {
+  const color = style?.color
+  return (
+    <SpinnerContainer>
+      <Spinner style={style} color={color} />
+    </SpinnerContainer>
+  )
+}
 
 export default function NotificationsList() {
   const {
-    notificationsData: { notifications },
-    noNotificationsComponent
+    notificationsData: { notifications, hasNext },
+    noNotificationsComponent,
+    loaderComponent,
+    inbox
   } = useInbox()
   const { notificationsContainer } = useTheme()
 
@@ -30,9 +43,27 @@ export default function NotificationsList() {
     )
   }
 
-  return notifications.map((notification, index) => (
-    <ClickableNotification notificationData={notification} key={index} />
-  ))
+  return (
+    <React.Fragment>
+      <InfiniteScroll
+        scrollableTarget='ss-notification-container'
+        dataLength={notifications.length}
+        next={() => {
+          inbox.feed.fetchNotifications()
+        }}
+        hasMore={hasNext}
+        loader={
+          loaderComponent?.() || (
+            <Loader style={notificationsContainer?.loader} />
+          )
+        }
+      >
+        {notifications.map((notification, index) => (
+          <ClickableNotification notificationData={notification} key={index} />
+        ))}
+      </InfiniteScroll>
+    </React.Fragment>
+  )
 }
 
 const EmptyNotificationsContainer = styled.div`
@@ -56,4 +87,31 @@ const EmptyText = styled(HeadingText)`
 const EmptySubText = styled(CText)`
   color: ${lightColors.secondaryText};
   text-align: center;
+`
+
+const spin = keyframes`
+0% {
+  transform: rotate(0deg);
+}
+100% {
+  transform: rotate(360deg);
+}
+`
+
+const Spinner = styled.div`
+  border: 3px solid ${lightColors.border};
+  border-top: 3px solid;
+  border-top-color: ${(props) =>
+    props.color ? props.color : lightColors.primary};
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  animation: ${spin} 1s linear infinite;
+  margin: 5px;
+`
+
+const SpinnerContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
