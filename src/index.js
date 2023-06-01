@@ -15,19 +15,25 @@ function SuprsendInbox({
   workspaceKey = '',
   workspaceSecret = '',
   distinctId = '',
-  subscriberId = '',
+  subscriberId = '', // subscriberId is deprecated use inboxId
+  inboxId = '',
   toastProps,
   notificationClickHandler,
-  theme,
   bellComponent,
   badgeComponent,
   notificationComponent,
   noNotificationsComponent,
+  loaderComponent,
   hideInbox,
   hideToast,
-  loaderComponent,
-  themeType = 'light'
+  theme,
+  themeType = 'light',
+  pagination = true,
+  pageSize
 }) {
+  if (inboxId) {
+    subscriberId = inboxId
+  }
   const storageKey = getStorageKey(workspaceKey)
   const storedData = getStorageData(storageKey)
   const isSameUser = storedData?.subscriber_id === subscriberId
@@ -48,21 +54,29 @@ function SuprsendInbox({
   useEffect(() => {
     if (!subscriberId) return
     const storedData = getStorageData(storageKey)
+    const isSameUser = storedData?.subscriber_id === subscriberId
     const resetData = {
       notifications: isSameUser ? storedData?.notifications || [] : [],
       count: 0
     }
+
     setNotificationsData(resetData)
-    const inboxInst = new SuprsendJSInbox(workspaceKey, workspaceSecret)
+    const inboxInst = new SuprsendJSInbox(workspaceKey, workspaceSecret, {
+      pageSize
+    })
     setInbox(inboxInst)
     inboxInst.identifyUser(distinctId, subscriberId)
 
     inboxInst.emitter.on('sync_notif_store', () => {
       const inboxData = inboxInst.feed.data
+      if (inboxData.initialLoading && notificationsData.notifications.length) {
+        return
+      }
       setNotificationsData({
         notifications: inboxData?.notifications || [],
         count: inboxData?.unseenCount || 0,
-        hasNext: inboxData?.hasNext
+        hasNext: inboxData?.hasNext,
+        initialLoading: inboxData.initialLoading
       })
       setStorageData(storageKey, {
         notifications: inboxData?.notifications?.slice(0, 20),
@@ -100,7 +114,8 @@ function SuprsendInbox({
           noNotificationsComponent,
           toggleInbox,
           inbox,
-          loaderComponent
+          loaderComponent,
+          pagination
         }}
       >
         {!hideInbox && (

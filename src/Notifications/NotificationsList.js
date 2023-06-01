@@ -7,23 +7,32 @@ import { useInbox, useTheme } from '../utils/context'
 import { CText, HeadingText, lightColors } from '../utils/styles'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
-function Loader({ style }) {
+function Loader({ style, size }) {
   const color = style?.color
   return (
     <SpinnerContainer>
-      <Spinner style={style} color={color} />
+      <Spinner style={style} color={color} size={size} />
     </SpinnerContainer>
   )
 }
 
 export default function NotificationsList() {
   const {
-    notificationsData: { notifications, hasNext },
+    notificationsData: { notifications, hasNext, initialLoading },
     noNotificationsComponent,
     loaderComponent,
-    inbox
+    inbox,
+    pagination
   } = useInbox()
   const { notificationsContainer } = useTheme()
+
+  if (initialLoading) {
+    return (
+      <InitialLoader>
+        <Loader style={notificationsContainer?.loader} size='large' />
+      </InitialLoader>
+    )
+  }
 
   if (notifications.length <= 0) {
     if (noNotificationsComponent) {
@@ -51,7 +60,7 @@ export default function NotificationsList() {
         next={() => {
           inbox.feed.fetchNotifications()
         }}
-        hasMore={hasNext}
+        hasMore={pagination && hasNext}
         loader={
           loaderComponent?.() || (
             <Loader style={notificationsContainer?.loader} />
@@ -99,13 +108,17 @@ const spin = keyframes`
 `
 
 const Spinner = styled.div`
-  border: 3px solid ${lightColors.border};
-  border-top: 3px solid;
+  border: ${(props) =>
+    props.size === 'large'
+      ? `5px solid ${lightColors.border}`
+      : `3px solid ${lightColors.border}`};
+  border-top: ${(props) =>
+    props.size === 'large' ? '5px solid' : '3px solid'};
   border-top-color: ${(props) =>
     props.color ? props.color : lightColors.primary};
   border-radius: 50%;
-  width: 10px;
-  height: 10px;
+  width: ${(props) => (props.size === 'large' ? '20px' : '10px')};
+  height: ${(props) => (props.size === 'large' ? '20px' : '10px')};
   animation: ${spin} 1s linear infinite;
   margin: 5px;
 `
@@ -114,4 +127,8 @@ const SpinnerContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`
+
+const InitialLoader = styled.div`
+  margin-top: 32px;
 `
