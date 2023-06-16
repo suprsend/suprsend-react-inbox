@@ -109,6 +109,7 @@ function SuprsendInbox({
   hideInbox,
   hideToast,
   collapseToastNotifications,
+  hideAvatar = false,
   themeType = 'light'
 }) {
   const storageKey = getStorageKey(workspaceKey)
@@ -184,7 +185,8 @@ function SuprsendInbox({
           badgeComponent,
           notificationComponent,
           noNotificationsComponent,
-          toggleInbox
+          toggleInbox,
+          hideAvatar
         }}
       >
         {!hideInbox && (

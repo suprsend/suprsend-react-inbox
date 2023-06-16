@@ -51,7 +51,7 @@ dayjs.updateLocale('en', {
 export default function Notification({ notificationData, markClicked }) {
   const [validAvatar, setValidAvatar] = useState(false)
   const { message, seen_on: seenOn, created_on: createdOn } = notificationData
-  const { notificationComponent } = useInbox()
+  const { notificationComponent, hideAvatar } = useInbox()
   const { notification } = useTheme()
   marked.use({
     renderer: renderer({
@@ -79,21 +79,23 @@ export default function Notification({ notificationData, markClicked }) {
     <Container style={notification?.container} read={!!seenOn}>
       <NotificationView>
         <LeftView>
-          <AvatarView
-            href={formatActionLink(message?.avatar?.action_url)}
-            onClick={(e) => {
-              if (formatActionLink(message?.avatar?.action_url)) {
-                e.stopPropagation()
-                markClicked()
-              }
-            }}
-          >
-            {message?.avatar?.avatar_url && validAvatar ? (
-              <AvatarImage src={message.avatar.avatar_url} alt='avatar' />
-            ) : (
-              <AvatarIcon />
-            )}
-          </AvatarView>
+          {!hideAvatar && (
+            <AvatarView
+              href={formatActionLink(message?.avatar?.action_url)}
+              onClick={(e) => {
+                if (formatActionLink(message?.avatar?.action_url)) {
+                  e.stopPropagation()
+                  markClicked()
+                }
+              }}
+            >
+              {message?.avatar?.avatar_url && validAvatar ? (
+                <AvatarImage src={message.avatar.avatar_url} alt='avatar' />
+              ) : (
+                <AvatarIcon />
+              )}
+            </AvatarView>
+          )}
           <div>
             <HeaderText style={notification?.headerText}>
               {message.header}
@@ -127,7 +129,7 @@ export default function Notification({ notificationData, markClicked }) {
             }
           }}
         >
-          <SubText style={notification?.subtext}>
+          <SubText style={notification?.subtext} hideAvatar={hideAvatar}>
             {message.subtext.text}
           </SubText>
         </SubTextView>
@@ -193,7 +195,7 @@ const Container = styled.div`
 
 const SubText = styled(HelperText)`
   font-size: 11px;
-  margin-left: 40px;
+  margin-left: ${(props) => (props.hideAvatar ? '0px' : '42px')};
   color: ${lightColors.secondaryText};
 `
 
