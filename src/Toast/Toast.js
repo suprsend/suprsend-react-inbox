@@ -42,7 +42,7 @@ export function notify({
 
   const handleClick = (e, notificationData) => {
     e.stopPropagation()
-    if (notificationData.seen_on) return
+    if (notificationData.interacted_on) return
     markClicked(workspaceKey, notificationData.n_id)
       .then((res) => {
         if (res.status === 202) {
@@ -50,6 +50,7 @@ export function notify({
             for (const notificationItem of prev.notifications) {
               if (notificationItem.n_id === notificationData.n_id) {
                 notificationItem.seen_on = Date.now()
+                notificationItem.interacted_on = Date.now()
               }
             }
             return { ...prev, count: 0 }
