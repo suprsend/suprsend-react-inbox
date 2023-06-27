@@ -57,6 +57,37 @@ export async function markBellClicked({
   })
 }
 
+export async function markAllRead({
+  subscriberId,
+  workspaceKey,
+  workspaceSecret,
+  distinctId
+}) {
+  const date = utcNow()
+  const route = '/mark-all-read/'
+  const body = JSON.stringify({
+    time: epochNow(),
+    distinct_id: distinctId,
+    subscriber_id: subscriberId
+  })
+  const signature = await createSignature({
+    workspaceSecret,
+    date,
+    route,
+    method: 'POST',
+    contentType: 'application/json',
+    body
+  })
+  return window.fetch(`${config.API_BASE_URL}${route}`, {
+    method: 'POST',
+    body,
+    headers: {
+      Authorization: `${workspaceKey}:${signature}`,
+      'x-amz-date': date
+    }
+  })
+}
+
 export function markClicked(workspaceKey, nId) {
   const body = {
     event: '$notification_clicked',

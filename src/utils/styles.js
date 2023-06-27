@@ -45,7 +45,8 @@ export const darkTheme = {
       borderBottom: `0.5px solid ${darkColors.border}`,
       boxShadow: '0 0 5px 0 rgba(0, 0, 0, 1)'
     },
-    headerText: { color: darkColors.primaryText }
+    headerText: { color: darkColors.primaryText },
+    markAllText: { color: darkColors.primary }
   },
   notificationsContainer: {
     container: {

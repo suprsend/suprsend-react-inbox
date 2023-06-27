@@ -20,7 +20,7 @@ export default function ClickableNotification({ notificationData }) {
   }
 
   const markNotificationClicked = () => {
-    if (!notificationData.seen_on) {
+    if (!notificationData.interacted_on) {
       markClicked(workspaceKey, notificationData.n_id)
         .then((res) => {
           if (res.status === 202) {
@@ -28,6 +28,7 @@ export default function ClickableNotification({ notificationData }) {
               for (const notificationItem of prev.notifications) {
                 if (notificationItem.n_id === notificationData.n_id) {
                   notificationItem.seen_on = Date.now()
+                  notificationItem.interacted_on = Date.now()
                 }
               }
               return { ...prev }

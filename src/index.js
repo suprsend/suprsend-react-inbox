@@ -178,6 +178,9 @@ function SuprsendInbox({
       <InboxContext.Provider
         value={{
           workspaceKey,
+          workspaceSecret,
+          distinctId,
+          subscriberId,
           notificationsData,
           setNotificationsData,
           notificationClickHandler,
