@@ -23,7 +23,7 @@ export default function Header() {
       <HeaderText style={header?.headerText}>Notifications</HeaderText>
       {!isEmpty && (
         <AllReadButton
-          style={header?.markAllText}
+          style={header?.markAllReadText}
           onClick={(e) => {
             e.stopPropagation()
             try {
