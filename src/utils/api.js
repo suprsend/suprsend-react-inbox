@@ -20,7 +20,7 @@ export async function getNotifications({
   return window.fetch(`${config.API_BASE_URL}${route}`, {
     method: 'GET',
     headers: {
-      Authorization: `${workspaceKey}:`,
+      Authorization: `${workspaceKey}:${uuid()}`,
       'x-amz-date': date
     }
   })
@@ -51,7 +51,7 @@ export async function markBellClicked({
     method: 'POST',
     body,
     headers: {
-      Authorization: `${workspaceKey}:`,
+      Authorization: `${workspaceKey}:${uuid()}`,
       'x-amz-date': date
     }
   })
@@ -82,7 +82,7 @@ export async function markAllRead({
     method: 'POST',
     body,
     headers: {
-      Authorization: `${workspaceKey}:`,
+      Authorization: `${workspaceKey}:${uuid()}`,
       'x-amz-date': date
     }
   })
@@ -100,7 +100,7 @@ export function markClicked(workspaceKey, nId) {
     method: 'POST',
     body: JSON.stringify(body),
     headers: {
-      Authorization: `${workspaceKey}:`,
+      Authorization: `${workspaceKey}:${uuid()}`,
       'Content-Type': 'application/json',
       'x-amz-date': utcNow()
     }
