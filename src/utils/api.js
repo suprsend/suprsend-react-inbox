@@ -1,6 +1,6 @@
 import config from '../config'
 import { epochNow, uuid, utcNow } from '../utils'
-import createSignature from './encryption'
+// import createSignature from './encryption'
 
 export async function getNotifications({
   subscriberId,
@@ -11,16 +11,16 @@ export async function getNotifications({
 }) {
   const date = utcNow()
   const route = `/fetch/?subscriber_id=${subscriberId}&after=${after}&distinct_id=${distinctId}`
-  const signature = await createSignature({
-    workspaceSecret,
-    date,
-    method: 'GET',
-    route
-  })
+  // const signature = await createSignature({
+  //   workspaceSecret,
+  //   date,
+  //   method: 'GET',
+  //   route
+  // })
   return window.fetch(`${config.API_BASE_URL}${route}`, {
     method: 'GET',
     headers: {
-      Authorization: `${workspaceKey}:${signature}`,
+      Authorization: `${workspaceKey}:${uuid()}`,
       'x-amz-date': date
     }
   })
@@ -39,19 +39,19 @@ export async function markBellClicked({
     distinct_id: distinctId,
     subscriber_id: subscriberId
   })
-  const signature = await createSignature({
-    workspaceSecret,
-    date,
-    route,
-    method: 'POST',
-    contentType: 'application/json',
-    body
-  })
+  // const signature = await createSignature({
+  //   workspaceSecret,
+  //   date,
+  //   route,
+  //   method: 'POST',
+  //   contentType: 'application/json',
+  //   body
+  // })
   return window.fetch(`${config.API_BASE_URL}${route}`, {
     method: 'POST',
     body,
     headers: {
-      Authorization: `${workspaceKey}:${signature}`,
+      Authorization: `${workspaceKey}:${uuid()}`,
       'x-amz-date': date
     }
   })
@@ -70,19 +70,19 @@ export async function markAllRead({
     distinct_id: distinctId,
     subscriber_id: subscriberId
   })
-  const signature = await createSignature({
-    workspaceSecret,
-    date,
-    route,
-    method: 'POST',
-    contentType: 'application/json',
-    body
-  })
+  // const signature = await createSignature({
+  //   workspaceSecret,
+  //   date,
+  //   route,
+  //   method: 'POST',
+  //   contentType: 'application/json',
+  //   body
+  // })
   return window.fetch(`${config.API_BASE_URL}${route}`, {
     method: 'POST',
     body,
     headers: {
-      Authorization: `${workspaceKey}:${signature}`,
+      Authorization: `${workspaceKey}:${uuid()}`,
       'x-amz-date': date
     }
   })
@@ -100,7 +100,7 @@ export function markClicked(workspaceKey, nId) {
     method: 'POST',
     body: JSON.stringify(body),
     headers: {
-      Authorization: `${workspaceKey}:`,
+      Authorization: `${workspaceKey}:${uuid()}`,
       'Content-Type': 'application/json',
       'x-amz-date': utcNow()
     }
