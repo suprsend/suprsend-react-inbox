@@ -17,7 +17,6 @@ function Example() {
   return (
     <SuprsendInbox
       workspaceKey='<workspace_key>'
-      workspaceSecret='<workspace_secret>'
       subscriberId='<subscriber_id>'
       distinctId='<distinct_id>'
     />

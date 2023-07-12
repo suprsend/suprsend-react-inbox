@@ -13,7 +13,7 @@ import { darkTheme } from './utils/styles'
 
 function SuprsendInbox({
   workspaceKey = '',
-  workspaceSecret = '',
+  tenantId = '',
   distinctId = '',
   subscriberId = '', // subscriberId is deprecated use inboxId
   inboxId = '',
@@ -24,6 +24,7 @@ function SuprsendInbox({
   notificationComponent,
   noNotificationsComponent,
   loaderComponent,
+  hideAvatar = false,
   hideInbox,
   hideToast,
   theme,
@@ -61,8 +62,9 @@ function SuprsendInbox({
     }
 
     setNotificationsData(resetData)
-    const inboxInst = new SuprsendJSInbox(workspaceKey, workspaceSecret, {
-      pageSize
+    const inboxInst = new SuprsendJSInbox(workspaceKey, {
+      pageSize,
+      tenantID: tenantId
     })
     setInbox(inboxInst)
     inboxInst.identifyUser(distinctId, subscriberId)
@@ -95,7 +97,7 @@ function SuprsendInbox({
     return () => {
       inboxInst.resetUser()
     }
-  }, [subscriberId, workspaceKey])
+  }, [subscriberId, workspaceKey, tenantId])
 
   const themeValue =
     themeType === 'dark' ? mergeDeep(darkTheme, theme) : theme || {}
@@ -115,7 +117,8 @@ function SuprsendInbox({
           toggleInbox,
           inbox,
           loaderComponent,
-          pagination
+          pagination,
+          hideAvatar
         }}
       >
         {!hideInbox && (
