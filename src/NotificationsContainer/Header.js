@@ -42,7 +42,7 @@ export default function Header() {
             } catch (e) {}
           }}
         >
-          Mark all read
+          Mark all as read
         </AllReadButton>
       )}
     </Container>
