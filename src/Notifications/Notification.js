@@ -22,14 +22,14 @@ dayjs.updateLocale('en', {
     hh: '%dh',
     d: '1d',
     dd: '%dd',
-    M: '1m',
-    MM: '%dm',
+    M: '1mo',
+    MM: '%dmo',
     y: '1y',
     yy: '%dy'
   }
 })
 
-export default function Notification({ notificationData, markClicked }) {
+export default function Notification({ notificationData, handleActionClick }) {
   const [validAvatar, setValidAvatar] = useState(false)
   const { message, seen_on: seenOn, created_on: createdOn } = notificationData
   const { notificationComponent, hideAvatar } = useInbox()
@@ -37,7 +37,6 @@ export default function Notification({ notificationData, markClicked }) {
 
   marked.use({
     renderer: markdownRenderer({
-      linkColor: notification?.bodyText?.linkColor || lightColors.primary,
       blockquoteColor:
         notification?.bodyText?.blockquoteColor || lightColors.border
     })
@@ -63,12 +62,8 @@ export default function Notification({ notificationData, markClicked }) {
         <LeftView>
           {!hideAvatar && (
             <AvatarView
-              href={formatActionLink(message?.avatar?.action_url)}
               onClick={(e) => {
-                if (formatActionLink(message?.avatar?.action_url)) {
-                  e.stopPropagation()
-                  markClicked()
-                }
+                handleActionClick(e, message?.avatar?.action_url)
               }}
             >
               {message?.avatar?.avatar_url && validAvatar ? (
@@ -85,7 +80,7 @@ export default function Notification({ notificationData, markClicked }) {
             <BodyText
               style={notification?.bodyText}
               dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(marked(message.text))
+                __html: marked(DOMPurify.sanitize(message.text))
               }}
             />
           </div>
@@ -103,12 +98,9 @@ export default function Notification({ notificationData, markClicked }) {
       </NotificationView>
       {message?.subtext?.text && (
         <SubTextView
-          href={formatActionLink(message?.subtext?.action_url)}
+          link={message?.subtext?.action_url}
           onClick={(e) => {
-            if (formatActionLink(message?.subtext?.action_url)) {
-              e.stopPropagation()
-              markClicked()
-            }
+            handleActionClick(e, message?.subtext?.action_url)
           }}
         >
           <SubText style={notification?.subtext} hideAvatar={hideAvatar}>
@@ -123,11 +115,7 @@ export default function Notification({ notificationData, markClicked }) {
               style={notification?.actions?.[0]?.container}
               key={actionOne.id}
               onClick={(e) => {
-                e.stopPropagation()
-                markClicked()
-                if (actionOne?.url) {
-                  window.location.href = formatActionLink(actionOne.url)
-                }
+                handleActionClick(e, actionOne.url)
               }}
             >
               <ButtonText style={notification?.actions?.[0]?.text}>
@@ -140,11 +128,7 @@ export default function Notification({ notificationData, markClicked }) {
               key={actionTwo.id}
               style={notification?.actions?.[1]?.container}
               onClick={(e) => {
-                e.stopPropagation()
-                markClicked()
-                if (actionTwo?.url) {
-                  window.location.href = formatActionLink(actionTwo.url)
-                }
+                handleActionClick(e, actionTwo.url)
               }}
             >
               <ButtonOutlineText style={notification?.actions?.[1]?.text}>
@@ -181,10 +165,11 @@ const SubText = styled(HelperText)`
   color: ${lightColors.secondaryText};
 `
 
-const SubTextView = styled.a`
+const SubTextView = styled.div`
   text-decoration: none;
+  overflow-wrap: anywhere;
   &:hover {
-    text-decoration: ${(props) => (props.href ? 'underline' : 'none')};
+    text-decoration: ${(props) => (props.link ? 'underline' : 'none')};
     text-decoration-color: ${lightColors.secondaryText};
   }
 `
@@ -231,9 +216,10 @@ const ButtonContainer = styled.div`
   margin-bottom: 5px;
   margin-left: 40px;
   margin-top: 10px;
+  overflow-wrap: anywhere;
 `
 
-const ButtonView = styled.a`
+const ButtonView = styled.div`
   max-width: 50%;
   background: #066af3;
   border-radius: 5px;
@@ -262,9 +248,10 @@ const ButtonOutlineText = styled(ButtonText)`
 
 const LeftView = styled.div`
   display: flex;
+  overflow-wrap: anywhere;
 `
 
-const AvatarView = styled.a`
+const AvatarView = styled.div`
   margin-top: 10px;
   margin-right: 10px;
 `

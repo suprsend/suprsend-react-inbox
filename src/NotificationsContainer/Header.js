@@ -19,7 +19,7 @@ export default function Header() {
             inbox.feed.markAllRead()
           }}
         >
-          Mark all read
+          Mark all as read
         </AllReadButton>
       )}
     </Container>

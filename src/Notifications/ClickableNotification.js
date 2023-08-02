@@ -20,17 +20,37 @@ export default function ClickableNotification({ notificationData }) {
     inbox.feed.markClicked(notificationData.n_id)
   }
 
-  const handleClick = (e) => {
+  const handleCardClick = (e) => {
+    const clicked = notificationData.interacted_on
     e.stopPropagation()
     markNotificationClicked()
-    navigateUser()
+    if (!clicked) {
+      setTimeout(() => {
+        navigateUser()
+      }, 1000)
+    } else {
+      navigateUser()
+    }
+  }
+
+  const handleActionClick = (e, link) => {
+    e.stopPropagation()
+    const clicked = notificationData.interacted_on
+    markNotificationClicked()
+    if (!clicked && link) {
+      setTimeout(() => {
+        window.location.href = formatActionLink(notificationData.message.url)
+      }, 1000)
+    } else {
+      window.location.href = formatActionLink(notificationData.message.url)
+    }
   }
 
   return (
-    <div onClick={handleClick}>
+    <div onClick={handleCardClick}>
       <Notification
         notificationData={notificationData}
-        markClicked={markNotificationClicked}
+        handleActionClick={handleActionClick}
       />
     </div>
   )

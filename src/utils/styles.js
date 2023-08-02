@@ -72,7 +72,6 @@ export const darkTheme = {
     headerText: { color: darkColors.primaryText },
     bodyText: {
       color: darkColors.primaryText,
-      linkColor: darkColors.primary,
       blockquoteColor: darkColors.border
     },
     unseenDot: { backgroundColor: darkColors.primary },
@@ -88,7 +87,6 @@ export const darkTheme = {
     headerText: { color: darkColors.primaryText },
     bodyText: {
       color: darkColors.primaryText,
-      linkColor: darkColors.primary,
       blockquoteColor: darkColors.border
     }
   },

@@ -69,9 +69,9 @@ export function formatActionLink(link) {
   }
 }
 
-export const markdownRenderer = ({ linkColor, blockquoteColor }) => ({
+export const markdownRenderer = ({ blockquoteColor }) => ({
   link(href, _, text) {
-    return `<a href=${href} style="color:${linkColor};text-decoration:none;">${text}</a>`
+    return `<span>${text}</span>`
   },
   paragraph(text) {
     return `<p style="margin:0px;"}}>${text}</p>`

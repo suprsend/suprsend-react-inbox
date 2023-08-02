@@ -16,7 +16,6 @@ export function ToastNotification({ notificationData, dismissToast }) {
 
   marked.use({
     renderer: markdownRenderer({
-      linkColor: toast?.bodyText?.linkColor || lightColors.primary,
       blockquoteColor: toast?.bodyText?.blockquoteColor || lightColors.border
     })
   })
@@ -64,6 +63,7 @@ const Container = styled.div`
   border-radius: 5px;
   box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2), 0 2px 1px 0 rgba(0, 0, 0, 0.1);
   display: flex;
+  overflow-wrap: anywhere;
 `
 
 const HeaderText = styled(CText)`
