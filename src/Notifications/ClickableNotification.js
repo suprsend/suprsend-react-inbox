@@ -19,7 +19,7 @@ export default function ClickableNotification({ notificationData }) {
     }
   }
 
-  const markNotificationClicked = () => {
+  const markNotificationClickedWithNav = () => {
     if (!notificationData.interacted_on) {
       markClicked(workspaceKey, notificationData.n_id)
         .then((res) => {
@@ -33,18 +33,53 @@ export default function ClickableNotification({ notificationData }) {
               }
               return { ...prev }
             })
+            navigateUser()
           }
         })
         .catch((err) => {
           console.log('MARK SEEN ERROR ', err)
+          navigateUser()
         })
+    } else {
+      navigateUser()
+    }
+  }
+
+  const markNotificationClicked = (link) => {
+    if (!notificationData.interacted_on) {
+      markClicked(workspaceKey, notificationData.n_id)
+        .then((res) => {
+          if (res.status === 202) {
+            setNotificationsData((prev) => {
+              for (const notificationItem of prev.notifications) {
+                if (notificationItem.n_id === notificationData.n_id) {
+                  notificationItem.seen_on = Date.now()
+                  notificationItem.interacted_on = Date.now()
+                }
+              }
+              return { ...prev }
+            })
+            if (link) {
+              window.location.href = formatActionLink(link)
+            }
+          }
+        })
+        .catch((err) => {
+          console.log('MARK SEEN ERROR ', err)
+          if (link) {
+            window.location.href = formatActionLink(link)
+          }
+        })
+    } else {
+      if (link) {
+        window.location.href = formatActionLink(link)
+      }
     }
   }
 
   const handleClick = async (e) => {
     e.stopPropagation()
-    await markNotificationClicked()
-    navigateUser()
+    markNotificationClickedWithNav()
   }
 
   return (

@@ -10,7 +10,7 @@ export async function getNotifications({
   after = 0
 }) {
   const date = utcNow()
-  const route = `/fetch/?subscriber_id=${subscriberId}&after=${after}&distinct_id=${distinctId}`
+  const route = `/fetch-notifications/?subscriber_id=${subscriberId}&distinct_id=${distinctId}`
   // const signature = await createSignature({
   //   workspaceSecret,
   //   date,
@@ -21,6 +21,8 @@ export async function getNotifications({
     method: 'GET',
     headers: {
       Authorization: `${workspaceKey}:${uuid()}`,
+      'ss-after': after,
+      'ss-referer': 'react-inbox',
       'x-amz-date': date
     }
   })

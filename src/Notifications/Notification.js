@@ -81,11 +81,10 @@ export default function Notification({ notificationData, markClicked }) {
         <LeftView>
           {!hideAvatar && (
             <AvatarView
-              href={formatActionLink(message?.avatar?.action_url)}
               onClick={(e) => {
                 if (formatActionLink(message?.avatar?.action_url)) {
                   e.stopPropagation()
-                  markClicked()
+                  markClicked(message?.avatar?.action_url)
                 }
               }}
             >
@@ -125,11 +124,11 @@ export default function Notification({ notificationData, markClicked }) {
       </NotificationView>
       {message?.subtext?.text && (
         <SubTextView
-          href={formatActionLink(message?.subtext?.action_url)}
+          link={message?.subtext?.action_url}
           onClick={(e) => {
             if (formatActionLink(message?.subtext?.action_url)) {
               e.stopPropagation()
-              markClicked()
+              markClicked(message?.subtext?.action_url)
             }
           }}
         >
@@ -145,10 +144,9 @@ export default function Notification({ notificationData, markClicked }) {
               style={notification?.actions?.[0]?.container}
               key={actionOne.id}
               onClick={(e) => {
-                e.stopPropagation()
-                markClicked()
-                if (actionOne?.url) {
-                  window.location.href = formatActionLink(actionOne.url)
+                if (actionOne.url) {
+                  e.stopPropagation()
+                  markClicked(actionOne.url)
                 }
               }}
             >
@@ -162,10 +160,9 @@ export default function Notification({ notificationData, markClicked }) {
               key={actionTwo.id}
               style={notification?.actions?.[1]?.container}
               onClick={(e) => {
-                e.stopPropagation()
-                markClicked()
-                if (actionTwo?.url) {
-                  window.location.href = formatActionLink(actionTwo.url)
+                if (actionTwo.url) {
+                  e.stopPropagation()
+                  markClicked(actionTwo.url)
                 }
               }}
             >
@@ -203,10 +200,10 @@ const SubText = styled(HelperText)`
   color: ${lightColors.secondaryText};
 `
 
-const SubTextView = styled.a`
+const SubTextView = styled.div`
   text-decoration: none;
   &:hover {
-    text-decoration: ${(props) => (props.href ? 'underline' : 'none')};
+    text-decoration: ${(props) => (props.link ? 'underline' : 'none')};
     text-decoration-color: ${lightColors.secondaryText};
   }
 `
@@ -255,7 +252,7 @@ const ButtonContainer = styled.div`
   margin-top: 10px;
 `
 
-const ButtonView = styled.a`
+const ButtonView = styled.div`
   max-width: 50%;
   background: #066af3;
   border-radius: 5px;
@@ -286,7 +283,7 @@ const LeftView = styled.div`
   display: flex;
 `
 
-const AvatarView = styled.a`
+const AvatarView = styled.div`
   margin-top: 10px;
   margin-right: 10px;
 `
