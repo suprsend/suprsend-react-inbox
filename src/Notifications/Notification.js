@@ -7,27 +7,7 @@ import updateLocale from 'dayjs/plugin/updateLocale'
 import { useInbox, useTheme } from '../utils/context'
 import AvatarIcon from './AvatarIcon'
 import { isImgUrl, formatActionLink } from '../utils'
-import { marked } from 'marked'
-import DOMPurify from 'dompurify'
-
-const renderer = ({ linkColor, blockquoteColor }) => ({
-  link(href, _, text) {
-    return `<a href=${href} style="color:${linkColor};text-decoration:none;">${text}</a>`
-  },
-  paragraph(text) {
-    return `<p style="margin:0px;"}}>${text}</p>`
-  },
-  list(body, ordered) {
-    if (ordered) {
-      return `<ol style="white-space:normal;margin:0px;padding-left:10px;">${body}</ol>`
-    } else {
-      return `<ul style="white-space:normal;margin:0px;padding-left:10px">${body}</ul>`
-    }
-  },
-  blockquote(src) {
-    return `<blockquote style="margin:0px;padding-left:10px;border-left:3px ${blockquoteColor} solid;margin-top:5px; margin-bottom:5px;">${src}</blockquote>`
-  }
-})
+import Markdown from 'react-markdown'
 
 dayjs.extend(relativeTime)
 dayjs.extend(updateLocale)
@@ -53,13 +33,10 @@ export default function Notification({ notificationData, markClicked }) {
   const { message, seen_on: seenOn, created_on: createdOn } = notificationData
   const { notificationComponent, hideAvatar } = useInbox()
   const { notification } = useTheme()
-  marked.use({
-    renderer: renderer({
-      linkColor: notification?.bodyText?.linkColor || lightColors.primary,
-      blockquoteColor:
-        notification?.bodyText?.blockquoteColor || lightColors.border
-    })
-  })
+
+  const blockquoteColor =
+    notification?.bodyText?.blockquoteColor || lightColors.border
+  const linkColor = notification?.bodyText?.linkColor || lightColors.primary
 
   const actionOne = message?.actions?.[0]
   const actionTwo = message?.actions?.[1]
@@ -103,12 +80,82 @@ export default function Notification({ notificationData, markClicked }) {
             <HeaderText style={notification?.headerText}>
               {message.header}
             </HeaderText>
-            <BodyText
-              style={notification?.bodyText}
-              dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(marked(message.text))
-              }}
-            />
+            <BodyText style={notification?.bodyText}>
+              <Markdown
+                components={{
+                  a({ children, href }) {
+                    return (
+                      <a
+                        href={href}
+                        style={{ color: linkColor, textDecoration: 'none' }}
+                      >
+                        {children}
+                      </a>
+                    )
+                  },
+                  p({ children }) {
+                    return (
+                      <p style={{ margin: 0, overflowWrap: 'anywhere' }}>
+                        {children}
+                      </p>
+                    )
+                  },
+                  blockquote({ children }) {
+                    return (
+                      <blockquote
+                        style={{
+                          margin: 0,
+                          paddingLeft: 10,
+                          borderLeft: `3px ${blockquoteColor} solid`,
+                          marginBottom: 5
+                        }}
+                      >
+                        {children}
+                      </blockquote>
+                    )
+                  },
+                  ul({ children }) {
+                    return (
+                      <ul
+                        style={{
+                          whiteSpace: 'normal',
+                          margin: 0,
+                          paddingLeft: 10
+                        }}
+                      >
+                        {children}
+                      </ul>
+                    )
+                  },
+                  ol({ children }) {
+                    return (
+                      <ol
+                        style={{
+                          whiteSpace: 'normal',
+                          margin: 0,
+                          paddingLeft: 10
+                        }}
+                      >
+                        {children}
+                      </ol>
+                    )
+                  },
+                  img(props) {
+                    return (
+                      <img
+                        style={{ maxWidth: '100%', objectFit: 'contain' }}
+                        {...props}
+                      />
+                    )
+                  }
+                }}
+              >
+                {message?.text
+                  ?.replaceAll('\\\n', '&nbsp;')
+                  ?.replaceAll('\n', '  \n')
+                  ?.replaceAll('&nbsp;', '&nbsp;  \n')}
+              </Markdown>
+            </BodyText>
           </div>
         </LeftView>
         <RightView>
@@ -217,7 +264,7 @@ const NotificationView = styled.div`
 
 const HeaderText = styled(CText)`
   margin: 10px 0px;
-  white-space: pre-line;
+  overflow-wrap: anywhere;
   line-height: 16px;
   font-weight: 700;
 `
@@ -226,7 +273,6 @@ const BodyText = styled.div`
   font-size: 13px;
   line-height: 18px;
   margin: 10px 0px 5px 0px;
-  white-space: pre-line;
   font-weight: 400;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
     Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
