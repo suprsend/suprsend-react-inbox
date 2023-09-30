@@ -1,6 +1,6 @@
 {
   "name": "@suprsend/react-inbox",
-  "version": "1.3.5",
+  "version": "1.4.0",
   "description": "SuprSend SDK for integrating inbox functionality in React applications",
   "author": "SuprSend Developers",
   "license": "MIT",
@@ -11,12 +11,14 @@
   "engines": {
     "node": ">=10"
   },
+  "types": "./dist/index.d.ts",
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "build": "microbundle-crl --no-compress --format modern,cjs",
+    "build": "microbundle-crl --no-compress --format modern,cjs && npm run cp-types",
     "start": "microbundle-crl watch --no-compress --format modern,cjs",
+    "cp-types": "cp ./src/index.d.ts ./dist/index.d.ts",
     "prepare": "run-s build",
     "test": "run-s test:unit test:lint test:build",
     "test:build": "run-s build",
@@ -59,9 +61,8 @@
     "@emotion/styled": "^11.8.1",
     "@popperjs/core": "^2.11.5",
     "dayjs": "^1.11.2",
-    "dompurify": "^3.0.1",
-    "marked": "^4.3.0",
     "react-hot-toast": "^2.2.0",
+    "react-markdown": "8.0.7",
     "react-popper": "^2.3.0"
   }
 }
