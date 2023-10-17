@@ -36,6 +36,7 @@ interface ISuprSendProviderProps {
   notificationClickHandler?: (notificationData: any) => void
   toastProps?: IToastProps
   theme?: Dictionary
+  openLinksInNewTab?: boolean
 }
 
 declare function SuprSendInbox({
@@ -53,6 +54,7 @@ declare function SuprSendInbox({
   badgeComponent,
   notificationClickHandler,
   toastProps,
-  theme
+  theme,
+  openLinksInNewTab
 }: ISuprSendProviderProps): JSX.Element
 export default SuprSendInbox

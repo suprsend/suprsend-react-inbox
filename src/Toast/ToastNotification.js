@@ -5,11 +5,7 @@ import { useTheme, useInbox } from '../utils/context'
 import AvatarIcon from '../Notifications/AvatarIcon'
 import { isImgUrl } from '../utils'
 
-export function ToastNotification({
-  notificationData,
-  markClicked,
-  dismissToast
-}) {
+export function ToastNotification({ notificationData, dismissToast }) {
   const { toast } = useTheme()
   const { toggleInbox } = useInbox()
   const { message } = notificationData
@@ -25,7 +21,6 @@ export function ToastNotification({
     <Container
       style={toast?.container}
       onClick={(e) => {
-        // markClicked(e, notificationData)
         toggleInbox(true)
         dismissToast()
       }}
