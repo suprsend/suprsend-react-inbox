@@ -5,8 +5,14 @@ import { useInbox } from '../utils/context'
 import { formatActionLink } from '../utils'
 
 export default function ClickableNotification({ notificationData }) {
-  const { workspaceKey, setNotificationsData, notificationClickHandler } =
-    useInbox()
+  const {
+    workspaceKey,
+    setNotificationsData,
+    notificationClickHandler,
+    openLinksInNewTab
+  } = useInbox()
+
+  const urlTarget = openLinksInNewTab ? '_blank' : '_self'
 
   const navigateUser = () => {
     // redirect after mark seen logic
@@ -14,7 +20,7 @@ export default function ClickableNotification({ notificationData }) {
       notificationClickHandler(notificationData)
     } else {
       if (notificationData?.message?.url) {
-        window.location.href = formatActionLink(notificationData.message.url)
+        window.open(formatActionLink(notificationData.message.url), urlTarget)
       }
     }
   }
@@ -60,19 +66,19 @@ export default function ClickableNotification({ notificationData }) {
               return { ...prev }
             })
             if (link) {
-              window.location.href = formatActionLink(link)
+              window.open(formatActionLink(link), urlTarget)
             }
           }
         })
         .catch((err) => {
           console.log('MARK SEEN ERROR ', err)
           if (link) {
-            window.location.href = formatActionLink(link)
+            window.open(formatActionLink(link), urlTarget)
           }
         })
     } else {
       if (link) {
-        window.location.href = formatActionLink(link)
+        window.open(formatActionLink(link), urlTarget)
       }
     }
   }
