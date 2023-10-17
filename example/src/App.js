@@ -18,7 +18,7 @@ const App = () => {
         subscriberId={process.env.REACT_APP_SUBSCRIBER_ID}
         distinctId={process.env.REACT_APP_DISTINCT_ID}
         themeType={themeType}
-        // openLinksInNewTab={false}
+        // openLinksInNewTab={true}
         // hideAvatar={true}
         // hideInbox={false}
         // hideToast={false}
