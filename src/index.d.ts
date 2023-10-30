@@ -37,6 +37,7 @@ interface ISuprSendProviderProps {
   toastProps?: IToastProps
   theme?: Dictionary
   openLinksInNewTab?: boolean
+  popperPosition: 'top' | 'bottom' | 'left' | 'right'
 }
 
 declare function SuprSendInbox({
@@ -55,6 +56,7 @@ declare function SuprSendInbox({
   notificationClickHandler,
   toastProps,
   theme,
-  openLinksInNewTab
+  openLinksInNewTab,
+  popperPosition
 }: ISuprSendProviderProps): JSX.Element
 export default SuprSendInbox
