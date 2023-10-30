@@ -111,7 +111,8 @@ function SuprsendInbox({
   collapseToastNotifications,
   hideAvatar = false,
   themeType = 'light',
-  openLinksInNewTab = false
+  openLinksInNewTab = false,
+  popperPosition = 'bottom'
 }) {
   const storageKey = getStorageKey(workspaceKey)
   const storedData = getStorageData(storageKey)
@@ -196,7 +197,11 @@ function SuprsendInbox({
         }}
       >
         {!hideInbox && (
-          <Inbox openInbox={openInbox} toggleInbox={toggleInbox} />
+          <Inbox
+            openInbox={openInbox}
+            toggleInbox={toggleInbox}
+            popperPosition={popperPosition}
+          />
         )}
         {!hideToast && <Toast {...toastProps} />}
       </InboxContext.Provider>
