@@ -9,8 +9,11 @@ const App = () => {
       style={{
         height: '100vh',
         width: '100vw',
-        paddingLeft: 50,
-        backgroundColor: themeType === 'light' ? 'white' : 'black'
+        padding: 50,
+        backgroundColor: themeType === 'light' ? 'white' : 'black',
+        display: 'flex',
+        alignItems: 'flex-end',
+        justifyContent: 'flex-end'
       }}
     >
       <SuprsendInbox
@@ -18,6 +21,7 @@ const App = () => {
         subscriberId={process.env.REACT_APP_SUBSCRIBER_ID}
         distinctId={process.env.REACT_APP_DISTINCT_ID}
         themeType={themeType}
+        // popperPosition='right'
         // openLinksInNewTab={true}
         // hideAvatar={true}
         // hideInbox={false}

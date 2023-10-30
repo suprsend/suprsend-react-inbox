@@ -23,14 +23,14 @@ function getArrowComponent(popperPosition = 'bottom') {
   }
 }
 
-export default function Inbox({ openInbox, toggleInbox }) {
+export default function Inbox({ openInbox, toggleInbox, popperPosition }) {
   const [referenceElement, setReferenceElement] = useState(null)
   const [popperElement, setPopperElement] = useState(null)
   const [arrowElement, setArrowElement] = useState(null)
   const { setNotificationsData } = useInbox()
   const { header, notificationsContainer } = useTheme()
   const { styles, attributes } = usePopper(referenceElement, popperElement, {
-    placement: 'left',
+    placement: popperPosition,
     modifiers: [
       { name: 'arrow', options: { element: arrowElement } },
       {
