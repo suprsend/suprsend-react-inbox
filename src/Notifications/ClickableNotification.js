@@ -4,14 +4,16 @@ import { useInbox } from '../utils/context'
 import { formatActionLink } from '../utils'
 
 export default function ClickableNotification({ notificationData }) {
-  const { notificationClickHandler, inbox } = useInbox()
+  const { notificationClickHandler, inbox, openLinksInNewTab } = useInbox()
+
+  const urlTarget = openLinksInNewTab ? '_blank' : '_self'
 
   const navigateUser = () => {
     if (typeof notificationClickHandler === 'function') {
       notificationClickHandler(notificationData)
     } else {
       if (notificationData?.message?.url) {
-        window.location.href = formatActionLink(notificationData.message.url)
+        window.open(formatActionLink(notificationData.message.url), urlTarget)
       }
     }
   }
@@ -36,13 +38,18 @@ export default function ClickableNotification({ notificationData }) {
   const handleActionClick = (e, link) => {
     e.stopPropagation()
     const clicked = notificationData.interacted_on
+    const actionUrl = notificationData.message.url
     markNotificationClicked()
     if (!clicked && link) {
       setTimeout(() => {
-        window.location.href = formatActionLink(notificationData.message.url)
+        if (actionUrl) {
+          window.open(formatActionLink(actionUrl), urlTarget)
+        }
       }, 1000)
     } else {
-      window.location.href = formatActionLink(notificationData.message.url)
+      if (actionUrl) {
+        window.open(formatActionLink(actionUrl), urlTarget)
+      }
     }
   }
 

@@ -19,6 +19,7 @@ const App = () => {
         distinctId={process.env.REACT_APP_DISTINCT_ID}
         // tenantId='test'
         themeType={themeType}
+        // openLinksInNewTab={true}
         // hideAvatar={true}
         // hideInbox={false}
         // hideToast={false}

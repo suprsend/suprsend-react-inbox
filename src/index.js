@@ -30,7 +30,8 @@ function SuprsendInbox({
   theme,
   themeType = 'light',
   pagination = true,
-  pageSize
+  pageSize,
+  openLinksInNewTab = false
 }) {
   if (inboxId) {
     subscriberId = inboxId
@@ -118,7 +119,8 @@ function SuprsendInbox({
           inbox,
           loaderComponent,
           pagination,
-          hideAvatar
+          hideAvatar,
+          openLinksInNewTab
         }}
       >
         {!hideInbox && (

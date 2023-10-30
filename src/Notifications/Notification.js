@@ -6,9 +6,8 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import updateLocale from 'dayjs/plugin/updateLocale'
 import { useInbox, useTheme } from '../utils/context'
 import AvatarIcon from './AvatarIcon'
-import { isImgUrl, formatActionLink, markdownRenderer } from '../utils'
-import { marked } from 'marked'
-import DOMPurify from 'dompurify'
+import { isImgUrl } from '../utils'
+import Markdown from 'react-markdown'
 
 dayjs.extend(relativeTime)
 dayjs.extend(updateLocale)
@@ -35,12 +34,9 @@ export default function Notification({ notificationData, handleActionClick }) {
   const { notificationComponent, hideAvatar } = useInbox()
   const { notification } = useTheme()
 
-  marked.use({
-    renderer: markdownRenderer({
-      blockquoteColor:
-        notification?.bodyText?.blockquoteColor || lightColors.border
-    })
-  })
+  const blockquoteColor =
+    notification?.bodyText?.blockquoteColor || lightColors.border
+  const linkColor = notification?.bodyText?.linkColor || lightColors.primary
 
   const actionOne = message?.actions?.[0]
   const actionTwo = message?.actions?.[1]
@@ -81,12 +77,82 @@ export default function Notification({ notificationData, handleActionClick }) {
             <HeaderText style={notification?.headerText}>
               {message.header}
             </HeaderText>
-            <BodyText
-              style={notification?.bodyText}
-              dangerouslySetInnerHTML={{
-                __html: marked(DOMPurify.sanitize(message.text))
-              }}
-            />
+            <BodyText style={notification?.bodyText}>
+              <Markdown
+                components={{
+                  a({ children, href }) {
+                    return (
+                      <a
+                        href={href}
+                        style={{ color: linkColor, textDecoration: 'none' }}
+                      >
+                        {children}
+                      </a>
+                    )
+                  },
+                  p({ children }) {
+                    return (
+                      <p style={{ margin: 0, overflowWrap: 'anywhere' }}>
+                        {children}
+                      </p>
+                    )
+                  },
+                  blockquote({ children }) {
+                    return (
+                      <blockquote
+                        style={{
+                          margin: 0,
+                          paddingLeft: 10,
+                          borderLeft: `3px ${blockquoteColor} solid`,
+                          marginBottom: 5
+                        }}
+                      >
+                        {children}
+                      </blockquote>
+                    )
+                  },
+                  ul({ children }) {
+                    return (
+                      <ul
+                        style={{
+                          whiteSpace: 'normal',
+                          margin: 0,
+                          paddingLeft: 10
+                        }}
+                      >
+                        {children}
+                      </ul>
+                    )
+                  },
+                  ol({ children }) {
+                    return (
+                      <ol
+                        style={{
+                          whiteSpace: 'normal',
+                          margin: 0,
+                          paddingLeft: 10
+                        }}
+                      >
+                        {children}
+                      </ol>
+                    )
+                  },
+                  img(props) {
+                    return (
+                      <img
+                        style={{ maxWidth: '100%', objectFit: 'contain' }}
+                        {...props}
+                      />
+                    )
+                  }
+                }}
+              >
+                {message?.text
+                  ?.replaceAll('\\\n', '&nbsp;')
+                  ?.replaceAll('\n', '  \n')
+                  ?.replaceAll('&nbsp;', '&nbsp;  \n')}
+              </Markdown>
+            </BodyText>
           </div>
         </LeftView>
         <RightView>
@@ -187,7 +253,7 @@ const NotificationView = styled.div`
 
 const HeaderText = styled(CText)`
   margin: 10px 0px;
-  white-space: pre-line;
+  overflow-wrap: anywhere;
   line-height: 16px;
   font-weight: 700;
 `
@@ -196,7 +262,6 @@ const BodyText = styled.div`
   font-size: 13px;
   line-height: 18px;
   margin: 10px 0px 5px 0px;
-  white-space: pre-line;
   font-weight: 400;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
     Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';

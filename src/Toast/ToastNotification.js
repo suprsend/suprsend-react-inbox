@@ -1,24 +1,21 @@
 import React, { useState, useEffect } from 'react'
 import styled from '@emotion/styled'
-import { marked } from 'marked'
-import DOMPurify from 'dompurify'
 import { CText, lightColors } from '../utils/styles'
 import { useTheme, useInbox } from '../utils/context'
 import AvatarIcon from '../Notifications/AvatarIcon'
-import { isImgUrl, markdownRenderer } from '../utils'
+import { isImgUrl } from '../utils'
+import Markdown from 'react-markdown'
 
 export function ToastNotification({ notificationData, dismissToast }) {
-  const { toast } = useTheme()
+  const { toast, notification } = useTheme()
   const { toggleInbox } = useInbox()
   const { message } = notificationData
 
-  const [validAvatar, setValidAvatar] = useState(false)
+  const blockquoteColor =
+    notification?.bodyText?.blockquoteColor || lightColors.border
+  const linkColor = notification?.bodyText?.linkColor || lightColors.primary
 
-  marked.use({
-    renderer: markdownRenderer({
-      blockquoteColor: toast?.bodyText?.blockquoteColor || lightColors.border
-    })
-  })
+  const [validAvatar, setValidAvatar] = useState(false)
 
   useEffect(() => {
     const isValidAvatar = isImgUrl(message?.avatar?.avatar_url)
@@ -42,12 +39,82 @@ export function ToastNotification({ notificationData, dismissToast }) {
       </AvatarView>
       <div>
         <HeaderText style={toast?.headerText}>{message.header}</HeaderText>
-        <BodyText
-          style={toast?.bodyText}
-          dangerouslySetInnerHTML={{
-            __html: DOMPurify.sanitize(marked(message.text))
-          }}
-        />
+        <BodyText style={notification?.bodyText}>
+          <Markdown
+            components={{
+              a({ children, href }) {
+                return (
+                  <a
+                    href={href}
+                    style={{ color: linkColor, textDecoration: 'none' }}
+                  >
+                    {children}
+                  </a>
+                )
+              },
+              p({ children }) {
+                return (
+                  <p style={{ margin: 0, overflowWrap: 'anywhere' }}>
+                    {children}
+                  </p>
+                )
+              },
+              blockquote({ children }) {
+                return (
+                  <blockquote
+                    style={{
+                      margin: 0,
+                      paddingLeft: 10,
+                      borderLeft: `3px ${blockquoteColor} solid`,
+                      marginBottom: 5
+                    }}
+                  >
+                    {children}
+                  </blockquote>
+                )
+              },
+              ul({ children }) {
+                return (
+                  <ul
+                    style={{
+                      whiteSpace: 'normal',
+                      margin: 0,
+                      paddingLeft: 10
+                    }}
+                  >
+                    {children}
+                  </ul>
+                )
+              },
+              ol({ children }) {
+                return (
+                  <ol
+                    style={{
+                      whiteSpace: 'normal',
+                      margin: 0,
+                      paddingLeft: 10
+                    }}
+                  >
+                    {children}
+                  </ol>
+                )
+              },
+              img(props) {
+                return (
+                  <img
+                    style={{ maxWidth: '100%', objectFit: 'contain' }}
+                    {...props}
+                  />
+                )
+              }
+            }}
+          >
+            {message?.text
+              ?.replaceAll('\\\n', '&nbsp;')
+              ?.replaceAll('\n', '  \n')
+              ?.replaceAll('&nbsp;', '&nbsp;  \n')}
+          </Markdown>
+        </BodyText>
       </div>
     </Container>
   )

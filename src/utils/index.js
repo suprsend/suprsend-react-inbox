@@ -68,22 +68,3 @@ export function formatActionLink(link) {
     return link.startsWith('http') ? link : `https://${link}`
   }
 }
-
-export const markdownRenderer = ({ blockquoteColor }) => ({
-  link(href, _, text) {
-    return `<span>${text}</span>`
-  },
-  paragraph(text) {
-    return `<p style="margin:0px;"}}>${text}</p>`
-  },
-  list(body, ordered) {
-    if (ordered) {
-      return `<ol style="white-space:normal;margin:0px;padding-left:10px;">${body}</ol>`
-    } else {
-      return `<ul style="white-space:normal;margin:0px;padding-left:10px">${body}</ul>`
-    }
-  },
-  blockquote(src) {
-    return `<blockquote style="margin:0px;padding-left:10px;border-left:3px ${blockquoteColor} solid;margin-top:5px; margin-bottom:5px;">${src}</blockquote>`
-  }
-})
