@@ -67,7 +67,11 @@ export default function Notification({ notificationData, handleActionClick }) {
               }}
             >
               {message?.avatar?.avatar_url && validAvatar ? (
-                <AvatarImage src={message.avatar.avatar_url} alt='avatar' />
+                <AvatarImage
+                  src={message.avatar.avatar_url}
+                  alt='avatar'
+                  style={notification?.avatar}
+                />
               ) : (
                 <AvatarIcon />
               )}
