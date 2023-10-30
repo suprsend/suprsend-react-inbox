@@ -12,8 +12,8 @@ const App = () => {
         padding: 50,
         backgroundColor: themeType === 'light' ? 'white' : 'black',
         display: 'flex',
-        alignItems: 'flex-end',
-        justifyContent: 'flex-end'
+        alignItems: 'center',
+        justifyContent: 'center'
       }}
     >
       <SuprsendInbox
