@@ -24,7 +24,7 @@ const Container = styled.div`
   border: 1px solid ${lightColors.border};
   display: inline-block;
   overflow: scroll;
-  box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0 0px 7px 0 rgba(0, 0, 0, 0.2);
   @media (max-width: 425px) {
     width: 99.5vw;
     margin: 0px;
