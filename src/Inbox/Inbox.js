@@ -47,7 +47,7 @@ export default function Inbox({ openInbox, toggleInbox }) {
           style={{ ...styles.popper, zIndex: 999 }}
           {...attributes.popper}
         >
-          <Arrow
+          <ArrowBottom
             ref={setArrowElement}
             style={styles.arrow}
             customStyles={{
@@ -62,7 +62,30 @@ export default function Inbox({ openInbox, toggleInbox }) {
   )
 }
 
-const Arrow = styled.div`
+const ArrowBottom = styled.div`
+  width: 0;
+  height: 0;
+  border-top: ${(props) =>
+    `solid 8px ${props?.customStyles?.borderColor || lightColors.border}`};
+  border-left: solid 8px transparent;
+  border-right: solid 8px transparent;
+  float: left;
+  bottom: -8px;
+  &:before {
+    content: '';
+    width: 0;
+    height: 0;
+    border-top: ${(props) =>
+      `solid 10px ${props?.customStyles?.backgroundColor || '#fff'}`};
+    border-left: solid 10px transparent;
+    border-right: solid 10px transparent;
+    position: absolute;
+    left: -10px;
+    bottom: 2px;
+  }
+`
+
+const ArrowTop = styled.div`
   width: 0;
   height: 0;
   border-bottom: ${(props) =>
