@@ -47,7 +47,7 @@ export default function Inbox({ openInbox, toggleInbox }) {
           style={{ ...styles.popper, zIndex: 999 }}
           {...attributes.popper}
         >
-          <ArrowBottom
+          <ArrowTop
             ref={setArrowElement}
             style={styles.arrow}
             customStyles={{
@@ -61,6 +61,28 @@ export default function Inbox({ openInbox, toggleInbox }) {
     </Container>
   )
 }
+
+const ArrowTop = styled.div`
+  width: 0;
+  height: 0;
+  border-bottom: ${(props) =>
+    `solid 10px ${props?.customStyles?.borderColor || lightColors.border}`};
+  border-left: solid 10px transparent;
+  border-right: solid 10px transparent;
+  top: -8px;
+  &:before {
+    content: '';
+    width: 0;
+    height: 0;
+    border-bottom: ${(props) =>
+      `solid 12px ${props?.customStyles?.backgroundColor || '#fff'}`};
+    border-left: solid 12px transparent;
+    border-right: solid 12px transparent;
+    position: absolute;
+    left: -12px;
+    top: 1.5px;
+  }
+`
 
 const ArrowBottom = styled.div`
   width: 0;
@@ -82,28 +104,6 @@ const ArrowBottom = styled.div`
     position: absolute;
     left: -10px;
     bottom: 2px;
-  }
-`
-
-const ArrowTop = styled.div`
-  width: 0;
-  height: 0;
-  border-bottom: ${(props) =>
-    `solid 10px ${props?.customStyles?.borderColor || lightColors.border}`};
-  border-left: solid 10px transparent;
-  border-right: solid 10px transparent;
-  top: -8px;
-  &:before {
-    content: '';
-    width: 0;
-    height: 0;
-    border-bottom: ${(props) =>
-      `solid 12px ${props?.customStyles?.backgroundColor || '#fff'}`};
-    border-left: solid 12px transparent;
-    border-right: solid 12px transparent;
-    position: absolute;
-    left: -12px;
-    top: 1.5px;
   }
 `
 
