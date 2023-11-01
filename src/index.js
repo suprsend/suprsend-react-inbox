@@ -31,7 +31,8 @@ function SuprsendInbox({
   themeType = 'light',
   pagination = true,
   pageSize,
-  openLinksInNewTab = false
+  openLinksInNewTab = false,
+  popperPosition = 'bottom'
 }) {
   if (inboxId) {
     subscriberId = inboxId
@@ -124,7 +125,11 @@ function SuprsendInbox({
         }}
       >
         {!hideInbox && (
-          <Inbox openInbox={openInbox} toggleInbox={toggleInbox} />
+          <Inbox
+            openInbox={openInbox}
+            toggleInbox={toggleInbox}
+            popperPosition={popperPosition}
+          />
         )}
         {!hideToast && <Toast {...toastProps} />}
       </InboxContext.Provider>
@@ -133,3 +138,4 @@ function SuprsendInbox({
 }
 
 export default SuprsendInbox
+export * from './Headless'
