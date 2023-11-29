@@ -19,7 +19,8 @@ export default function Headless() {
 }
 
 function Notifications() {
-  const { notifications, fetchPrevious, markClicked } = useNotifications()
+  const { notifications, fetchPrevious, markClicked, markAllRead } =
+    useNotifications()
   const { unSeenCount, markAllSeen } = useBell()
 
   useEvent('new_notification', (data) => {
@@ -32,6 +33,7 @@ function Notifications() {
         <h3
           onClick={() => {
             markAllSeen()
+            markAllRead()
           }}
           style={{ marginRight: 100 }}
         >
