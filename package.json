@@ -1,6 +1,6 @@
 {
   "name": "@suprsend/react-inbox",
-  "version": "1.2.0",
+  "version": "2.0.0-beta.1",
   "description": "SuprSend SDK for integrating inbox functionality in React applications",
   "author": "SuprSend Developers",
   "license": "MIT",
@@ -60,7 +60,7 @@
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "@popperjs/core": "^2.11.5",
-    "@suprsend/js-inbox": "file:../suprsend-js-sdk/suprsend-js-inbox-1.0.0.tgz",
+    "@suprsend/js-inbox": "^2.0.0-beta.1",
     "dayjs": "^1.11.2",
     "react-hot-toast": "^2.2.0",
     "react-infinite-scroll-component": "^6.1.0",
