@@ -39,82 +39,7 @@ export function ToastNotification({ notificationData, dismissToast }) {
       </AvatarView>
       <div>
         <HeaderText style={toast?.headerText}>{message.header}</HeaderText>
-        <BodyText style={notification?.bodyText}>
-          <Markdown
-            components={{
-              a({ children, href }) {
-                return (
-                  <a
-                    href={href}
-                    style={{ color: linkColor, textDecoration: 'none' }}
-                  >
-                    {children}
-                  </a>
-                )
-              },
-              p({ children }) {
-                return (
-                  <p style={{ margin: 0, overflowWrap: 'anywhere' }}>
-                    {children}
-                  </p>
-                )
-              },
-              blockquote({ children }) {
-                return (
-                  <blockquote
-                    style={{
-                      margin: 0,
-                      paddingLeft: 10,
-                      borderLeft: `3px ${blockquoteColor} solid`,
-                      marginBottom: 5
-                    }}
-                  >
-                    {children}
-                  </blockquote>
-                )
-              },
-              ul({ children }) {
-                return (
-                  <ul
-                    style={{
-                      whiteSpace: 'normal',
-                      margin: 0,
-                      paddingLeft: 10
-                    }}
-                  >
-                    {children}
-                  </ul>
-                )
-              },
-              ol({ children }) {
-                return (
-                  <ol
-                    style={{
-                      whiteSpace: 'normal',
-                      margin: 0,
-                      paddingLeft: 10
-                    }}
-                  >
-                    {children}
-                  </ol>
-                )
-              },
-              img(props) {
-                return (
-                  <img
-                    style={{ maxWidth: '100%', objectFit: 'contain' }}
-                    {...props}
-                  />
-                )
-              }
-            }}
-          >
-            {message?.text
-              ?.replaceAll('\\\n', '&nbsp;')
-              ?.replaceAll('\n', '  \n')
-              ?.replaceAll('&nbsp;', '&nbsp;  \n')}
-          </Markdown>
-        </BodyText>
+        <BodyText style={notification?.bodyText}>{message?.text}</BodyText>
       </div>
     </Container>
   )
@@ -140,10 +65,14 @@ const HeaderText = styled(CText)`
   margin: 10px 0px;
 `
 
-const BodyText = styled(CText)`
+const BodyText = styled.div`
   font-size: 12px;
   line-height: 18px;
   margin: 10px 0px;
+  font-weight: 400;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  color: ${lightColors.primaryText};
 `
 
 const AvatarImage = styled.img`
