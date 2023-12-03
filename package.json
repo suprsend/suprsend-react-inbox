@@ -1,6 +1,6 @@
 {
   "name": "@suprsend/react-inbox",
-  "version": "2.0.0-beta.1",
+  "version": "2.0.0-beta.1.1",
   "description": "SuprSend SDK for integrating inbox functionality in React applications",
   "author": "SuprSend Developers",
   "license": "MIT",
