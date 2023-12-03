@@ -65,7 +65,7 @@ const HeaderText = styled(CText)`
   margin: 10px 0px;
 `
 
-const BodyText = styled.div`
+const BodyText = styled(CText)`
   font-size: 12px;
   line-height: 18px;
   margin: 10px 0px;
