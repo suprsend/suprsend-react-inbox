@@ -20,7 +20,7 @@ interface ISuprSendInbox {
   workspaceKey: string
   distinctId: string | null
   subscriberId: string | null
-  inboxId: string | null
+  inboxId?: string | null
   tenantId?: string
   themeType?: 'light' | 'dark'
   hideAvatar?: boolean
@@ -42,7 +42,7 @@ interface ISuprSendInbox {
   openLinksInNewTab?: boolean
   pagination?: boolean
   pageSize?: number
-  popperPosition: 'top' | 'bottom' | 'left' | 'right'
+  popperPosition?: 'top' | 'bottom' | 'left' | 'right'
 }
 
 declare function SuprSendInbox({
