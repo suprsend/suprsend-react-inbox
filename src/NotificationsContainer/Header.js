@@ -71,7 +71,12 @@ const TopContainer = styled.div`
 
 const TabsContainer = styled.div`
   display: flex;
-  overflow: scroll;
+  overflow-x: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `
 
 const TabText = styled(CText)`

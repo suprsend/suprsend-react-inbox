@@ -16,9 +16,10 @@
     "access": "public"
   },
   "scripts": {
-    "build": "microbundle-crl --no-compress --format modern,cjs && npm run cp-types",
+    "build": "microbundle-crl --no-compress --format modern,cjs && npm run cp-types && npm run cp-assets",
     "start": "microbundle-crl watch --no-compress --format modern,cjs",
     "cp-types": "cp ./src/index.d.ts ./dist/index.d.ts",
+    "cp-assets": "cp -r ./src/utils/assets/ ./dist/assets",
     "prepare": "run-s build",
     "test": "run-s test:unit test:lint test:build",
     "test:build": "run-s build",
