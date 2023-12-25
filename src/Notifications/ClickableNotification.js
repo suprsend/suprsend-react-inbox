@@ -23,7 +23,7 @@ export default function ClickableNotification({ notificationData }) {
     return target
   }
 
-  const cardClickNavigate = () => {
+  const cardClickNavigation = () => {
     if (typeof notificationClickHandler === 'function') {
       notificationClickHandler(notificationData)
     } else {
@@ -51,10 +51,10 @@ export default function ClickableNotification({ notificationData }) {
 
     if (!clicked) {
       setTimeout(() => {
-        cardClickNavigate()
+        cardClickNavigation()
       }, 1000)
     } else {
-      cardClickNavigate()
+      cardClickNavigation()
     }
   }
 
@@ -71,7 +71,7 @@ export default function ClickableNotification({ notificationData }) {
           const actionUrlTarget = getURLTarget(clickData?.localTarget)
           window.open(formatActionLink(clickData.url), actionUrlTarget)
         } else {
-          cardClickNavigate()
+          cardClickNavigation()
         }
       }, 1000)
     } else {
@@ -79,7 +79,7 @@ export default function ClickableNotification({ notificationData }) {
         const actionUrlTarget = getURLTarget(clickData?.localTarget)
         window.open(formatActionLink(clickData.url), actionUrlTarget)
       } else {
-        cardClickNavigate()
+        cardClickNavigation()
       }
     }
   }
