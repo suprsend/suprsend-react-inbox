@@ -3,23 +3,24 @@ import styled from '@emotion/styled'
 import { CText, HeadingText, lightColors } from '../utils/styles'
 import { useTheme, useInbox } from '../utils/context'
 
-const tabs = [
-  { label: 'All', id: 'default' },
-  { label: 'Marketing', id: 'marketing' },
-  { label: 'Marketing1', id: 'marketing1' },
-  { label: 'Marketing2', id: 'marketing2' },
-  { label: 'Marketing3', id: 'marketing3' }
-]
-
 export default function Header() {
   const { header } = useTheme()
-  const { inbox, notificationsData } = useInbox()
-  const [selectedTab, setSelectedtab] = React.useState(tabs[0].id)
+  const {
+    inbox,
+    notificationsData,
+    activeStore,
+    setActiveStore,
+    setChangingActiveStore
+  } = useInbox()
 
-  const isEmpty = notificationsData?.notifications.length <= 0
+  // const isEmpty = notificationsData?.notifications.length <= 0
+  const isEmpty = false
+  const hasStores = !!notificationsData?.storeData?.hasStores
+  const stores = inbox.feed.stores
+
   return (
     <Container style={header?.container}>
-      <TopContainer>
+      <TopContainer hasStores={hasStores}>
         <HeaderText style={header?.headerText}>Notifications</HeaderText>
         {!isEmpty && (
           <AllReadButton
@@ -33,21 +34,33 @@ export default function Header() {
           </AllReadButton>
         )}
       </TopContainer>
-      <TabsContainer>
-        {tabs.map((item) => {
-          return (
-            <TabText
-              selected={selectedTab === item.id}
-              key={item.id}
-              onClick={() => {
-                setSelectedtab(item.id)
-              }}
-            >
-              {item.label}
-            </TabText>
-          )
-        })}
-      </TabsContainer>
+      {stores && stores.length > 0 && (
+        <TabsContainer>
+          {stores.map((store, index) => {
+            const tabUnseenCount =
+              notificationsData?.storeData?.[store.storeId]?.unseenCount || 0
+            return (
+              <TabContainer
+                key={index}
+                selected={activeStore === store.storeId}
+                onClick={() => {
+                  setChangingActiveStore(true)
+                  setActiveStore(store.storeId)
+                  inbox.changeActiveStore(store.storeId)
+                  setTimeout(() => {
+                    setChangingActiveStore(false)
+                  }, 0)
+                }}
+              >
+                <TabText>{store.label}</TabText>
+                {tabUnseenCount > 0 && (
+                  <TabBadgeText>{tabUnseenCount}</TabBadgeText>
+                )}
+              </TabContainer>
+            )
+          })}
+        </TabsContainer>
+      )}
     </Container>
   )
 }
@@ -66,7 +79,8 @@ const TopContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: ${(props) => (props.hasStores ? '16px' : '0px')};
+  padding-bottom: ${(props) => (props.hasStores ? '0px' : '10px')};
 `
 
 const TabsContainer = styled.div`
@@ -79,17 +93,23 @@ const TabsContainer = styled.div`
   }
 `
 
+const TabContainer = styled.div`
+  padding: 5px 15px 3px 15px;
+  border-bottom: ${(props) => {
+    return props.selected ? `2px solid ${lightColors.primary}` : 'none'
+  }};
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+`
+
 const TabText = styled(CText)`
   font-size: 14px;
   font-weight: 600;
   color: ${(props) => {
     return props.selected ? lightColors.primaryText : lightColors.secondaryText
   }};
-  padding: 5px 15px 3px 15px;
-  border-bottom: ${(props) => {
-    return props.selected ? `2px solid ${lightColors.primary}` : 'none'
-  }};
-  cursor: pointer;
 `
 
 const HeaderText = styled(HeadingText)`
@@ -101,4 +121,16 @@ const AllReadButton = styled(HeadingText)`
   color: ${lightColors.primary};
   font-size: 12px;
   cursor: pointer;
+`
+
+const TabBadgeText = styled.span`
+  font-size: 10px;
+  line-height: 1;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  padding: 3px 6px;
+  border-radius: 50%;
+  background-color: ${lightColors.primary};
+  color: #fff;
+  text-align: center;
 `

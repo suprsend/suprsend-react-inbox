@@ -6,14 +6,34 @@ import { formatActionLink } from '../utils'
 export default function ClickableNotification({ notificationData }) {
   const { notificationClickHandler, inbox, openLinksInNewTab } = useInbox()
 
-  const urlTarget = openLinksInNewTab ? '_blank' : '_self'
+  function getURLTarget(localTarget) {
+    let target
 
-  const navigateUser = () => {
+    if (localTarget === true) {
+      target = '_blank'
+    } else if (localTarget === false) {
+      target = '_self'
+    } else {
+      if (openLinksInNewTab === true) {
+        target = '_blank'
+      } else {
+        target = '_self'
+      }
+    }
+    return target
+  }
+
+  const cardClickNavigate = () => {
     if (typeof notificationClickHandler === 'function') {
       notificationClickHandler(notificationData)
     } else {
-      if (notificationData?.message?.url) {
-        window.open(formatActionLink(notificationData.message.url), urlTarget)
+      const message = notificationData?.message
+      if (message?.url) {
+        const actionUrlTarget = getURLTarget(message?.open_in_new_tab)
+        window.open(
+          formatActionLink(notificationData.message.url),
+          actionUrlTarget
+        )
       }
     }
   }
@@ -23,32 +43,43 @@ export default function ClickableNotification({ notificationData }) {
   }
 
   const handleCardClick = (e) => {
-    const clicked = notificationData.interacted_on
     e.stopPropagation()
+
+    const clicked = notificationData.interacted_on
+
     markNotificationClicked()
+
     if (!clicked) {
       setTimeout(() => {
-        navigateUser()
+        cardClickNavigate()
       }, 1000)
     } else {
-      navigateUser()
+      cardClickNavigate()
     }
   }
 
-  const handleActionClick = (e, link) => {
+  const handleActionClick = (e, clickData) => {
     e.stopPropagation()
+
     const clicked = notificationData.interacted_on
-    const actionUrl = notificationData.message.url
+
     markNotificationClicked()
-    if (!clicked && link) {
+
+    if (!clicked) {
       setTimeout(() => {
-        if (actionUrl) {
-          window.open(formatActionLink(actionUrl), urlTarget)
+        if (clickData?.url) {
+          const actionUrlTarget = getURLTarget(clickData?.localTarget)
+          window.open(formatActionLink(clickData.url), actionUrlTarget)
+        } else {
+          cardClickNavigate()
         }
       }, 1000)
     } else {
-      if (actionUrl) {
-        window.open(formatActionLink(actionUrl), urlTarget)
+      if (clickData?.url) {
+        const actionUrlTarget = getURLTarget(clickData?.localTarget)
+        window.open(formatActionLink(clickData.url), actionUrlTarget)
+      } else {
+        cardClickNavigate()
       }
     }
   }

@@ -1,3 +1,5 @@
+import { IStore } from '@suprsend/js-inbox'
+
 interface Dictionary {
   [key: string]: any
 }
@@ -22,6 +24,7 @@ interface ISuprSendInbox {
   subscriberId: string | null
   inboxId?: string | null
   tenantId?: string
+  stores?: IStore[]
   themeType?: 'light' | 'dark'
   hideAvatar?: boolean
   hideInbox?: boolean

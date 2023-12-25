@@ -18,13 +18,15 @@ function Loader({ style, size }) {
 
 export default function NotificationsList() {
   const {
-    notificationsData: { notifications, hasNext, initialLoading },
+    notificationsData: { storeData, hasNext, initialLoading, activeStoreId },
     noNotificationsComponent,
     loaderComponent,
-    inbox,
-    pagination
+    pagination,
+    changingActiveStore,
+    inbox
   } = useInbox()
   const { notificationsContainer } = useTheme()
+  const notifications = storeData?.[activeStoreId]?.notifications || []
 
   if (initialLoading) {
     return (
@@ -52,8 +54,11 @@ export default function NotificationsList() {
     )
   }
 
+  if (changingActiveStore) {
+    return null
+  }
   return (
-    <React.Fragment>
+    <ScrollDiv>
       <InfiniteScroll
         scrollableTarget='ss-notification-container'
         dataLength={notifications.length}
@@ -67,13 +72,21 @@ export default function NotificationsList() {
           )
         }
       >
-        {notifications.map((notification, index) => (
-          <ClickableNotification notificationData={notification} key={index} />
+        {notifications.map((notification) => (
+          <ClickableNotification
+            notificationData={notification}
+            key={notification.n_id}
+          />
         ))}
       </InfiniteScroll>
-    </React.Fragment>
+    </ScrollDiv>
   )
 }
+
+const ScrollDiv = styled.div`
+  margin-bottom: 30px;
+  padding-bottom: 5px;
+`
 
 const EmptyNotificationsContainer = styled.div`
   display: flex;
