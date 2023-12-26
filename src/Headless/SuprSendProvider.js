@@ -1,9 +1,8 @@
 import React, { useEffect, useState, createContext } from 'react'
 import SuprsendJSInbox from '@suprsend/js-inbox'
-import { getStorageKey, getStorageData, setStorageData } from '../utils'
 
 const initialNotificationData = {
-  notifications: [],
+  storeData: {},
   unseenCount: 0,
   hasNext: false,
   initialLoading: false,
@@ -21,60 +20,56 @@ function SuprSendProvider({
   subscriberId,
   inboxId,
   tenantId,
+  stores,
   pageSize
 }) {
   if (inboxId) {
     subscriberId = inboxId
   }
-  const storageKey = getStorageKey(workspaceKey)
-  const storedData = getStorageData(storageKey)
-  const isSameUser = storedData?.subscriber_id === subscriberId
 
   const [inbox, setInbox] = useState()
   const [notificationsData, setNotificationsData] = useState({
-    ...initialNotificationData,
-    notifications: isSameUser ? storedData?.notifications || [] : []
+    ...initialNotificationData
   })
 
   useEffect(() => {
-    if (!subscriberId) return
-
     const inboxInst = new SuprsendJSInbox(workspaceKey, {
       pageSize,
-      tenantID: tenantId
+      tenantID: tenantId,
+      stores
     })
     setInbox(inboxInst)
-    inboxInst.identifyUser(distinctId, subscriberId)
 
     inboxInst.emitter.on('sync_notif_store', () => {
       const inboxData = inboxInst.feed.data
-
-      if (inboxData.initialLoading && inboxData?.notifications.length) {
-        return
-      }
-
       setNotificationsData({
-        notifications: inboxData?.notifications || [],
-        unseenCount: inboxData?.unseenCount || 0,
+        storeData: inboxData?.stores || {},
+        count: inboxData?.unseenCount || 0,
         hasNext: inboxData?.hasNext,
-        initialLoading: inboxData.initialLoading,
-        fetchMoreLoading: inboxData.fetchMoreLoading
-      })
-      setStorageData(storageKey, {
-        notifications: inboxData?.notifications?.slice(0, 20),
-        subscriber_id: subscriberId
+        initialLoading: inboxData?.initialLoading,
+        fetchMoreLoading: inboxData?.fetchMoreLoading,
+        activeStoreId: inboxData?.activeStoreId
       })
     })
 
-    inboxInst.feed.fetchNotifications()
+    return () => {
+      inboxInst.emitter.all.clear()
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!subscriberId || !inbox) return
+
+    inbox.identifyUser(distinctId, subscriberId)
+    inbox.feed.fetchNotifications()
 
     return () => {
-      inboxInst.resetUser()
+      inbox.resetUser()
     }
-  }, [subscriberId, workspaceKey, tenantId])
+  }, [subscriberId, inbox])
 
   return (
-    <InboxContext.Provider value={{ inbox, notificationsData }}>
+    <InboxContext.Provider value={{ inbox, notificationsData, subscriberId }}>
       {children}
     </InboxContext.Provider>
   )
