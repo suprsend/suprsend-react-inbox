@@ -3,6 +3,17 @@ import styled from '@emotion/styled'
 import { CText, HeadingText, lightColors } from '../utils/styles'
 import { useTheme, useInbox } from '../utils/context'
 
+function hasNotifications(storeData) {
+  let hasData = false
+  for (const storeId in storeData) {
+    const store = storeData[storeId]
+    if (store?.notifications?.length > 0) {
+      hasData = true
+    }
+  }
+  return hasData
+}
+
 export default function Header() {
   const { header } = useTheme()
   const {
@@ -13,11 +24,9 @@ export default function Header() {
     setChangingActiveStore
   } = useInbox()
 
-  // const isEmpty = notificationsData?.notifications.length <= 0
-  const isEmpty = false
-  const hasStores = !!notificationsData?.storeData?.hasStores
+  const isEmpty = !hasNotifications(notificationsData?.storeData)
   const stores = inbox.feed.stores
-
+  const hasStores = stores?.length > 0
   return (
     <Container style={header?.container}>
       <TopContainer hasStores={hasStores}>

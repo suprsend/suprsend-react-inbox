@@ -2,7 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import NotificationsList from '../Notifications/NotificationsList'
 import Header from './Header'
-import Footer from './Footer'
+// import Footer from './Footer'
 import { useTheme } from '../utils/context'
 import { lightColors } from '../utils/styles'
 
@@ -15,7 +15,7 @@ export default function NotificationsContainer() {
     >
       <Header />
       <NotificationsList />
-      <Footer />
+      {/* <Footer /> */}
     </Container>
   )
 }

@@ -84,8 +84,8 @@ export default function NotificationsList() {
 }
 
 const ScrollDiv = styled.div`
-  margin-bottom: 30px;
-  padding-bottom: 5px;
+  //  margin-bottom: 30px;
+  // padding-bottom: 5px;
 `
 
 const EmptyNotificationsContainer = styled.div`
