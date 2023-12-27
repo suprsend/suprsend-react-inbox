@@ -80,14 +80,17 @@ export default SuprSendInbox
 interface IActionObject {
   name: string
   url: string
+  open_in_new_tab?: boolean
 }
 
 interface IRemoteNotificationMessage {
-  header: string
   schema: string
+  header: string
   text: string
   url: string
+  open_in_new_tab?: boolean
   extra_data?: string
+  tags?: string[]
   actions?: IActionObject[]
 }
 
@@ -107,6 +110,7 @@ interface ISuprSendProvider {
   subscriberId?: string
   inboxId?: string
   tenantId?: string
+  stores?: IStore[]
   pageSize?: number
 }
 
@@ -117,12 +121,26 @@ export function SuprSendProvider({
   subscriberId,
   inboxId,
   tenantId,
+  stores,
   pageSize
 }: ISuprSendProvider): JSX.Element
 
 export function useBell(): {
   unSeenCount: number
   markAllSeen: () => Promise<void>
+}
+
+export function useUnseenCount(): {
+  unSeenCount: number
+  markAllSeen: () => Promise<void>
+}
+
+export function useStoreUnseenCount(): {
+  unSeenCount: number
+}
+
+export function useStoresUnseenCount(): {
+  [key: string]: number
 }
 
 export function useEvent(
@@ -132,7 +150,6 @@ export function useEvent(
 
 export function useNotifications(): {
   notifications: IRemoteNotification[]
-  unSeenCount: number
   initialLoading: boolean
   hasNext: boolean
   fetchMoreLoading: boolean
