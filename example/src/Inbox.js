@@ -67,23 +67,23 @@ const App = () => {
         stores={[
           {
             storeId: 'test',
-            label: 'Testing',
-            query: {
-              categories: ['sdf']
-            }
+            label: 'Testing'
           },
           {
             storeId: 'test1',
-            label: 'Test2',
-            query: { read: true }
+            label: 'Test2'
           }
         ]}
+        // tabBadgeComponent={({ count }) => {
+        //   return <p>{count}</p>
+        // }}
         // tenantId='test'
         themeType={themeType}
         // openLinksInNewTab={true}
         // hideAvatar={true}
         // hideInbox={false}
         // hideToast={false}
+        // showUnreadCountOnTabs={true}
         // collapseToastNotifications={true}
         // bellComponent={() => <p>Hello world</p>}
         // badgeComponent={({ count }) => <p>{count}</p>}
@@ -103,6 +103,13 @@ const App = () => {
         // }}
 
         // theme={{
+        //   tabs: {
+        //     color: 'red',
+        //     unselectedColor: 'red',
+        //     bottomColor: 'pink',
+        //     badgeColor: 'yellow',
+        //     badgeText: 'red'
+        //   },
         //   bell: { color: 'blue' },
         //   badge: { backgroundColor: 'pink', color: 'black' },
         //   notificationsContainer: {

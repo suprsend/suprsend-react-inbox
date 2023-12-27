@@ -20,6 +20,7 @@ function SuprsendInbox({
   notificationComponent,
   noNotificationsComponent,
   loaderComponent,
+  tabBadgeComponent,
   hideAvatar = false,
   hideInbox,
   hideToast,
@@ -28,7 +29,8 @@ function SuprsendInbox({
   pagination = true,
   pageSize,
   openLinksInNewTab = false,
-  popperPosition = 'bottom'
+  popperPosition = 'bottom',
+  showUnreadCountOnTabs = true
 }) {
   if (inboxId) {
     subscriberId = inboxId
@@ -110,6 +112,7 @@ function SuprsendInbox({
           badgeComponent,
           notificationComponent,
           noNotificationsComponent,
+          tabBadgeComponent,
           toggleInbox,
           inbox,
           loaderComponent,
@@ -119,7 +122,8 @@ function SuprsendInbox({
           activeStore,
           setActiveStore,
           changingActiveStore,
-          setChangingActiveStore
+          setChangingActiveStore,
+          showUnreadCountOnTabs
         }}
       >
         {!hideInbox && (

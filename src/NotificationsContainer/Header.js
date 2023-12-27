@@ -15,18 +15,22 @@ function hasNotifications(storeData) {
 }
 
 export default function Header() {
-  const { header } = useTheme()
+  const { header, tabs } = useTheme()
   const {
     inbox,
     notificationsData,
     activeStore,
     setActiveStore,
-    setChangingActiveStore
+    setChangingActiveStore,
+    showUnreadCountOnTabs,
+    tabBadgeComponent
   } = useInbox()
 
   const isEmpty = !hasNotifications(notificationsData?.storeData)
   const stores = inbox.feed.stores
   const hasStores = stores?.length > 0
+  const TabBadgeComponent = tabBadgeComponent
+
   return (
     <Container style={header?.container}>
       <TopContainer hasStores={hasStores}>
@@ -46,12 +50,23 @@ export default function Header() {
       {stores && stores.length > 0 && (
         <TabsContainer>
           {stores.map((store, index) => {
+            const isActiveTab = activeStore === store.storeId
             const tabUnseenCount =
               notificationsData?.storeData?.[store.storeId]?.unseenCount || 0
+            const showBadge = showUnreadCountOnTabs && tabUnseenCount > 0
+
+            const selectedTabBottomColor = isActiveTab
+              ? tabs?.bottomColor
+              : 'none'
+            const textColor = isActiveTab
+              ? tabs?.color
+              : tabs?.unselectedColor || tabs?.color
+
             return (
               <TabContainer
+                style={{ borderBottomColor: selectedTabBottomColor }}
                 key={index}
-                selected={activeStore === store.storeId}
+                selected={isActiveTab}
                 onClick={() => {
                   setChangingActiveStore(true)
                   setActiveStore(store.storeId)
@@ -61,10 +76,30 @@ export default function Header() {
                   }, 0)
                 }}
               >
-                <TabText>{store.label}</TabText>
-                {tabUnseenCount > 0 && (
-                  <TabBadgeText>{tabUnseenCount}</TabBadgeText>
-                )}
+                <TabText
+                  selected={isActiveTab}
+                  style={{
+                    ...tabs,
+                    color: textColor
+                  }}
+                >
+                  {store.label}
+                </TabText>
+                {showBadge &&
+                  (TabBadgeComponent ? (
+                    <TabBadgeComponent count={tabUnseenCount} />
+                  ) : (
+                    <TabBadge
+                      style={{
+                        backgroundColor: tabs?.badgeColor,
+                        color: tabs?.badgeText
+                      }}
+                    >
+                      <TabBadgeText count={tabUnseenCount}>
+                        {tabUnseenCount}
+                      </TabBadgeText>
+                    </TabBadge>
+                  ))}
               </TabContainer>
             )
           })}
@@ -132,14 +167,24 @@ const AllReadButton = styled(HeadingText)`
   cursor: pointer;
 `
 
-const TabBadgeText = styled.span`
-  font-size: 10px;
+const TabBadge = styled.div`
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  background-color: ${lightColors.primary};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+
+const TabBadgeText = styled.p`
+  margin: 0px;
+  padding: 0px;
+  font-size: ${(props) => {
+    return props?.count > 99 ? '8px' : '10px'
+  }};
   line-height: 1;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
     Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-  padding: 3px 6px;
-  border-radius: 50%;
-  background-color: ${lightColors.primary};
-  color: #fff;
-  text-align: center;
+  color: white;
 `

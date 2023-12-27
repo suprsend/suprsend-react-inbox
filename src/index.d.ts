@@ -39,6 +39,7 @@ interface ISuprSendInbox {
   bellComponent?: () => JSX.Element
   badgeComponent?: ({ count }: { count: number | null }) => JSX.Element
   loaderComponent?: () => JSX.Element
+  tabBadgeComponent?: ({ count }: { count: number }) => JSX.Element
   notificationClickHandler?: (notificationData: any) => void
   toastProps?: IToastProps
   theme?: Dictionary
@@ -46,6 +47,7 @@ interface ISuprSendInbox {
   pagination?: boolean
   pageSize?: number
   popperPosition?: 'top' | 'bottom' | 'left' | 'right'
+  showUnreadCountOnTabs?: boolean
 }
 
 declare function SuprSendInbox({
@@ -64,13 +66,15 @@ declare function SuprSendInbox({
   bellComponent,
   badgeComponent,
   loaderComponent,
+  tabBadgeComponent,
   notificationClickHandler,
   toastProps,
   theme,
   openLinksInNewTab,
   pageSize,
   pagination,
-  popperPosition
+  popperPosition,
+  showUnreadCountOnTabs
 }: ISuprSendInbox): JSX.Element
 
 export default SuprSendInbox

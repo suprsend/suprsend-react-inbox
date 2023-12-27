@@ -9,7 +9,7 @@ export const lightColors = {
 }
 
 export const darkColors = {
-  primary: '#3B8EFF',
+  primary: '#066AF3',
   primaryText: '#EFEFEF',
   secondaryText: '#B8B8B8',
   border: '#434343',
@@ -46,7 +46,14 @@ export const darkTheme = {
       boxShadow: '0 0 5px 0 rgba(0, 0, 0, 0.5)'
     },
     headerText: { color: darkColors.primaryText },
-    markAllReadText: { color: darkColors.primary }
+    markAllReadText: { color: '#3B8EFF' }
+  },
+  tabs: {
+    color: darkColors.primaryText,
+    unselectedColor: darkColors.secondaryText,
+    bottomColor: darkColors.primary,
+    badgeColor: darkColors.primary,
+    badgeText: darkColors.primaryText
   },
   notificationsContainer: {
     container: {
