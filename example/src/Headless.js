@@ -7,12 +7,41 @@ import {
 } from '@suprsend/react-inbox'
 
 export default function Headless() {
+  const [dId, setDid] = React.useState(process.env.REACT_APP_DISTINCT_ID1)
+  const [sId, setSid] = React.useState(process.env.REACT_APP_SUBSCRIBER_ID1)
+
   return (
     <SuprSendProvider
       workspaceKey={process.env.REACT_APP_WORKSPACE_KEY || ''}
-      subscriberId={process.env.REACT_APP_SUBSCRIBER_ID || ''}
-      distinctId={process.env.REACT_APP_DISTINCT_ID || ''}
+      subscriberId={sId}
+      distinctId={dId}
     >
+      <div style={{ display: 'flex', gap: 10 }}>
+        <button
+          onClick={() => {
+            setSid('')
+            setDid('')
+          }}
+        >
+          Remove Person
+        </button>
+        <button
+          onClick={() => {
+            setSid(process.env.REACT_APP_SUBSCRIBER_ID1)
+            setDid(process.env.REACT_APP_DISTINCT_ID1)
+          }}
+        >
+          Set Person 1
+        </button>
+        <button
+          onClick={() => {
+            setSid(process.env.REACT_APP_SUBSCRIBER_ID2)
+            setDid(process.env.REACT_APP_DISTINCT_ID2)
+          }}
+        >
+          Set Person 2
+        </button>
+      </div>
       <Notifications />
     </SuprSendProvider>
   )
