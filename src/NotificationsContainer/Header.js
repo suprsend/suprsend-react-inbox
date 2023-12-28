@@ -175,6 +175,7 @@ const TabBadge = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #fff;
 `
 
 const TabBadgeText = styled.p`
@@ -186,5 +187,4 @@ const TabBadgeText = styled.p`
   line-height: 1;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
     Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-  color: white;
 `

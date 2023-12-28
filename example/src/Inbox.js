@@ -79,7 +79,6 @@ const App = () => {
         // }}
         // tenantId='test'
         themeType={themeType}
-        // openLinksInNewTab={true}
         // hideAvatar={true}
         // hideInbox={false}
         // hideToast={false}

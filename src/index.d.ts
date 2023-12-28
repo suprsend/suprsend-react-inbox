@@ -43,7 +43,6 @@ interface ISuprSendInbox {
   notificationClickHandler?: (notificationData: any) => void
   toastProps?: IToastProps
   theme?: Dictionary
-  openLinksInNewTab?: boolean
   pagination?: boolean
   pageSize?: number
   popperPosition?: 'top' | 'bottom' | 'left' | 'right'
@@ -70,7 +69,6 @@ declare function SuprSendInbox({
   notificationClickHandler,
   toastProps,
   theme,
-  openLinksInNewTab,
   pageSize,
   pagination,
   popperPosition,

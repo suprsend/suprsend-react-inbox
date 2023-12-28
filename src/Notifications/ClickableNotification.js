@@ -3,25 +3,12 @@ import Notification from './Notification'
 import { useInbox } from '../utils/context'
 import { formatActionLink } from '../utils'
 
+function getURLTarget(target) {
+  return target ? '_blank' : '_self'
+}
+
 export default function ClickableNotification({ notificationData }) {
-  const { notificationClickHandler, inbox, openLinksInNewTab } = useInbox()
-
-  function getURLTarget(localTarget) {
-    let target
-
-    if (localTarget === true) {
-      target = '_blank'
-    } else if (localTarget === false) {
-      target = '_self'
-    } else {
-      if (openLinksInNewTab === true) {
-        target = '_blank'
-      } else {
-        target = '_self'
-      }
-    }
-    return target
-  }
+  const { notificationClickHandler, inbox } = useInbox()
 
   const cardClickNavigation = () => {
     if (typeof notificationClickHandler === 'function') {
@@ -30,10 +17,7 @@ export default function ClickableNotification({ notificationData }) {
       const message = notificationData?.message
       if (message?.url) {
         const actionUrlTarget = getURLTarget(message?.open_in_new_tab)
-        window.open(
-          formatActionLink(notificationData.message.url),
-          actionUrlTarget
-        )
+        window.open(formatActionLink(message.url), actionUrlTarget)
       }
     }
   }
@@ -46,10 +30,13 @@ export default function ClickableNotification({ notificationData }) {
     e.stopPropagation()
 
     const clicked = notificationData.interacted_on
+    const actionUrlTarget = getURLTarget(
+      notificationData?.message?.open_in_new_tab
+    )
 
     markNotificationClicked()
 
-    if (!clicked) {
+    if (!clicked && actionUrlTarget === '_self') {
       setTimeout(() => {
         cardClickNavigation()
       }, 1000)
@@ -62,13 +49,13 @@ export default function ClickableNotification({ notificationData }) {
     e.stopPropagation()
 
     const clicked = notificationData.interacted_on
+    const actionUrlTarget = getURLTarget(clickData?.target)
 
     markNotificationClicked()
 
-    if (!clicked) {
+    if (!clicked && actionUrlTarget === '_self') {
       setTimeout(() => {
         if (clickData?.url) {
-          const actionUrlTarget = getURLTarget(clickData?.localTarget)
           window.open(formatActionLink(clickData.url), actionUrlTarget)
         } else {
           cardClickNavigation()
@@ -76,7 +63,6 @@ export default function ClickableNotification({ notificationData }) {
       }, 1000)
     } else {
       if (clickData?.url) {
-        const actionUrlTarget = getURLTarget(clickData?.localTarget)
         window.open(formatActionLink(clickData.url), actionUrlTarget)
       } else {
         cardClickNavigation()

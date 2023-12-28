@@ -59,9 +59,11 @@ export default function Notification({ notificationData, handleActionClick }) {
           {!hideAvatar && (
             <AvatarView
               onClick={(e) => {
+                const avatarData = message?.avatar
                 handleActionClick(e, {
                   type: 'avatar',
-                  url: message?.avatar?.action_url
+                  url: avatarData?.action_url,
+                  target: avatarData?.open_in_new_tab
                 })
               }}
             >
@@ -173,9 +175,11 @@ export default function Notification({ notificationData, handleActionClick }) {
         <SubTextView
           link={message?.subtext?.action_url}
           onClick={(e) => {
+            const subTextData = message?.subtext
             handleActionClick(e, {
               type: 'subtext',
-              url: message?.subtext?.action_url
+              url: subTextData?.action_url,
+              target: subTextData?.open_in_new_tab
             })
           }}
         >
@@ -194,7 +198,7 @@ export default function Notification({ notificationData, handleActionClick }) {
                 handleActionClick(e, {
                   type: 'action_button',
                   url: actionOne.url,
-                  localTarget: actionOne.open_in_new_tab
+                  target: actionOne.open_in_new_tab
                 })
               }}
             >
@@ -211,7 +215,7 @@ export default function Notification({ notificationData, handleActionClick }) {
                 handleActionClick(e, {
                   type: 'action_button',
                   url: actionTwo.url,
-                  localTarget: actionTwo.open_in_new_tab
+                  target: actionTwo.open_in_new_tab
                 })
               }}
             >

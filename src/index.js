@@ -28,7 +28,6 @@ function SuprsendInbox({
   themeType = 'light',
   pagination = true,
   pageSize,
-  openLinksInNewTab = false,
   popperPosition = 'bottom',
   showUnreadCountOnTabs = true
 }) {
@@ -118,7 +117,6 @@ function SuprsendInbox({
           loaderComponent,
           pagination,
           hideAvatar,
-          openLinksInNewTab,
           activeStore,
           setActiveStore,
           changingActiveStore,
