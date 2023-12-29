@@ -83,7 +83,6 @@ const App = () => {
         // hideInbox={false}
         // hideToast={false}
         // showUnreadCountOnTabs={true}
-        // collapseToastNotifications={true}
         // bellComponent={() => <p>Hello world</p>}
         // badgeComponent={({ count }) => <p>{count}</p>}
         // notificationComponent={({ notificationData }) => (
@@ -127,8 +126,7 @@ const App = () => {
         //     container: { backgroundColor: 'red' },
         //     headerText: { color: 'white' },
         //     bodyText: { color: 'white' }
-        //   },
-        //   collapseToastNotification: { backgroundColor: 'red' }
+        //   }
         // }}
       />
     </div>

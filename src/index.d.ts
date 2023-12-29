@@ -29,7 +29,6 @@ interface ISuprSendInbox {
   hideAvatar?: boolean
   hideInbox?: boolean
   hideToast?: boolean
-  collapseToastNotifications?: boolean
   noNotificationsComponent?: () => JSX.Element
   notificationComponent?: ({
     notificationData
@@ -59,7 +58,6 @@ declare function SuprSendInbox({
   hideAvatar,
   hideInbox,
   hideToast,
-  collapseToastNotifications,
   noNotificationsComponent,
   notificationComponent,
   bellComponent,
@@ -137,7 +135,7 @@ export function useUnseenCount(): {
   markAllSeen: () => Promise<void>
 }
 
-export function useStoreUnseenCount(): {
+export function useStoreUnseenCount(storeId?: string): {
   unSeenCount: number
 }
 
@@ -150,7 +148,7 @@ export function useEvent(
   callback: (notification: IRemoteNotification) => void
 ): void
 
-export function useNotifications(): {
+export function useNotifications(storeId?: string): {
   notifications: IRemoteNotification[]
   initialLoading: boolean
   hasNext: boolean

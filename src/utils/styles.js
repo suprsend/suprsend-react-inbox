@@ -96,10 +96,5 @@ export const darkTheme = {
       color: darkColors.primaryText,
       blockquoteColor: darkColors.border
     }
-  },
-  collapseToastNotification: {
-    backgroundColor: darkColors.main,
-    borderColor: darkColors.border,
-    color: darkColors.primaryText
   }
 }
