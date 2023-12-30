@@ -64,16 +64,16 @@ const App = () => {
         workspaceKey={process.env.REACT_APP_WORKSPACE_KEY}
         subscriberId={sId}
         distinctId={dId}
-        stores={[
-          {
-            storeId: 'test',
-            label: 'Testing'
-          },
-          {
-            storeId: 'test1',
-            label: 'Test2'
-          }
-        ]}
+        // stores={[
+        //   {
+        //     storeId: 'test',
+        //     label: 'Testing'
+        //   },
+        //   {
+        //     storeId: 'test1',
+        //     label: 'Test2'
+        //   }
+        // ]}
         // tabBadgeComponent={({ count }) => {
         //   return <p>{count}</p>
         // }}
