@@ -1,6 +1,6 @@
 {
   "name": "@suprsend/react-inbox",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "SuprSend SDK for integrating inbox functionality in React applications",
   "author": "SuprSend Developers",
   "license": "MIT",
@@ -16,9 +16,10 @@
     "access": "public"
   },
   "scripts": {
-    "build": "microbundle-crl --no-compress --format modern,cjs && npm run cp-types",
+    "build": "microbundle-crl --no-compress --format modern,cjs && npm run cp-types && npm run cp-assets",
     "start": "microbundle-crl watch --no-compress --format modern,cjs",
     "cp-types": "cp ./src/index.d.ts ./dist/index.d.ts",
+    "cp-assets": "cp -r ./src/utils/assets/ ./dist/assets",
     "prepare": "run-s build",
     "test": "run-s test:unit test:lint test:build",
     "test:build": "run-s build",
@@ -60,7 +61,7 @@
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "@popperjs/core": "^2.11.5",
-    "@suprsend/js-inbox": "^2.0.0",
+    "@suprsend/js-inbox": "^2.1.0",
     "dayjs": "^1.11.2",
     "react-hot-toast": "^2.2.0",
     "react-infinite-scroll-component": "^6.1.0",

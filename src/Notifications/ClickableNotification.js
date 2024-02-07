@@ -3,17 +3,21 @@ import Notification from './Notification'
 import { useInbox } from '../utils/context'
 import { formatActionLink } from '../utils'
 
+function getURLTarget(target) {
+  return target ? '_blank' : '_self'
+}
+
 export default function ClickableNotification({ notificationData }) {
-  const { notificationClickHandler, inbox, openLinksInNewTab } = useInbox()
+  const { notificationClickHandler, inbox } = useInbox()
 
-  const urlTarget = openLinksInNewTab ? '_blank' : '_self'
-
-  const navigateUser = () => {
+  const cardClickNavigation = () => {
     if (typeof notificationClickHandler === 'function') {
       notificationClickHandler(notificationData)
     } else {
-      if (notificationData?.message?.url) {
-        window.open(formatActionLink(notificationData.message.url), urlTarget)
+      const message = notificationData?.message
+      if (message?.url) {
+        const actionUrlTarget = getURLTarget(message?.open_in_new_tab)
+        window.open(formatActionLink(message.url), actionUrlTarget)
       }
     }
   }
@@ -23,32 +27,45 @@ export default function ClickableNotification({ notificationData }) {
   }
 
   const handleCardClick = (e) => {
-    const clicked = notificationData.interacted_on
     e.stopPropagation()
+
+    const clicked = notificationData.interacted_on
+    const actionUrlTarget = getURLTarget(
+      notificationData?.message?.open_in_new_tab
+    )
+
     markNotificationClicked()
-    if (!clicked) {
+
+    if (!clicked && actionUrlTarget === '_self') {
       setTimeout(() => {
-        navigateUser()
+        cardClickNavigation()
       }, 1000)
     } else {
-      navigateUser()
+      cardClickNavigation()
     }
   }
 
-  const handleActionClick = (e, link) => {
+  const handleActionClick = (e, clickData) => {
     e.stopPropagation()
+
     const clicked = notificationData.interacted_on
-    const actionUrl = notificationData.message.url
+    const actionUrlTarget = getURLTarget(clickData?.target)
+
     markNotificationClicked()
-    if (!clicked && link) {
+
+    if (!clicked && actionUrlTarget === '_self') {
       setTimeout(() => {
-        if (actionUrl) {
-          window.open(formatActionLink(actionUrl), urlTarget)
+        if (clickData?.url) {
+          window.open(formatActionLink(clickData.url), actionUrlTarget)
+        } else {
+          cardClickNavigation()
         }
       }, 1000)
     } else {
-      if (actionUrl) {
-        window.open(formatActionLink(actionUrl), urlTarget)
+      if (clickData?.url) {
+        window.open(formatActionLink(clickData.url), actionUrlTarget)
+      } else {
+        cardClickNavigation()
       }
     }
   }

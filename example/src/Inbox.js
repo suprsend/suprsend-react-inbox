@@ -1,8 +1,49 @@
 import React from 'react'
 import SuprsendInbox from '@suprsend/react-inbox'
 
+function Buttons({ themeType, setThemeType, setDid, setSid }) {
+  return (
+    <div style={{ display: 'flex', gap: 10 }}>
+      <button
+        onClick={() => {
+          const theme = themeType === 'light' ? 'dark' : 'light'
+          setThemeType(theme)
+        }}
+      >
+        Change Theme
+      </button>
+      <button
+        onClick={() => {
+          setSid('')
+          setDid('')
+        }}
+      >
+        Remove Person
+      </button>
+      <button
+        onClick={() => {
+          setDid(process.env.REACT_APP_DISTINCT_ID1)
+          setSid(process.env.REACT_APP_SUBSCRIBER_ID1)
+        }}
+      >
+        Set Person 1
+      </button>
+      <button
+        onClick={() => {
+          setDid(process.env.REACT_APP_DISTINCT_ID2)
+          setSid(process.env.REACT_APP_SUBSCRIBER_ID2)
+        }}
+      >
+        Set Person 2
+      </button>
+    </div>
+  )
+}
+
 const App = () => {
   const [themeType, setThemeType] = React.useState('light')
+  const [dId, setDid] = React.useState(process.env.REACT_APP_DISTINCT_ID1)
+  const [sId, setSid] = React.useState(process.env.REACT_APP_SUBSCRIBER_ID1)
 
   return (
     <div
@@ -13,17 +54,35 @@ const App = () => {
         backgroundColor: themeType === 'light' ? 'white' : 'black'
       }}
     >
+      <Buttons
+        themeType={themeType}
+        setThemeType={setThemeType}
+        setDid={setDid}
+        setSid={setSid}
+      />
       <SuprsendInbox
         workspaceKey={process.env.REACT_APP_WORKSPACE_KEY}
-        subscriberId={process.env.REACT_APP_SUBSCRIBER_ID}
-        distinctId={process.env.REACT_APP_DISTINCT_ID}
+        subscriberId={sId}
+        distinctId={dId}
+        // stores={[
+        //   {
+        //     storeId: 'test',
+        //     label: 'Testing'
+        //   },
+        //   {
+        //     storeId: 'test1',
+        //     label: 'Test2'
+        //   }
+        // ]}
+        // tabBadgeComponent={({ count }) => {
+        //   return <p>{count}</p>
+        // }}
         // tenantId='test'
         themeType={themeType}
-        // openLinksInNewTab={true}
         // hideAvatar={true}
         // hideInbox={false}
         // hideToast={false}
-        // collapseToastNotifications={true}
+        // showUnreadCountOnTabs={true}
         // bellComponent={() => <p>Hello world</p>}
         // badgeComponent={({ count }) => <p>{count}</p>}
         // notificationComponent={({ notificationData }) => (
@@ -42,6 +101,13 @@ const App = () => {
         // }}
 
         // theme={{
+        //   tabs: {
+        //     color: 'red',
+        //     unselectedColor: 'red',
+        //     bottomColor: 'pink',
+        //     badgeColor: 'yellow',
+        //     badgeText: 'red'
+        //   },
         //   bell: { color: 'blue' },
         //   badge: { backgroundColor: 'pink', color: 'black' },
         //   notificationsContainer: {
@@ -60,23 +126,9 @@ const App = () => {
         //     container: { backgroundColor: 'red' },
         //     headerText: { color: 'white' },
         //     bodyText: { color: 'white' }
-        //   },
-        //   collapseToastNotification: { backgroundColor: 'red' }
+        //   }
         // }}
       />
-      <div>
-        <button
-          onClick={() => {
-            if (themeType === 'light') {
-              setThemeType('dark')
-            } else {
-              setThemeType('light')
-            }
-          }}
-        >
-          Toggle Theme
-        </button>
-      </div>
     </div>
   )
 }

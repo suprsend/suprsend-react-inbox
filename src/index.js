@@ -2,12 +2,7 @@ import React, { useState, useEffect } from 'react'
 import SuprsendJSInbox from '@suprsend/js-inbox'
 import Inbox from './Inbox'
 import Toast, { notify } from './Toast'
-import {
-  getStorageKey,
-  getStorageData,
-  mergeDeep,
-  setStorageData
-} from './utils'
+import { mergeDeep } from './utils'
 import { InboxContext, InboxThemeContext } from './utils/context'
 import { darkTheme } from './utils/styles'
 
@@ -17,6 +12,7 @@ function SuprsendInbox({
   distinctId = '',
   subscriberId = '', // subscriberId is deprecated use inboxId
   inboxId = '',
+  stores,
   toastProps,
   notificationClickHandler,
   bellComponent,
@@ -24,6 +20,7 @@ function SuprsendInbox({
   notificationComponent,
   noNotificationsComponent,
   loaderComponent,
+  tabBadgeComponent,
   hideAvatar = false,
   hideInbox,
   hideToast,
@@ -31,61 +28,40 @@ function SuprsendInbox({
   themeType = 'light',
   pagination = true,
   pageSize,
-  openLinksInNewTab = false,
-  popperPosition = 'bottom'
+  popperPosition = 'bottom',
+  showUnreadCountOnTabs = true
 }) {
   if (inboxId) {
     subscriberId = inboxId
   }
-  const storageKey = getStorageKey(workspaceKey)
-  const storedData = getStorageData(storageKey)
-  const isSameUser = storedData?.subscriber_id === subscriberId
 
   const [openInbox, toggleInbox] = useState(false)
   const [inbox, setInbox] = useState()
   const [notificationsData, setNotificationsData] = useState({
-    notifications: isSameUser ? storedData?.notifications || [] : [],
+    storeData: {},
     count: 0
   })
+  const [activeStore, setActiveStore] = useState('')
+  const [changingActiveStore, setChangingActiveStore] = useState(false)
 
   useEffect(() => {
-    if (openInbox && subscriberId && inbox) {
-      inbox.feed.markAllSeen()
-    }
-  }, [openInbox, subscriberId, inbox])
-
-  useEffect(() => {
-    if (!subscriberId) return
-    const storedData = getStorageData(storageKey)
-    const isSameUser = storedData?.subscriber_id === subscriberId
-    const resetData = {
-      notifications: isSameUser ? storedData?.notifications || [] : [],
-      count: 0
-    }
-
-    setNotificationsData(resetData)
     const inboxInst = new SuprsendJSInbox(workspaceKey, {
       pageSize,
-      tenantID: tenantId
+      tenantID: tenantId,
+      stores
     })
     setInbox(inboxInst)
-    inboxInst.identifyUser(distinctId, subscriberId)
 
     inboxInst.emitter.on('sync_notif_store', () => {
       const inboxData = inboxInst.feed.data
-      if (inboxData.initialLoading && notificationsData.notifications.length) {
-        return
-      }
       setNotificationsData({
-        notifications: inboxData?.notifications || [],
+        storeData: inboxData?.stores || {},
         count: inboxData?.unseenCount || 0,
         hasNext: inboxData?.hasNext,
-        initialLoading: inboxData.initialLoading
+        initialLoading: inboxData?.initialLoading,
+        activeStoreId: inboxData?.activeStoreId
       })
-      setStorageData(storageKey, {
-        notifications: inboxData?.notifications?.slice(0, 20),
-        subscriber_id: subscriberId
-      })
+      setActiveStore(inboxData?.activeStoreId)
     })
 
     inboxInst.emitter.on('new_notification', (notification) => {
@@ -95,11 +71,30 @@ function SuprsendInbox({
       })
     })
 
-    inboxInst.feed.fetchNotifications()
     return () => {
-      inboxInst.resetUser()
+      inboxInst.emitter.all.clear()
     }
-  }, [subscriberId, workspaceKey, tenantId])
+  }, [])
+
+  useEffect(() => {
+    if (openInbox && subscriberId && inbox) {
+      inbox.feed.markAllSeen()
+    }
+  }, [openInbox, subscriberId, inbox])
+
+  useEffect(() => {
+    if (!subscriberId || !inbox) return
+    setNotificationsData({
+      storeData: {},
+      count: 0
+    })
+    inbox.identifyUser(distinctId, subscriberId)
+    inbox.feed.fetchNotifications()
+
+    return () => {
+      inbox.resetUser()
+    }
+  }, [subscriberId, inbox])
 
   const themeValue =
     themeType === 'dark' ? mergeDeep(darkTheme, theme) : theme || {}
@@ -116,12 +111,17 @@ function SuprsendInbox({
           badgeComponent,
           notificationComponent,
           noNotificationsComponent,
+          tabBadgeComponent,
           toggleInbox,
           inbox,
           loaderComponent,
           pagination,
           hideAvatar,
-          openLinksInNewTab
+          activeStore,
+          setActiveStore,
+          changingActiveStore,
+          setChangingActiveStore,
+          showUnreadCountOnTabs
         }}
       >
         {!hideInbox && (

@@ -2,6 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import NotificationsList from '../Notifications/NotificationsList'
 import Header from './Header'
+// import Footer from './Footer'
 import { useTheme } from '../utils/context'
 import { lightColors } from '../utils/styles'
 
@@ -14,12 +15,13 @@ export default function NotificationsContainer() {
     >
       <Header />
       <NotificationsList />
+      {/* <Footer /> */}
     </Container>
   )
 }
 
 const Container = styled.div`
-  height: 400px;
+  height: 500px;
   width: 400px;
   margin: 0px 15px;
   border-radius: 5px;

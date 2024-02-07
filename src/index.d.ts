@@ -1,3 +1,5 @@
+import { IStore } from '@suprsend/js-inbox'
+
 interface Dictionary {
   [key: string]: any
 }
@@ -22,11 +24,11 @@ interface ISuprSendInbox {
   subscriberId: string | null
   inboxId?: string | null
   tenantId?: string
+  stores?: IStore[]
   themeType?: 'light' | 'dark'
   hideAvatar?: boolean
   hideInbox?: boolean
   hideToast?: boolean
-  collapseToastNotifications?: boolean
   noNotificationsComponent?: () => JSX.Element
   notificationComponent?: ({
     notificationData
@@ -36,13 +38,14 @@ interface ISuprSendInbox {
   bellComponent?: () => JSX.Element
   badgeComponent?: ({ count }: { count: number | null }) => JSX.Element
   loaderComponent?: () => JSX.Element
+  tabBadgeComponent?: ({ count }: { count: number }) => JSX.Element
   notificationClickHandler?: (notificationData: any) => void
   toastProps?: IToastProps
   theme?: Dictionary
-  openLinksInNewTab?: boolean
   pagination?: boolean
   pageSize?: number
   popperPosition?: 'top' | 'bottom' | 'left' | 'right'
+  showUnreadCountOnTabs?: boolean
 }
 
 declare function SuprSendInbox({
@@ -55,19 +58,19 @@ declare function SuprSendInbox({
   hideAvatar,
   hideInbox,
   hideToast,
-  collapseToastNotifications,
   noNotificationsComponent,
   notificationComponent,
   bellComponent,
   badgeComponent,
   loaderComponent,
+  tabBadgeComponent,
   notificationClickHandler,
   toastProps,
   theme,
-  openLinksInNewTab,
   pageSize,
   pagination,
-  popperPosition
+  popperPosition,
+  showUnreadCountOnTabs
 }: ISuprSendInbox): JSX.Element
 
 export default SuprSendInbox
@@ -77,14 +80,17 @@ export default SuprSendInbox
 interface IActionObject {
   name: string
   url: string
+  open_in_new_tab?: boolean
 }
 
 interface IRemoteNotificationMessage {
-  header: string
   schema: string
+  header: string
   text: string
   url: string
+  open_in_new_tab?: boolean
   extra_data?: string
+  tags?: string[]
   actions?: IActionObject[]
 }
 
@@ -104,6 +110,7 @@ interface ISuprSendProvider {
   subscriberId?: string
   inboxId?: string
   tenantId?: string
+  stores?: IStore[]
   pageSize?: number
 }
 
@@ -114,6 +121,7 @@ export function SuprSendProvider({
   subscriberId,
   inboxId,
   tenantId,
+  stores,
   pageSize
 }: ISuprSendProvider): JSX.Element
 
@@ -122,14 +130,26 @@ export function useBell(): {
   markAllSeen: () => Promise<void>
 }
 
+export function useUnseenCount(): {
+  unSeenCount: number
+  markAllSeen: () => Promise<void>
+}
+
+export function useStoreUnseenCount(storeId?: string): {
+  unSeenCount: number
+}
+
+export function useStoresUnseenCount(): {
+  [key: string]: number
+}
+
 export function useEvent(
   eventName: string,
   callback: (notification: IRemoteNotification) => void
 ): void
 
-export function useNotifications(): {
+export function useNotifications(storeId?: string): {
   notifications: IRemoteNotification[]
-  unSeenCount: number
   initialLoading: boolean
   hasNext: boolean
   fetchMoreLoading: boolean

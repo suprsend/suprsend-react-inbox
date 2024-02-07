@@ -4,16 +4,11 @@ import { CText, lightColors } from '../utils/styles'
 import { useTheme, useInbox } from '../utils/context'
 import AvatarIcon from '../Notifications/AvatarIcon'
 import { isImgUrl } from '../utils'
-import Markdown from 'react-markdown'
 
 export function ToastNotification({ notificationData, dismissToast }) {
   const { toast, notification } = useTheme()
   const { toggleInbox } = useInbox()
   const { message } = notificationData
-
-  const blockquoteColor =
-    notification?.bodyText?.blockquoteColor || lightColors.border
-  const linkColor = notification?.bodyText?.linkColor || lightColors.primary
 
   const [validAvatar, setValidAvatar] = useState(false)
 

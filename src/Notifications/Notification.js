@@ -59,7 +59,12 @@ export default function Notification({ notificationData, handleActionClick }) {
           {!hideAvatar && (
             <AvatarView
               onClick={(e) => {
-                handleActionClick(e, message?.avatar?.action_url)
+                const avatarData = message?.avatar
+                handleActionClick(e, {
+                  type: 'avatar',
+                  url: avatarData?.action_url,
+                  target: avatarData?.open_in_new_tab
+                })
               }}
             >
               {message?.avatar?.avatar_url && validAvatar ? (
@@ -170,7 +175,12 @@ export default function Notification({ notificationData, handleActionClick }) {
         <SubTextView
           link={message?.subtext?.action_url}
           onClick={(e) => {
-            handleActionClick(e, message?.subtext?.action_url)
+            const subTextData = message?.subtext
+            handleActionClick(e, {
+              type: 'subtext',
+              url: subTextData?.action_url,
+              target: subTextData?.open_in_new_tab
+            })
           }}
         >
           <SubText style={notification?.subtext} hideAvatar={hideAvatar}>
@@ -185,7 +195,11 @@ export default function Notification({ notificationData, handleActionClick }) {
               style={notification?.actions?.[0]?.container}
               key={actionOne.id}
               onClick={(e) => {
-                handleActionClick(e, actionOne.url)
+                handleActionClick(e, {
+                  type: 'action_button',
+                  url: actionOne.url,
+                  target: actionOne.open_in_new_tab
+                })
               }}
             >
               <ButtonText style={notification?.actions?.[0]?.text}>
@@ -198,7 +212,11 @@ export default function Notification({ notificationData, handleActionClick }) {
               key={actionTwo.id}
               style={notification?.actions?.[1]?.container}
               onClick={(e) => {
-                handleActionClick(e, actionTwo.url)
+                handleActionClick(e, {
+                  type: 'action_button',
+                  url: actionTwo.url,
+                  target: actionTwo.open_in_new_tab
+                })
               }}
             >
               <ButtonOutlineText style={notification?.actions?.[1]?.text}>
