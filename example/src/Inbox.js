@@ -22,16 +22,16 @@ function Buttons({ themeType, setThemeType, setDid, setSid }) {
       </button>
       <button
         onClick={() => {
-          setDid(process.env.REACT_APP_DISTINCT_ID1)
-          setSid(process.env.REACT_APP_SUBSCRIBER_ID1)
+          setDid(process.env.REACT_APP_DISTINCT_ID)
+          setSid(process.env.REACT_APP_SUBSCRIBER_ID)
         }}
       >
         Set Person 1
       </button>
       <button
         onClick={() => {
-          setDid(process.env.REACT_APP_DISTINCT_ID2)
-          setSid(process.env.REACT_APP_SUBSCRIBER_ID2)
+          setDid(process.env.REACT_APP_DISTINCT_ID1)
+          setSid(process.env.REACT_APP_SUBSCRIBER_ID1)
         }}
       >
         Set Person 2
@@ -42,8 +42,8 @@ function Buttons({ themeType, setThemeType, setDid, setSid }) {
 
 const App = () => {
   const [themeType, setThemeType] = React.useState('light')
-  const [dId, setDid] = React.useState(process.env.REACT_APP_DISTINCT_ID1)
-  const [sId, setSid] = React.useState(process.env.REACT_APP_SUBSCRIBER_ID1)
+  const [dId, setDid] = React.useState()
+  const [sId, setSid] = React.useState()
 
   return (
     <div
@@ -116,12 +116,18 @@ const App = () => {
         //     noNotificationsSubtext: { color: 'blue' }
         //   },
         //   header: { container: { backgroundColor: 'gray' }, headertext: {} },
-        //   notification: {
-        //     container: { backgroundColor: 'gray' },
-        //     headerText: { color: 'red' },
-        //     bodyText: { color: 'blue' },
-        //     unseenDot: { backgroundColor: 'red' }
-        //   },
+        // notification: {
+        // container: { backgroundColor: 'gray' },
+        // headerText: { color: 'red' },
+        // bodyText: { color: 'blue' },
+        // unseenDot: { backgroundColor: 'red' }
+        // expiresText: {
+        //   backgroundColor: 'pink',
+        //   color: 'yellow',
+        //   expiringBackgroundColor: 'yellow',
+        //   expiringColor: 'blue'
+        // }
+        // }
         //   toast: {
         //     container: { backgroundColor: 'red' },
         //     headerText: { color: 'white' },

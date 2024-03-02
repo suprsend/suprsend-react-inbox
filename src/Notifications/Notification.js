@@ -11,22 +11,61 @@ import Markdown from 'react-markdown'
 
 dayjs.extend(relativeTime)
 dayjs.extend(updateLocale)
-dayjs.updateLocale('en', {
-  relativeTime: {
-    past: '%ss',
-    s: '1m',
-    m: '1m',
-    mm: '%dm',
-    h: '1h',
-    hh: '%dh',
-    d: '1d',
-    dd: '%dd',
-    M: '1mo',
-    MM: '%dmo',
-    y: '1y',
-    yy: '%dy'
+
+function ExpiryTime({ dateInput, hideAvatar, style }) {
+  const date = dateInput
+  const [, setTime] = useState(Date.now())
+
+  useEffect(() => {
+    const interval = setInterval(() => setTime(Date.now()), 10000)
+    return () => {
+      clearInterval(interval)
+    }
+  }, [])
+
+  const isExpiring = date - Date.now() <= 3600000
+  if (typeof dateInput === 'number') {
+    return (
+      <div>
+        <ExpiresText
+          hideAvatar={hideAvatar}
+          style={{
+            ...style,
+            color: isExpiring
+              ? style?.expiringColor || lightColors.error
+              : style?.color || lightColors.secondaryText,
+            backgroundColor: isExpiring
+              ? style?.expiringBackgroundColor || 'rgba(217, 45, 32, 0.09)'
+              : style?.backgroundColor || 'rgba(100, 116, 139, 0.09)'
+          }}
+        >
+          Expires in{' '}
+          {dayjs(date)
+            .locale('en', {
+              relativeTime: {
+                future: 'in %s',
+                past: '%s ago',
+                s: 'a minute',
+                m: 'a minute',
+                mm: '%d minutes',
+                h: 'an hour',
+                hh: '%d hours',
+                d: 'a day',
+                dd: '%d days',
+                M: 'a month',
+                MM: '%d months',
+                y: 'a year',
+                yy: '%d years'
+              }
+            })
+            .toNow(true)}
+        </ExpiresText>
+      </div>
+    )
+  } else {
+    return null
   }
-})
+}
 
 export default function Notification({ notificationData, handleActionClick }) {
   const [validAvatar, setValidAvatar] = useState(false)
@@ -162,7 +201,24 @@ export default function Notification({ notificationData, handleActionClick }) {
         </LeftView>
         <RightView>
           <CreatedText style={notification?.createdOnText}>
-            {dayjs(createdOn).fromNow(true)}
+            {dayjs(createdOn)
+              .locale('en', {
+                relativeTime: {
+                  past: '%ss',
+                  s: '1m',
+                  m: '1m',
+                  mm: '%dm',
+                  h: '1h',
+                  hh: '%dh',
+                  d: '1d',
+                  dd: '%dd',
+                  M: '1mo',
+                  MM: '%dmo',
+                  y: '1y',
+                  yy: '%dy'
+                }
+              })
+              .fromNow(true)}
           </CreatedText>
           {!seenOn && (
             <div>
@@ -187,6 +243,13 @@ export default function Notification({ notificationData, handleActionClick }) {
             {message.subtext.text}
           </SubText>
         </SubTextView>
+      )}
+      {notificationData.expiry && notificationData?.is_expiry_visible && (
+        <ExpiryTime
+          dateInput={notificationData.expiry}
+          hideAvatar={hideAvatar}
+          style={notification?.expiresText}
+        />
       )}
       {hasButtons && (
         <ButtonContainer>
@@ -256,10 +319,20 @@ const SubText = styled(HelperText)`
 const SubTextView = styled.div`
   text-decoration: none;
   overflow-wrap: anywhere;
+  display: inline-block;
   &:hover {
     text-decoration: ${(props) => (props.link ? 'underline' : 'none')};
     text-decoration-color: ${lightColors.secondaryText};
   }
+`
+
+const ExpiresText = styled(HelperText)`
+  font-size: 11px;
+  margin-top: 12px;
+  display: inline-block;
+  padding: 1px 6px 1px 6px;
+  border-radius: 4px;
+  margin-left: ${(props) => (props.hideAvatar ? '0px' : '42px')};
 `
 
 const NotificationView = styled.div`
