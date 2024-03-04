@@ -116,18 +116,20 @@ const App = () => {
         //     noNotificationsSubtext: { color: 'blue' }
         //   },
         //   header: { container: { backgroundColor: 'gray' }, headertext: {} },
-        // notification: {
-        // container: { backgroundColor: 'gray' },
-        // headerText: { color: 'red' },
-        // bodyText: { color: 'blue' },
-        // unseenDot: { backgroundColor: 'red' }
-        // expiresText: {
-        //   backgroundColor: 'pink',
-        //   color: 'yellow',
-        //   expiringBackgroundColor: 'yellow',
-        //   expiringColor: 'blue'
-        // }
-        // }
+        //   notification: {
+        //     pinnedIcon: { color: 'red' },
+        //     pinnedText: { color: 'yellow' },
+        //     container: { backgroundColor: 'gray' },
+        //     headerText: { color: 'red' },
+        //     bodyText: { color: 'blue' },
+        //     unseenDot: { backgroundColor: 'red' },
+        //     expiresText: {
+        //       backgroundColor: 'pink',
+        //       color: 'yellow',
+        //       expiringBackgroundColor: 'yellow',
+        //       expiringColor: 'blue'
+        //     }
+        //   },
         //   toast: {
         //     container: { backgroundColor: 'red' },
         //     headerText: { color: 'white' },

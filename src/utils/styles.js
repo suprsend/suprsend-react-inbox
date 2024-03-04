@@ -78,6 +78,9 @@ export const darkTheme = {
       readBackgroundColor: darkColors.main,
       readHoverBackgroundColor: '#121212'
     },
+    pinnedText: {
+      color: darkColors?.secondaryText
+    },
     headerText: { color: darkColors.primaryText },
     bodyText: {
       color: darkColors.primaryText,

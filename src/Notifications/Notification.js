@@ -8,6 +8,7 @@ import { useInbox, useTheme } from '../utils/context'
 import AvatarIcon from './AvatarIcon'
 import { isImgUrl } from '../utils'
 import Markdown from 'react-markdown'
+import PinnedNotificationIcon from './PinnedNotificationIcon'
 
 dayjs.extend(relativeTime)
 dayjs.extend(updateLocale)
@@ -93,6 +94,14 @@ export default function Notification({ notificationData, handleActionClick }) {
 
   return (
     <Container style={notification?.container} read={!!seenOn}>
+      {notificationData.pin && (
+        <PinnedView hideAvatar={hideAvatar}>
+          <PinnedNotificationIcon style={notification?.pinnedIcon} />
+          <PinnedNotificationText style={notification?.pinnedText}>
+            Pinned
+          </PinnedNotificationText>
+        </PinnedView>
+      )}
       <NotificationView>
         <LeftView>
           {!hideAvatar && (
@@ -227,7 +236,7 @@ export default function Notification({ notificationData, handleActionClick }) {
           )}
         </RightView>
       </NotificationView>
-      {message?.subtext?.text && (
+      {!!message?.subtext?.text && (
         <SubTextView
           link={message?.subtext?.action_url}
           onClick={(e) => {
@@ -308,6 +317,18 @@ const Container = styled.div`
         ? props?.style?.readHoverBackgroundColor || '#F6F6F6'
         : props?.style?.unreadHoverBackgroundColor || '#DFECFF'};
   }
+`
+
+const PinnedView = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: ${(props) => (props.hideAvatar ? '0px' : '42px')};
+  margin-bottom: -6px;
+  gap: 4px;
+`
+
+const PinnedNotificationText = styled(HelperText)`
+  font-size: 11px;
 `
 
 const SubText = styled(HelperText)`
