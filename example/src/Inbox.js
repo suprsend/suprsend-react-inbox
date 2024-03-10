@@ -42,8 +42,8 @@ function Buttons({ themeType, setThemeType, setDid, setSid }) {
 
 const App = () => {
   const [themeType, setThemeType] = React.useState('light')
-  const [dId, setDid] = React.useState()
-  const [sId, setSid] = React.useState()
+  const [dId, setDid] = React.useState(process.env.REACT_APP_DISTINCT_ID)
+  const [sId, setSid] = React.useState(process.env.REACT_APP_SUBSCRIBER_ID)
 
   return (
     <div

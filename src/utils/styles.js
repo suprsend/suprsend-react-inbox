@@ -93,8 +93,21 @@ export const darkTheme = {
     expiresText: {
       backgroundColor: 'rgba(100, 116, 139, 0.14)',
       color: darkColors.secondaryText,
-      expiringBackgroundColor: 'rgba(217, 45, 32, 0.14)',
+      expiringBackgroundColor: 'rgba(217, 45, 32, 0.5)',
       expiringColor: darkColors.error
+    },
+    actionsMenuIcon: {
+      color: darkColors.primaryText,
+      hoverBackgroundColor: 'rgba(100, 116, 139, 0.5)'
+    },
+    actionsMenu: {
+      backgroundColor: darkColors.main,
+      borderColor: darkColors.border
+    },
+    actionsMenuItem: { hoverBackgroundColor: '#121212' },
+    actionsMenuItemIcon: { color: darkColors.primaryText },
+    actionsMenuItemText: {
+      color: darkColors.primaryText
     }
   },
   toast: {

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { CText, lightColors } from '../utils/styles'
 import { useTheme, useInbox } from '../utils/context'
-import AvatarIcon from '../Notifications/AvatarIcon'
+import AvatarIcon from '../Notifications/Icons/AvatarIcon'
 import { isImgUrl } from '../utils'
 
 export function ToastNotification({ notificationData, dismissToast }) {

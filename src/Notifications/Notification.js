@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
-import { CText, HelperText, lightColors } from '../utils/styles'
+import Markdown from 'react-markdown'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import updateLocale from 'dayjs/plugin/updateLocale'
+import { CText, HelperText, lightColors } from '../utils/styles'
 import { useInbox, useTheme } from '../utils/context'
-import AvatarIcon from './AvatarIcon'
 import { isImgUrl } from '../utils'
-import Markdown from 'react-markdown'
-import PinnedNotificationIcon from './PinnedNotificationIcon'
+import AvatarIcon from './Icons/AvatarIcon'
+import MoreIcon from './Icons/MoreIcon'
+import PinnedNotificationIcon from './Icons/PinnedNotificationIcon'
+import UnReadIcon from './Icons/UnReadIcon'
+import ReadIcon from './Icons/ReadIcon'
 
 dayjs.extend(relativeTime)
 dayjs.extend(updateLocale)
 
-function ExpiryTime({ dateInput, hideAvatar, style }) {
+function ExpiryTime({ dateInput, style }) {
   const date = dateInput
   const [, setTime] = useState(Date.now())
 
@@ -29,7 +32,6 @@ function ExpiryTime({ dateInput, hideAvatar, style }) {
     return (
       <div>
         <ExpiresText
-          hideAvatar={hideAvatar}
           style={{
             ...style,
             color: isExpiring
@@ -70,8 +72,11 @@ function ExpiryTime({ dateInput, hideAvatar, style }) {
 
 export default function Notification({ notificationData, handleActionClick }) {
   const [validAvatar, setValidAvatar] = useState(false)
+  const [showMore, setShowMore] = useState(false)
+  const [moreOpen, setMoreOpen] = useState(false)
+
   const { message, seen_on: seenOn, created_on: createdOn } = notificationData
-  const { notificationComponent, hideAvatar } = useInbox()
+  const { notificationComponent, hideAvatar, inbox } = useInbox()
   const { notification } = useTheme()
 
   const blockquoteColor =
@@ -93,8 +98,25 @@ export default function Notification({ notificationData, handleActionClick }) {
   }
 
   return (
-    <Container style={notification?.container} read={!!seenOn}>
-      {notificationData.pin && (
+    <Container
+      style={notification?.container}
+      read={!!seenOn}
+      onMouseEnter={() => {
+        setShowMore(true)
+        setMoreOpen(false)
+      }}
+      onMouseLeave={() => {
+        setShowMore(false)
+        setMoreOpen(false)
+      }}
+      onClick={(e) => {
+        if (moreOpen) {
+          e.stopPropagation()
+          setMoreOpen(false)
+        }
+      }}
+    >
+      {notificationData.is_pinned && (
         <PinnedView hideAvatar={hideAvatar}>
           <PinnedNotificationIcon style={notification?.pinnedIcon} />
           <PinnedNotificationText style={notification?.pinnedText}>
@@ -127,9 +149,11 @@ export default function Notification({ notificationData, handleActionClick }) {
             </AvatarView>
           )}
           <div>
-            <HeaderText style={notification?.headerText}>
-              {message.header}
-            </HeaderText>
+            {message.header && (
+              <HeaderText style={notification?.headerText}>
+                {message.header}
+              </HeaderText>
+            )}
             <BodyText style={notification?.bodyText}>
               <Markdown
                 components={{
@@ -206,6 +230,67 @@ export default function Notification({ notificationData, handleActionClick }) {
                   ?.replaceAll('&nbsp;', '&nbsp;  \n')}
               </Markdown>
             </BodyText>
+            {!!message?.subtext?.text && (
+              <SubTextView
+                link={message?.subtext?.action_url}
+                onClick={(e) => {
+                  const subTextData = message?.subtext
+                  handleActionClick(e, {
+                    type: 'subtext',
+                    url: subTextData?.action_url,
+                    target: subTextData?.open_in_new_tab
+                  })
+                }}
+              >
+                <SubText style={notification?.subtext}>
+                  {message.subtext.text}
+                </SubText>
+              </SubTextView>
+            )}
+            {notificationData.expiry && notificationData?.is_expiry_visible && (
+              <ExpiryTime
+                dateInput={notificationData.expiry}
+                style={notification?.expiresText}
+              />
+            )}
+            {hasButtons && (
+              <ButtonContainer>
+                {actionOne && (
+                  <ButtonView
+                    style={notification?.actions?.[0]?.container}
+                    key={actionOne.id}
+                    onClick={(e) => {
+                      handleActionClick(e, {
+                        type: 'action_button',
+                        url: actionOne.url,
+                        target: actionOne.open_in_new_tab
+                      })
+                    }}
+                  >
+                    <ButtonText style={notification?.actions?.[0]?.text}>
+                      {actionOne.name}
+                    </ButtonText>
+                  </ButtonView>
+                )}
+                {actionTwo && (
+                  <ButtonOutlineView
+                    key={actionTwo.id}
+                    style={notification?.actions?.[1]?.container}
+                    onClick={(e) => {
+                      handleActionClick(e, {
+                        type: 'action_button',
+                        url: actionTwo.url,
+                        target: actionTwo.open_in_new_tab
+                      })
+                    }}
+                  >
+                    <ButtonOutlineText style={notification?.actions?.[1]?.text}>
+                      {actionTwo.name}
+                    </ButtonOutlineText>
+                  </ButtonOutlineView>
+                )}
+              </ButtonContainer>
+            )}
           </div>
         </LeftView>
         <RightView>
@@ -234,70 +319,51 @@ export default function Notification({ notificationData, handleActionClick }) {
               <UnseenDot style={notification?.unseenDot} />
             </div>
           )}
+
+          <CMenuView showMore={showMore}>
+            <CMenuButton
+              hoverBGColor={notification?.actionsMenuIcon?.hoverBackgroundColor}
+              onClick={(e) => {
+                e.stopPropagation()
+                setMoreOpen((prev) => !prev)
+              }}
+            >
+              <MoreIcon style={notification?.actionsMenuIcon} />
+            </CMenuButton>
+            <CMenuPopup moreOpen={moreOpen} style={notification?.actionsMenu}>
+              {notificationData.seen_on ? (
+                <CMenuItem
+                  style={notification?.actionsMenuItem}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    inbox.feed.markUnRead(notificationData.n_id)
+                    setMoreOpen(false)
+                  }}
+                >
+                  <UnReadIcon style={notification?.actionsMenuItemIcon} />
+                  <CMenuText style={notification?.actionsMenuItemText}>
+                    Mark as unread
+                  </CMenuText>
+                </CMenuItem>
+              ) : (
+                <CMenuItem
+                  style={notification?.actionsMenuItem}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    inbox.feed.markRead(notificationData.n_id)
+                    setMoreOpen(false)
+                  }}
+                >
+                  <ReadIcon style={notification?.actionsMenuItemIcon} />
+                  <CMenuText style={notification?.actionsMenuItemText}>
+                    Mark as read
+                  </CMenuText>
+                </CMenuItem>
+              )}
+            </CMenuPopup>
+          </CMenuView>
         </RightView>
       </NotificationView>
-      {!!message?.subtext?.text && (
-        <SubTextView
-          link={message?.subtext?.action_url}
-          onClick={(e) => {
-            const subTextData = message?.subtext
-            handleActionClick(e, {
-              type: 'subtext',
-              url: subTextData?.action_url,
-              target: subTextData?.open_in_new_tab
-            })
-          }}
-        >
-          <SubText style={notification?.subtext} hideAvatar={hideAvatar}>
-            {message.subtext.text}
-          </SubText>
-        </SubTextView>
-      )}
-      {notificationData.expiry && notificationData?.is_expiry_visible && (
-        <ExpiryTime
-          dateInput={notificationData.expiry}
-          hideAvatar={hideAvatar}
-          style={notification?.expiresText}
-        />
-      )}
-      {hasButtons && (
-        <ButtonContainer>
-          {actionOne && (
-            <ButtonView
-              style={notification?.actions?.[0]?.container}
-              key={actionOne.id}
-              onClick={(e) => {
-                handleActionClick(e, {
-                  type: 'action_button',
-                  url: actionOne.url,
-                  target: actionOne.open_in_new_tab
-                })
-              }}
-            >
-              <ButtonText style={notification?.actions?.[0]?.text}>
-                {actionOne.name}
-              </ButtonText>
-            </ButtonView>
-          )}
-          {actionTwo && (
-            <ButtonOutlineView
-              key={actionTwo.id}
-              style={notification?.actions?.[1]?.container}
-              onClick={(e) => {
-                handleActionClick(e, {
-                  type: 'action_button',
-                  url: actionTwo.url,
-                  target: actionTwo.open_in_new_tab
-                })
-              }}
-            >
-              <ButtonOutlineText style={notification?.actions?.[1]?.text}>
-                {actionTwo.name}
-              </ButtonOutlineText>
-            </ButtonOutlineView>
-          )}
-        </ButtonContainer>
-      )}
     </Container>
   )
 }
@@ -333,7 +399,6 @@ const PinnedNotificationText = styled(HelperText)`
 
 const SubText = styled(HelperText)`
   font-size: 11px;
-  margin-left: ${(props) => (props.hideAvatar ? '0px' : '42px')};
   color: ${lightColors.secondaryText};
 `
 
@@ -353,7 +418,6 @@ const ExpiresText = styled(HelperText)`
   display: inline-block;
   padding: 1px 6px 1px 6px;
   border-radius: 4px;
-  margin-left: ${(props) => (props.hideAvatar ? '0px' : '42px')};
 `
 
 const NotificationView = styled.div`
@@ -385,7 +449,6 @@ const UnseenDot = styled.div`
   border-radius: 50%;
   width: 7px;
   height: 7px;
-  margin-top: 10px;
 `
 
 const CreatedText = styled(HelperText)``
@@ -395,7 +458,6 @@ const ButtonContainer = styled.div`
   flex-direction: row;
   gap: 10px;
   margin-bottom: 5px;
-  margin-left: 40px;
   margin-top: 10px;
   overflow-wrap: anywhere;
 `
@@ -442,10 +504,55 @@ const RightView = styled.div`
   flex-direction: column;
   align-items: center;
   margin-top: 5px;
+  width: 40px;
+  gap: 5px;
 `
 
 const AvatarImage = styled.img`
   height: 32px;
   width: 32px;
   border-radius: 100px;
+`
+
+const CMenuPopup = styled.div`
+  position: absolute;
+  right: 0px;
+  display: ${(props) => (props.moreOpen ? 'block' : 'none')};
+  min-width: 150px;
+  padding: 2px;
+  background-color: ${lightColors.main};
+  border: 1px solid;
+  border-color: ${lightColors.border};
+  border-radius: 4px;
+  box-shadow: 1px 1px 20px 1px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+`
+
+const CMenuItem = styled.div`
+  padding: 7px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  &:hover {
+    background-color: ${(props) =>
+      props?.style?.hoverBackgroundColor || '#f6f6f6'};
+  }
+`
+
+const CMenuText = styled(CText)``
+
+const CMenuView = styled.div`
+  position: relative;
+  visibility: ${(props) => (props?.showMore ? 'visible' : 'hidden')};
+`
+
+const CMenuButton = styled.div`
+  height: 20px;
+  width: 20px;
+  &:hover {
+    border-radius: 50%;
+    background-color: ${(props) =>
+      props?.hoverBGColor || 'rgba(100, 116, 139, 0.09)'};
+  }
 `
