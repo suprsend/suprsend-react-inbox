@@ -148,7 +148,7 @@ export default function Notification({ notificationData, handleActionClick }) {
               )}
             </AvatarView>
           )}
-          <div>
+          <ContentView>
             {message.header && (
               <HeaderText style={notification?.headerText}>
                 {message.header}
@@ -291,7 +291,7 @@ export default function Notification({ notificationData, handleActionClick }) {
                 )}
               </ButtonContainer>
             )}
-          </div>
+          </ContentView>
         </LeftView>
         <RightView>
           <CreatedText style={notification?.createdOnText}>
@@ -492,11 +492,16 @@ const ButtonOutlineText = styled(ButtonText)`
 const LeftView = styled.div`
   display: flex;
   overflow-wrap: anywhere;
+  flex-grow: 1;
 `
 
 const AvatarView = styled.div`
   margin-top: 10px;
   margin-right: 10px;
+`
+
+const ContentView = styled.div`
+  flex: 1;
 `
 
 const RightView = styled.div`
