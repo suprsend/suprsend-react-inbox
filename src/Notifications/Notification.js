@@ -28,6 +28,8 @@ function ExpiryTime({ dateInput, style }) {
   }, [])
 
   const isExpiring = date - Date.now() <= 3600000
+  const expiredAlready = Date.now() >= date
+
   if (typeof dateInput === 'number') {
     return (
       <div>
@@ -43,25 +45,27 @@ function ExpiryTime({ dateInput, style }) {
           }}
         >
           Expires in{' '}
-          {dayjs(date)
-            .locale('en', {
-              relativeTime: {
-                future: 'in %s',
-                past: '%s ago',
-                s: 'a minute',
-                m: 'a minute',
-                mm: '%d minutes',
-                h: 'an hour',
-                hh: '%d hours',
-                d: 'a day',
-                dd: '%d days',
-                M: 'a month',
-                MM: '%d months',
-                y: 'a year',
-                yy: '%d years'
-              }
-            })
-            .toNow(true)}
+          {expiredAlready
+            ? 'a minute'
+            : dayjs(date)
+                .locale('en', {
+                  relativeTime: {
+                    future: 'in %s',
+                    past: '%s ago',
+                    s: 'a minute',
+                    m: 'a minute',
+                    mm: '%d minutes',
+                    h: 'an hour',
+                    hh: '%d hours',
+                    d: 'a day',
+                    dd: '%d days',
+                    M: 'a month',
+                    MM: '%d months',
+                    y: 'a year',
+                    yy: '%d years'
+                  }
+                })
+                .toNow(true)}
         </ExpiresText>
       </div>
     )
