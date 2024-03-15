@@ -95,9 +95,9 @@ interface ISubTextObject {
 
 interface IRemoteNotificationMessage {
   schema: string
-  header: string
+  header?: string
   text: string
-  url: string
+  url?: string
   open_in_new_tab?: boolean
   extra_data?: string
   actions?: IActionObject[]
