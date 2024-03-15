@@ -48,8 +48,14 @@ export default function Headless() {
 }
 
 function Notifications() {
-  const { notifications, fetchPrevious, markClicked, markAllRead } =
-    useNotifications()
+  const {
+    notifications,
+    fetchPrevious,
+    markClicked,
+    markAllRead,
+    markRead,
+    markUnRead
+  } = useNotifications()
   const { unSeenCount, markAllSeen } = useBell()
 
   useEvent('new_notification', (data) => {
@@ -76,6 +82,8 @@ function Notifications() {
             notification={notification}
             key={notification.n_id}
             markClicked={markClicked}
+            markRead={markRead}
+            markUnRead={markUnRead}
           />
         )
       })}
@@ -83,7 +91,7 @@ function Notifications() {
   )
 }
 
-function NotificationItem({ notification, markClicked }) {
+function NotificationItem({ notification, markClicked, markRead, markUnRead }) {
   return (
     <div
       style={{ display: 'flex' }}
@@ -91,8 +99,29 @@ function NotificationItem({ notification, markClicked }) {
         markClicked(notification.n_id)
       }}
     >
-      <p>{notification.n_id}</p>
+      <span style={{ margin: 20 }}>{notification.n_id}</span>
       {!notification.seen_on && <p>*</p>}
+      <div style={{ marginLeft: 20, backgroundColor: 'blue' }}>
+        {notification.seen_on ? (
+          <span
+            onClick={(e) => {
+              e.stopPropagation()
+              markUnRead(notification.n_id)
+            }}
+          >
+            Mark UnRead
+          </span>
+        ) : (
+          <span
+            onClick={(e) => {
+              e.stopPropagation()
+              markRead(notification.n_id)
+            }}
+          >
+            Mark Read
+          </span>
+        )}
+      </div>
     </div>
   )
 }

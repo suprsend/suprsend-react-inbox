@@ -83,6 +83,16 @@ interface IActionObject {
   open_in_new_tab?: boolean
 }
 
+interface IAvatarObject {
+  action_url?: string
+  avatar_url: string
+}
+
+interface ISubTextObject {
+  action_url?: string
+  text: string
+}
+
 interface IRemoteNotificationMessage {
   schema: string
   header: string
@@ -90,8 +100,9 @@ interface IRemoteNotificationMessage {
   url: string
   open_in_new_tab?: boolean
   extra_data?: string
-  tags?: string[]
   actions?: IActionObject[]
+  avatar?: IAvatarObject
+  subtext?: ISubTextObject
 }
 
 interface IRemoteNotification {
@@ -100,6 +111,11 @@ interface IRemoteNotification {
   created_on: number
   seen_on?: number
   interacted_on?: number
+  tags?: string[]
+  is_pinned?: boolean
+  can_user_unpin?: boolean
+  is_expiry_visible?: boolean
+  expiry?: number
   message: IRemoteNotificationMessage
 }
 
@@ -157,4 +173,6 @@ export function useNotifications(storeId?: string): {
   markAllSeen: () => void
   fetchPrevious: () => void
   markAllRead: () => void
+  markRead(n_id: string): void
+  markUnRead(n_id: string): void
 }
