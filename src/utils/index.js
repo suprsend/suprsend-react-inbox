@@ -64,7 +64,10 @@ export async function isImgUrl(url) {
 }
 
 export function formatActionLink(link) {
-  if (link) {
-    return link.startsWith('http') ? link : `https://${link}`
+  if (!link) return
+  if (link.startsWith('http') || link.startsWith('/')) {
+    return link
+  } else {
+    return `https://${link}`
   }
 }

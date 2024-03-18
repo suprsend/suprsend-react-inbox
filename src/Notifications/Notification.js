@@ -163,12 +163,18 @@ export default function Notification({ notificationData, handleActionClick }) {
                 components={{
                   a({ children, href }) {
                     return (
-                      <a
-                        href={href}
+                      <span
+                        onClick={(e) => {
+                          e.preventDefault()
+                          handleActionClick(e, {
+                            type: 'markdown_link',
+                            url: href
+                          })
+                        }}
                         style={{ color: linkColor, textDecoration: 'none' }}
                       >
                         {children}
-                      </a>
+                      </span>
                     )
                   },
                   p({ children }) {
