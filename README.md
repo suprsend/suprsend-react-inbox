@@ -24,7 +24,7 @@ After installing, Import the component in your code and use it as given below. R
 import SuprSendInbox from '@suprsend/react-inbox'
 
 // add to your react component;
-;<SuprSendInbox
+<SuprSendInbox
   workspaceKey='<workspace_key>'
   subscriberId='<subscriber_id>'
   distinctId='<distinct_id>'
@@ -187,7 +187,8 @@ Enclose your notifications component in **SuprSendProvider**. SuprSend hooks can
 
 ```javascript Syntax
 import { SuprSendProvider } from '@suprsend/react-inbox'
-;<SuprSendProvider
+
+<SuprSendProvider
   workspaceKey='<workspace_key>'
   subscriberId='<subscriber_id>'
   distinctId='<distinct_id>'
