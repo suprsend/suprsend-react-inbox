@@ -5,7 +5,8 @@ export const lightColors = {
   primaryText: '#1C1C1C',
   secondaryText: '#707070',
   border: '#DBDADA',
-  main: '#FFF'
+  main: '#FFF',
+  error: '#B42318'
 }
 
 export const darkColors = {
@@ -13,7 +14,8 @@ export const darkColors = {
   primaryText: '#EFEFEF',
   secondaryText: '#B8B8B8',
   border: '#434343',
-  main: '#202020'
+  main: '#202020',
+  error: '#F97066'
 }
 
 export const CText = styled.p`
@@ -76,6 +78,9 @@ export const darkTheme = {
       readBackgroundColor: darkColors.main,
       readHoverBackgroundColor: '#121212'
     },
+    pinnedText: {
+      color: darkColors?.secondaryText
+    },
     headerText: { color: darkColors.primaryText },
     bodyText: {
       color: darkColors.primaryText,
@@ -84,7 +89,26 @@ export const darkTheme = {
     unseenDot: { backgroundColor: darkColors.primary },
     createdOnText: { color: darkColors.secondaryText },
     subtext: { color: darkColors.secondaryText },
-    actions: [{ container: { backgroundColor: darkColors.primary } }]
+    actions: [{ container: { backgroundColor: darkColors.primary } }],
+    expiresText: {
+      backgroundColor: 'rgba(100, 116, 139, 0.14)',
+      color: darkColors.secondaryText,
+      expiringBackgroundColor: 'rgba(217, 45, 32, 0.5)',
+      expiringColor: darkColors.error
+    },
+    actionsMenuIcon: {
+      color: darkColors.primaryText,
+      hoverBackgroundColor: 'rgba(100, 116, 139, 0.5)'
+    },
+    actionsMenu: {
+      backgroundColor: darkColors.main,
+      borderColor: darkColors.border
+    },
+    actionsMenuItem: { hoverBackgroundColor: '#121212' },
+    actionsMenuItemIcon: { color: darkColors.primaryText },
+    actionsMenuItemText: {
+      color: darkColors.primaryText
+    }
   },
   toast: {
     container: {
