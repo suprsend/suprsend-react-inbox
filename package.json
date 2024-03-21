@@ -62,10 +62,10 @@
     "@emotion/styled": "^11.8.1",
     "@popperjs/core": "^2.11.5",
     "@suprsend/js-inbox": "^2.2.0",
-    "dayjs": "^1.11.2",
     "react-hot-toast": "^2.2.0",
     "react-infinite-scroll-component": "^6.1.0",
     "react-markdown": "8.0.7",
-    "react-popper": "^2.3.0"
+    "react-popper": "^2.3.0",
+    "react-timeago": "^7.2.0"
   }
 }

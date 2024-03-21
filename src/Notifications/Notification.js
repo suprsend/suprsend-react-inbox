@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import Markdown from 'react-markdown'
-import dayjs from 'dayjs'
-import relativeTime from 'dayjs/plugin/relativeTime'
-import updateLocale from 'dayjs/plugin/updateLocale'
+import TimeAgo from 'react-timeago'
 import { CText, HelperText, lightColors } from '../utils/styles'
 import { useInbox, useTheme } from '../utils/context'
 import { isImgUrl } from '../utils'
@@ -13,8 +11,47 @@ import PinnedNotificationIcon from './Icons/PinnedNotificationIcon'
 import UnReadIcon from './Icons/UnReadIcon'
 import ReadIcon from './Icons/ReadIcon'
 
-dayjs.extend(relativeTime)
-dayjs.extend(updateLocale)
+function getLongFormattedTime(value, unit) {
+  switch (unit) {
+    case 'second':
+      return 'a minute'
+    case 'minute':
+      return value === 1 ? `${value} minute` : `${value} minutes`
+    case 'hour':
+      return value === 1 ? `${value} hour` : `${value} hours`
+    case 'day':
+      return value === 1 ? `${value} day` : `${value} days`
+    case 'week':
+      return value === 1 ? `${value} week` : `${value} weeks`
+    case 'month':
+      return value === 1 ? `${value} month` : `${value} months`
+    case 'year':
+      return value === 1 ? `${value} year` : `${value} years`
+    default:
+      return value
+  }
+}
+
+function getShortFormattedTime(value, unit) {
+  switch (unit) {
+    case 'second':
+      return '1m'
+    case 'minute':
+      return `${value}m`
+    case 'hour':
+      return `${value}h`
+    case 'day':
+      return `${value}d`
+    case 'week':
+      return `${value}w`
+    case 'month':
+      return `${value}mo`
+    case 'year':
+      return `${value}y`
+    default:
+      return value
+  }
+}
 
 function ExpiryTime({ dateInput, style }) {
   const date = dateInput
@@ -45,27 +82,15 @@ function ExpiryTime({ dateInput, style }) {
           }}
         >
           Expires in{' '}
-          {expiredAlready
-            ? 'a minute'
-            : dayjs(date)
-                .locale('en', {
-                  relativeTime: {
-                    future: 'in %s',
-                    past: '%s ago',
-                    s: 'a minute',
-                    m: 'a minute',
-                    mm: '%d minutes',
-                    h: 'an hour',
-                    hh: '%d hours',
-                    d: 'a day',
-                    dd: '%d days',
-                    M: 'a month',
-                    MM: '%d months',
-                    y: 'a year',
-                    yy: '%d years'
-                  }
-                })
-                .toNow(true)}
+          {expiredAlready ? (
+            'a minute'
+          ) : (
+            <TimeAgo
+              date={date}
+              live={false}
+              formatter={getLongFormattedTime}
+            />
+          )}
         </ExpiresText>
       </div>
     )
@@ -305,24 +330,11 @@ export default function Notification({ notificationData, handleActionClick }) {
         </LeftView>
         <RightView>
           <CreatedText style={notification?.createdOnText}>
-            {dayjs(createdOn)
-              .locale('en', {
-                relativeTime: {
-                  past: '%ss',
-                  s: '1m',
-                  m: '1m',
-                  mm: '%dm',
-                  h: '1h',
-                  hh: '%dh',
-                  d: '1d',
-                  dd: '%dd',
-                  M: '1mo',
-                  MM: '%dmo',
-                  y: '1y',
-                  yy: '%dy'
-                }
-              })
-              .fromNow(true)}
+            <TimeAgo
+              date={createdOn}
+              live={false}
+              formatter={getShortFormattedTime}
+            />
           </CreatedText>
           {!seenOn && (
             <div>
