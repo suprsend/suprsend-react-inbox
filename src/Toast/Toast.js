@@ -45,7 +45,7 @@ export function notify({ notificationsData, toastProps }) {
 const StyledContainer = styled(ToastContainer)`
   &.Toastify__toast-container {
     max-width: 450px;
-    min-width: 150px;
+    min-width: 300px;
     padding: 0px;
     width: unset;
   }
