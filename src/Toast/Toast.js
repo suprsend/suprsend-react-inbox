@@ -1,9 +1,11 @@
-/** @jsx jsx */
-import { jsx } from '@emotion/react'
-import { Toaster, toast } from 'react-hot-toast'
+import React from 'react'
+import styled from '@emotion/styled'
+import { ToastContainer, toast } from 'react-toastify'
 import { ToastNotification } from './ToastNotification'
+import 'react-toastify/dist/ReactToastify.css'
 
-export default function Toast({ position, ...otherProps }) {
+export default function Toast({ position, duration = 3000 }) {
+  const toastDuration = duration || 3000
   const toastPosition = !position
     ? window.innerWidth > 425
       ? 'bottom-right'
@@ -11,11 +13,12 @@ export default function Toast({ position, ...otherProps }) {
     : position
 
   return (
-    <Toaster
+    <StyledContainer
+      closeButton={false}
+      autoClose={toastDuration}
       position={toastPosition}
-      gutter={8}
-      toastOptions={{ duration: 3000 }}
-      {...otherProps}
+      hideProgressBar
+      pauseOnFocusLoss={false}
     />
   )
 }
@@ -24,13 +27,33 @@ export function notify({ notificationsData, toastProps }) {
   const ToastNotificationComponent =
     toastProps?.toastComponent || ToastNotification
 
-  toast.custom((t) => (
+  const toastId = toast(
     <ToastNotificationComponent
-      t={t}
       notificationData={notificationsData}
-      dismissToast={() => {
-        toast.dismiss(t.id)
+      closeToast={() => {
+        toast.dismiss({ id: toastId })
       }}
     />
-  ))
+  )
 }
+
+const StyledContainer = styled(ToastContainer)`
+  &.Toastify__toast-container {
+    max-width: 450px;
+    min-width: 150px;
+    padding: 0px;
+    width: unset;
+  }
+
+  .Toastify__toast-theme--light,
+  .Toastify__toast-theme--default,
+  .Toastify__toast-theme--dark {
+    padding: 0px;
+    border-radius: 5px;
+    background-color: transparent;
+  }
+
+  .Toastify__toast-body {
+    padding: 0px;
+  }
+`

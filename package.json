@@ -66,6 +66,7 @@
     "react-hot-toast": "^2.2.0",
     "react-infinite-scroll-component": "^6.1.0",
     "react-markdown": "8.0.7",
-    "react-popper": "^2.3.0"
+    "react-popper": "^2.3.0",
+    "react-toastify": "9.0.3"
   }
 }
