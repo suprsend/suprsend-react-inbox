@@ -7,7 +7,7 @@ import { isImgUrl } from '../utils'
 import Markdown from 'react-markdown'
 
 export function ToastNotification({ notificationData, closeToast }) {
-  const { toast, notification } = useTheme()
+  const { toast } = useTheme()
   const { toggleInbox } = useInbox()
   const { message } = notificationData
 
@@ -17,6 +17,9 @@ export function ToastNotification({ notificationData, closeToast }) {
     const isValidAvatar = isImgUrl(message?.avatar?.avatar_url)
     isValidAvatar.then((res) => setValidAvatar(res))
   }, [notificationData])
+
+  const blockquoteColor = toast?.bodyText?.blockquoteColor || lightColors.border
+  const linkColor = toast?.bodyText?.linkColor || lightColors.primary
 
   return (
     <Container
@@ -35,23 +38,17 @@ export function ToastNotification({ notificationData, closeToast }) {
       </AvatarView>
       <div>
         <HeaderText style={toast?.headerText}>{message.header}</HeaderText>
-        <BodyText style={notification?.bodyText}>
+        <BodyText style={toast?.bodyText}>
           <Markdown
             components={{
               a({ children, href }) {
                 return (
-                  <span
-                    onClick={(e) => {
-                      e.preventDefault()
-                      // handleActionClick(e, {
-                      //   type: 'markdown_link',
-                      //   url: href
-                      // })
-                    }}
-                    style={{ color: 'red', textDecoration: 'none' }}
+                  <a
+                    href={href}
+                    style={{ color: linkColor, textDecoration: 'none' }}
                   >
                     {children}
-                  </span>
+                  </a>
                 )
               },
               p({ children }) {
@@ -67,7 +64,7 @@ export function ToastNotification({ notificationData, closeToast }) {
                     style={{
                       margin: 0,
                       paddingLeft: 10,
-                      borderLeft: `3px red solid`,
+                      borderLeft: `3px ${blockquoteColor} solid`,
                       marginBottom: 5
                     }}
                   >
@@ -126,7 +123,6 @@ const Container = styled.div`
   background-color: ${lightColors.main};
   cursor: pointer;
   padding: 7px 14px;
-
   display: flex;
   overflow-wrap: anywhere;
 `

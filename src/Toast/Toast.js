@@ -4,8 +4,9 @@ import { ToastContainer, toast } from 'react-toastify'
 import { ToastNotification } from './ToastNotification'
 import 'react-toastify/dist/ReactToastify.css'
 
-export default function Toast({ position, duration = 3000 }) {
+export default function Toast({ position, duration, limit }) {
   const toastDuration = duration || 3000
+  const toastsLimit = limit || 3
   const toastPosition = !position
     ? window.innerWidth > 425
       ? 'bottom-right'
@@ -14,10 +15,12 @@ export default function Toast({ position, duration = 3000 }) {
 
   return (
     <StyledContainer
-      closeButton={false}
       autoClose={toastDuration}
       position={toastPosition}
+      limit={toastsLimit}
       hideProgressBar
+      pauseOnHover={false}
+      closeButton={false}
       pauseOnFocusLoss={false}
     />
   )
@@ -26,6 +29,8 @@ export default function Toast({ position, duration = 3000 }) {
 export function notify({ notificationsData, toastProps }) {
   const ToastNotificationComponent =
     toastProps?.toastComponent || ToastNotification
+
+  if (document.hidden) return
 
   const toastId = toast(
     <ToastNotificationComponent
