@@ -4,54 +4,12 @@ import Markdown from 'react-markdown'
 import TimeAgo from 'react-timeago'
 import { CText, HelperText, lightColors } from '../utils/styles'
 import { useInbox, useTheme } from '../utils/context'
-import { isImgUrl } from '../utils'
+import { isImgUrl, getLongFormattedTime, getShortFormattedTime } from '../utils'
 import AvatarIcon from './Icons/AvatarIcon'
 import MoreIcon from './Icons/MoreIcon'
 import PinnedNotificationIcon from './Icons/PinnedNotificationIcon'
 import UnReadIcon from './Icons/UnReadIcon'
 import ReadIcon from './Icons/ReadIcon'
-
-function getLongFormattedTime(value, unit) {
-  switch (unit) {
-    case 'second':
-      return 'a minute'
-    case 'minute':
-      return value === 1 ? `${value} minute` : `${value} minutes`
-    case 'hour':
-      return value === 1 ? `${value} hour` : `${value} hours`
-    case 'day':
-      return value === 1 ? `${value} day` : `${value} days`
-    case 'week':
-      return value === 1 ? `${value} week` : `${value} weeks`
-    case 'month':
-      return value === 1 ? `${value} month` : `${value} months`
-    case 'year':
-      return value === 1 ? `${value} year` : `${value} years`
-    default:
-      return value
-  }
-}
-
-function getShortFormattedTime(value, unit) {
-  switch (unit) {
-    case 'second':
-      return '1m'
-    case 'minute':
-      return `${value}m`
-    case 'hour':
-      return `${value}h`
-    case 'day':
-      return `${value}d`
-    case 'week':
-      return `${value}w`
-    case 'month':
-      return `${value}mo`
-    case 'year':
-      return `${value}y`
-    default:
-      return value
-  }
-}
 
 function ExpiryTime({ dateInput, style }) {
   const date = dateInput
