@@ -1,20 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import Markdown from 'react-markdown'
-import dayjs from 'dayjs'
-import relativeTime from 'dayjs/plugin/relativeTime'
-import updateLocale from 'dayjs/plugin/updateLocale'
+import TimeAgo from 'react-timeago'
 import { CText, HelperText, lightColors } from '../utils/styles'
 import { useInbox, useTheme } from '../utils/context'
-import { isImgUrl } from '../utils'
+import { isImgUrl, getLongFormattedTime, getShortFormattedTime } from '../utils'
 import AvatarIcon from './Icons/AvatarIcon'
 import MoreIcon from './Icons/MoreIcon'
 import PinnedNotificationIcon from './Icons/PinnedNotificationIcon'
 import UnReadIcon from './Icons/UnReadIcon'
 import ReadIcon from './Icons/ReadIcon'
-
-dayjs.extend(relativeTime)
-dayjs.extend(updateLocale)
 
 function ExpiryTime({ dateInput, style }) {
   const date = dateInput
@@ -45,27 +40,15 @@ function ExpiryTime({ dateInput, style }) {
           }}
         >
           Expires in{' '}
-          {expiredAlready
-            ? 'a minute'
-            : dayjs(date)
-                .locale('en', {
-                  relativeTime: {
-                    future: 'in %s',
-                    past: '%s ago',
-                    s: 'a minute',
-                    m: 'a minute',
-                    mm: '%d minutes',
-                    h: 'an hour',
-                    hh: '%d hours',
-                    d: 'a day',
-                    dd: '%d days',
-                    M: 'a month',
-                    MM: '%d months',
-                    y: 'a year',
-                    yy: '%d years'
-                  }
-                })
-                .toNow(true)}
+          {expiredAlready ? (
+            'a minute'
+          ) : (
+            <TimeAgo
+              date={date}
+              live={false}
+              formatter={getLongFormattedTime}
+            />
+          )}
         </ExpiresText>
       </div>
     )
@@ -305,24 +288,11 @@ export default function Notification({ notificationData, handleActionClick }) {
         </LeftView>
         <RightView>
           <CreatedText style={notification?.createdOnText}>
-            {dayjs(createdOn)
-              .locale('en', {
-                relativeTime: {
-                  past: '%ss',
-                  s: '1m',
-                  m: '1m',
-                  mm: '%dm',
-                  h: '1h',
-                  hh: '%dh',
-                  d: '1d',
-                  dd: '%dd',
-                  M: '1mo',
-                  MM: '%dmo',
-                  y: '1y',
-                  yy: '%dy'
-                }
-              })
-              .fromNow(true)}
+            <TimeAgo
+              date={createdOn}
+              live={false}
+              formatter={getShortFormattedTime}
+            />
           </CreatedText>
           {!seenOn && (
             <div>
