@@ -92,7 +92,7 @@ const ArrowTop = styled.div`
     width: 0;
     height: 0;
     border-bottom: ${(props) =>
-      `solid 12px ${props?.customStyles?.backgroundColor || '#fff'}`};
+      `solid 12px ${props?.customStyles?.backgroundColor || lightColors.main}`};
     border-left: solid 12px transparent;
     border-right: solid 12px transparent;
     position: absolute;
@@ -115,7 +115,7 @@ const ArrowBottom = styled.div`
     width: 0;
     height: 0;
     border-top: ${(props) =>
-      `solid 10px ${props?.customStyles?.backgroundColor || '#fff'}`};
+      `solid 10px ${props?.customStyles?.backgroundColor || lightColors.main}`};
     border-left: solid 10px transparent;
     border-right: solid 10px transparent;
     position: absolute;
@@ -150,7 +150,7 @@ const ArrowLeft = styled.div`
     position: absolute;
     border-color: rgba(255, 255, 255, 0);
     border-right-color: ${(props) =>
-      `${props?.customStyles?.backgroundColor || '#fff'}`};
+      `${props?.customStyles?.backgroundColor || lightColors.main}`};
     border-width: 8px;
     margin-top: -8px;
   }
@@ -183,7 +183,7 @@ const ArrowRight = styled.div`
     position: absolute;
     border-color: rgba(255, 255, 255, 0);
     border-left-color: ${(props) =>
-      `${props?.customStyles?.backgroundColor || '#fff'}`};
+      `${props?.customStyles?.backgroundColor || lightColors.main}`};
     border-width: 8px;
     margin-top: -8px;
     right: 5px;

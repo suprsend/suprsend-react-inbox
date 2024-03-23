@@ -4,7 +4,7 @@ import { lightColors } from '../../utils/styles'
 const MoreIcon = ({ style }) => {
   const height = style?.height || 20
   const width = style?.width || 20
-  const color = style?.color || lightColors.primaryText
+  const color = style?.color || lightColors.secondaryText
 
   return (
     <svg

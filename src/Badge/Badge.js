@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { useInbox, useTheme } from '../utils/context'
-import { lightColors } from '../utils/styles'
+import { lightColors, CText } from '../utils/styles'
 
 export default function Badge() {
   const {
@@ -20,18 +20,16 @@ export default function Badge() {
   return null
 }
 
-const CountText = styled.span`
+const CountText = styled(CText)`
   position: absolute;
   right: -3px;
   top: -7px;
   display: inline-block;
   font-size: 10px;
   line-height: 1;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
-    Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
   padding: 3px 6px;
   border-radius: 50%;
   background-color: ${lightColors.primary};
-  color: #fff;
+  color: ${lightColors.main};
   text-align: center;
 `

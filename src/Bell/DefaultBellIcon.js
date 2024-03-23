@@ -1,17 +1,18 @@
-/** @jsx jsx */
-import { css, jsx } from '@emotion/react'
+import React from 'react'
+import { lightColors } from '../utils/styles'
 
 const DefaultBellIcon = ({ style }) => {
+  const height = style?.height || 24
+  const width = style?.width || 24
+  const color = style?.color || lightColors.primaryText
+
   if (style?.bellType === 'solid') {
     return (
       <svg
         xmlns='http://www.w3.org/2000/svg'
-        css={css`
-          height: 24px;
-          width: 24px;
-          color: #000;
-          ${style}
-        `}
+        width={width}
+        height={height}
+        color={color}
         viewBox='0 0 20 20'
         fill='currentColor'
       >
@@ -22,12 +23,9 @@ const DefaultBellIcon = ({ style }) => {
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'
-      css={css`
-        height: 24px;
-        width: 24px;
-        color: #000;
-        ${style}
-      `}
+      width={width}
+      height={height}
+      color={color}
       fill='none'
       viewBox='0 0 24 24'
       stroke='currentColor'

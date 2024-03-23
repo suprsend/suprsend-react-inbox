@@ -67,7 +67,7 @@ export default function Notification({ notificationData, handleActionClick }) {
   const { notification } = useTheme()
 
   const blockquoteColor =
-    notification?.bodyText?.blockquoteColor || lightColors.border
+    notification?.bodyText?.blockquoteColor || 'rgba(100, 116, 139, 0.3)'
   const linkColor = notification?.bodyText?.linkColor || lightColors.primary
 
   const actionOne = message?.actions?.[0]
@@ -113,28 +113,31 @@ export default function Notification({ notificationData, handleActionClick }) {
       )}
       <NotificationView>
         <LeftView>
-          {!hideAvatar && (
-            <AvatarView
-              onClick={(e) => {
-                const avatarData = message?.avatar
-                handleActionClick(e, {
-                  type: 'avatar',
-                  url: avatarData?.action_url,
-                  target: avatarData?.open_in_new_tab
-                })
-              }}
-            >
-              {message?.avatar?.avatar_url && validAvatar ? (
-                <AvatarImage
-                  src={message.avatar.avatar_url}
-                  alt='avatar'
-                  style={notification?.avatar}
-                />
-              ) : (
-                <AvatarIcon />
-              )}
-            </AvatarView>
-          )}
+          <LeftAvatarView>
+            <UnseenDot style={notification?.unseenDot} show={!seenOn} />
+            {!hideAvatar && (
+              <AvatarView
+                onClick={(e) => {
+                  const avatarData = message?.avatar
+                  handleActionClick(e, {
+                    type: 'avatar',
+                    url: avatarData?.action_url,
+                    target: avatarData?.open_in_new_tab
+                  })
+                }}
+              >
+                {message?.avatar?.avatar_url && validAvatar ? (
+                  <AvatarImage
+                    src={message.avatar.avatar_url}
+                    alt='avatar'
+                    style={notification?.avatar}
+                  />
+                ) : (
+                  <AvatarIcon />
+                )}
+              </AvatarView>
+            )}
+          </LeftAvatarView>
           <ContentView>
             {message.header && (
               <HeaderText style={notification?.headerText}>
@@ -294,12 +297,6 @@ export default function Notification({ notificationData, handleActionClick }) {
               formatter={getShortFormattedTime}
             />
           </CreatedText>
-          {!seenOn && (
-            <div>
-              <UnseenDot style={notification?.unseenDot} />
-            </div>
-          )}
-
           <CMenuView showMore={showMore}>
             <CMenuButton
               hoverBGColor={notification?.actionsMenuIcon?.hoverBackgroundColor}
@@ -349,20 +346,17 @@ export default function Notification({ notificationData, handleActionClick }) {
 }
 
 const Container = styled.div`
-  padding: 12px 14px;
+  padding: 12px 14px 12px 10px;
   cursor: pointer;
   background-color: ${(props) => {
     return props.read
-      ? props?.style?.readBackgroundColor || '#FFF'
+      ? props?.style?.readBackgroundColor || lightColors.main
       : props?.style?.unreadBackgroundColor || '#F4F9FF'
   }};
   border-bottom: 0.5px solid ${lightColors.border};
   &:hover {
     background-color: ${(props) =>
-      props.read
-        ? props?.style?.readHoverBackgroundColor || '#F6F6F6'
-        : props?.style?.unreadHoverBackgroundColor || '#DFECFF'};
-  }
+      props?.style?.hoverBackgroundColor || '#DBE7FF'}
 `
 
 const PinnedView = styled.div`
@@ -421,7 +415,7 @@ const BodyText = styled.div`
   font-weight: 400;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
     Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-  color: ${lightColors.primaryText};
+  color: ${lightColors.secondaryText};
 `
 
 const UnseenDot = styled.div`
@@ -429,6 +423,7 @@ const UnseenDot = styled.div`
   border-radius: 50%;
   width: 7px;
   height: 7px;
+  visibility: ${(props) => (props.show ? 'visible' : 'hidden')};
 `
 
 const CreatedText = styled(HelperText)``
@@ -444,14 +439,18 @@ const ButtonContainer = styled.div`
 
 const ButtonView = styled.div`
   max-width: 50%;
-  background: #066af3;
+  background: ${lightColors.primary};
   border-radius: 5px;
   text-decoration: none;
   padding: 4px 16px;
+  &:hover {
+    background-color: ${(props) =>
+      props.style?.hoverBackgroundColor || '#265cbf'} !important;
+  }
 `
 
 const ButtonText = styled(CText)`
-  color: #fff;
+  color: ${lightColors.main};
   text-align: center;
   word-break: break-all;
   font-weight: 600;
@@ -459,14 +458,18 @@ const ButtonText = styled(CText)`
 `
 
 const ButtonOutlineView = styled(ButtonView)`
-  background: #fff;
+  background: ${lightColors.main};
   border-color: ${lightColors.border};
   border-style: solid;
-  border-width: 0.5px;
+  border-width: 1.2px;
+  &:hover {
+    background-color: ${(props) =>
+      props.style?.hoverBackgroundColor || '#f7f7f9'} !important;
+  }
 `
 
 const ButtonOutlineText = styled(ButtonText)`
-  color: #434343;
+  color: ${lightColors.secondaryText};
 `
 
 const LeftView = styled.div`
@@ -475,10 +478,13 @@ const LeftView = styled.div`
   flex-grow: 1;
 `
 
-const AvatarView = styled.div`
+const LeftAvatarView = styled.div`
+  display: flex;
   margin-top: 10px;
   margin-right: 10px;
 `
+
+const AvatarView = styled.div``
 
 const ContentView = styled.div`
   flex: 1;
@@ -521,7 +527,7 @@ const CMenuItem = styled.div`
   gap: 8px;
   &:hover {
     background-color: ${(props) =>
-      props?.style?.hoverBackgroundColor || '#f6f6f6'};
+      props?.style?.hoverBackgroundColor || 'rgba(100, 116, 139, 0.09)'};
   }
 `
 

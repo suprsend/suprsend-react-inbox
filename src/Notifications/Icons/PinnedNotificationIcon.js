@@ -1,9 +1,9 @@
 import React from 'react'
 
 const PinnedNotificationIcon = ({ style }) => {
-  const color = style?.color || '#DC6803'
   const height = style?.height || 13
   const width = style?.width || 13
+  const color = style?.color || '#DC6803'
 
   return (
     <svg
