@@ -22,7 +22,7 @@ export default function NotificationsContainer() {
 
 const Container = styled.div`
   height: 500px;
-  width: 400px;
+  width: 450px;
   margin: 0px 15px;
   border-radius: 5px;
   background-color: ${lightColors.main};
