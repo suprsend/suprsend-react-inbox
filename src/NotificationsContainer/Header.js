@@ -112,7 +112,7 @@ export default function Header() {
 const Container = styled.div`
   position: sticky;
   top: 0;
-  padding: 14px;
+  padding: 16px;
   padding-bottom: 0px;
   z-index: 1000;
   background-color: ${lightColors.main};
@@ -124,7 +124,7 @@ const TopContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: ${(props) => (props.hasStores ? '16px' : '0px')};
-  padding-bottom: ${(props) => (props.hasStores ? '0px' : '10px')};
+  padding-bottom: ${(props) => (props.hasStores ? '0px' : '16px')};
 `
 
 const TabsContainer = styled.div`
@@ -145,7 +145,7 @@ const TabContainer = styled.div`
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 3px;
+  gap: 5px;
 `
 
 const TabText = styled(CText)`

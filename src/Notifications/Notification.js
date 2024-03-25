@@ -63,7 +63,7 @@ export default function Notification({ notificationData, handleActionClick }) {
   const [moreOpen, setMoreOpen] = useState(false)
 
   const { message, seen_on: seenOn, created_on: createdOn } = notificationData
-  const { notificationComponent, hideAvatar, inbox } = useInbox()
+  const { notificationComponent, hideAvatar, inbox, themeType } = useInbox()
   const { notification } = useTheme()
 
   const blockquoteColor =
@@ -133,7 +133,7 @@ export default function Notification({ notificationData, handleActionClick }) {
                     style={notification?.avatar}
                   />
                 ) : (
-                  <AvatarIcon />
+                  <AvatarIcon type={themeType} />
                 )}
               </AvatarView>
             )}
@@ -177,7 +177,8 @@ export default function Notification({ notificationData, handleActionClick }) {
                           margin: 0,
                           paddingLeft: 10,
                           borderLeft: `3px ${blockquoteColor} solid`,
-                          marginBottom: 5
+                          marginBottom: 5,
+                          marginTop: 5
                         }}
                       >
                         {children}
@@ -346,12 +347,12 @@ export default function Notification({ notificationData, handleActionClick }) {
 }
 
 const Container = styled.div`
-  padding: 12px 14px 12px 10px;
+  padding: 16px;
   cursor: pointer;
   background-color: ${(props) => {
     return props.read
       ? props?.style?.readBackgroundColor || lightColors.main
-      : props?.style?.unreadBackgroundColor || '#F4F9FF'
+      : props?.style?.unreadBackgroundColor || '#edf3ff'
   }};
   border-bottom: 0.5px solid ${lightColors.border};
   &:hover {
@@ -362,18 +363,14 @@ const Container = styled.div`
 const PinnedView = styled.div`
   display: flex;
   align-items: center;
-  margin-left: ${(props) => (props.hideAvatar ? '0px' : '42px')};
-  margin-bottom: -6px;
+  margin-left: ${(props) => (props.hideAvatar ? '0px' : '52px')};
   gap: 4px;
 `
 
-const PinnedNotificationText = styled(HelperText)`
-  font-size: 11px;
-`
+const PinnedNotificationText = styled(HelperText)``
 
 const SubText = styled(HelperText)`
-  font-size: 11px;
-  color: ${lightColors.secondaryText};
+  color: #64748b;
 `
 
 const SubTextView = styled.div`
@@ -387,10 +384,9 @@ const SubTextView = styled.div`
 `
 
 const ExpiresText = styled(HelperText)`
-  font-size: 11px;
-  margin-top: 12px;
+  margin-top: 8px;
   display: inline-block;
-  padding: 1px 6px 1px 6px;
+  padding: 1px 6px;
   border-radius: 4px;
 `
 
@@ -402,16 +398,16 @@ const NotificationView = styled.div`
 `
 
 const HeaderText = styled(CText)`
-  margin: 10px 0px;
+  margin: 8px 0px 0px 0px;
   overflow-wrap: anywhere;
-  line-height: 16px;
+  line-height: 18px;
   font-weight: 700;
 `
 
 const BodyText = styled.div`
-  font-size: 13px;
-  line-height: 18px;
-  margin: 10px 0px 5px 0px;
+  font-size: 14px;
+  line-height: 20px;
+  margin: 8px 0px 6px;
   font-weight: 400;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
     Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
@@ -432,8 +428,8 @@ const ButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
   gap: 10px;
-  margin-bottom: 5px;
-  margin-top: 10px;
+  margin-bottom: 6px;
+  margin-top: 12px;
   overflow-wrap: anywhere;
 `
 
@@ -480,8 +476,8 @@ const LeftView = styled.div`
 
 const LeftAvatarView = styled.div`
   display: flex;
-  margin-top: 10px;
-  margin-right: 10px;
+  margin-top: 8px;
+  margin-right: 12px;
 `
 
 const AvatarView = styled.div``
@@ -495,13 +491,13 @@ const RightView = styled.div`
   flex-direction: column;
   align-items: center;
   margin-top: 5px;
-  width: 40px;
+  max-width: 40px;
   gap: 5px;
 `
 
 const AvatarImage = styled.img`
-  height: 32px;
-  width: 32px;
+  height: 36px;
+  width: 36px;
   border-radius: 100px;
 `
 

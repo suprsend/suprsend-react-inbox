@@ -8,7 +8,7 @@ import Markdown from 'react-markdown'
 
 export function ToastNotification({ notificationData, closeToast }) {
   const { toast } = useTheme()
-  const { toggleInbox } = useInbox()
+  const { toggleInbox, themeType } = useInbox()
   const { message } = notificationData
 
   const [validAvatar, setValidAvatar] = useState(false)
@@ -33,7 +33,7 @@ export function ToastNotification({ notificationData, closeToast }) {
         {message?.avatar?.avatar_url && validAvatar ? (
           <AvatarImage src={message.avatar.avatar_url} alt='avatar' />
         ) : (
-          <AvatarIcon />
+          <AvatarIcon type={themeType} />
         )}
       </AvatarView>
       <div>
@@ -65,7 +65,8 @@ export function ToastNotification({ notificationData, closeToast }) {
                       margin: 0,
                       paddingLeft: 10,
                       borderLeft: `3px ${blockquoteColor} solid`,
-                      marginBottom: 5
+                      marginBottom: 5,
+                      marginTop: 5
                     }}
                   >
                     {children}
@@ -122,7 +123,7 @@ export function ToastNotification({ notificationData, closeToast }) {
 const Container = styled.div`
   background-color: ${lightColors.main};
   cursor: pointer;
-  padding: 7px 14px;
+  padding: 14px;
   display: flex;
   overflow-wrap: anywhere;
 `
@@ -146,12 +147,12 @@ const BodyText = styled.div`
 `
 
 const AvatarImage = styled.img`
-  height: 32px;
-  width: 32px;
+  height: 36px;
+  width: 36px;
   border-radius: 100px;
 `
 
 const AvatarView = styled.div`
-  margin-top: 10px;
-  margin-right: 10px;
+  margin-top: 8px;
+  margin-right: 12px;
 `

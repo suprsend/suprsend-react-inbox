@@ -121,7 +121,8 @@ function SuprsendInbox({
           setActiveStore,
           changingActiveStore,
           setChangingActiveStore,
-          showUnreadCountOnTabs
+          showUnreadCountOnTabs,
+          themeType
         }}
       >
         {!hideInbox && (

@@ -87,7 +87,7 @@ export const darkTheme = {
     },
     unseenDot: { backgroundColor: darkColors.primary },
     createdOnText: { color: darkColors.secondaryText },
-    subtext: { color: darkColors.secondaryText },
+    subtext: { color: '#94a3b8' },
     actions: [
       { container: { backgroundColor: darkColors.primary } },
       {
