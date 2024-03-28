@@ -112,7 +112,7 @@ export default function Header() {
 const Container = styled.div`
   position: sticky;
   top: 0;
-  padding: 14px;
+  padding: 16px;
   padding-bottom: 0px;
   z-index: 1000;
   background-color: ${lightColors.main};
@@ -124,7 +124,7 @@ const TopContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: ${(props) => (props.hasStores ? '16px' : '0px')};
-  padding-bottom: ${(props) => (props.hasStores ? '0px' : '10px')};
+  padding-bottom: ${(props) => (props.hasStores ? '0px' : '16px')};
 `
 
 const TabsContainer = styled.div`
@@ -145,14 +145,16 @@ const TabContainer = styled.div`
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 3px;
+  gap: 5px;
 `
 
 const TabText = styled(CText)`
   font-size: 14px;
   font-weight: 600;
   color: ${(props) => {
-    return props.selected ? lightColors.primaryText : lightColors.secondaryText
+    return props.selected
+      ? lightColors.primaryText
+      : lightColors.secondaryText + 'D9'
   }};
 `
 
@@ -169,13 +171,13 @@ const AllReadButton = styled(HeadingText)`
 
 const TabBadge = styled.div`
   height: 18px;
-  width: 18px;
+  width: 20px;
   border-radius: 50%;
-  background-color: ${lightColors.primary};
+  background-color: rgba(100, 116, 139, 0.09);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: ${lightColors.primaryText};
 `
 
 const TabBadgeText = styled.p`
@@ -184,6 +186,7 @@ const TabBadgeText = styled.p`
   font-size: ${(props) => {
     return props?.count > 99 ? '8px' : '10px'
   }};
+  font-weight: 600;
   line-height: 1;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
     Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';

@@ -22,14 +22,14 @@ export default function NotificationsContainer() {
 
 const Container = styled.div`
   height: 500px;
-  width: 400px;
+  width: 450px;
   margin: 0px 15px;
   border-radius: 5px;
   background-color: ${lightColors.main};
   border: 1px solid ${lightColors.border};
   display: inline-block;
   overflow: scroll;
-  box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0 0px 7px 0 rgba(0, 0, 0, 0.1);
   @media (max-width: 425px) {
     width: 99.5vw;
     margin: 0px;

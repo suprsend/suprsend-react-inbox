@@ -1,20 +1,20 @@
 import styled from '@emotion/styled'
 
 export const lightColors = {
-  primary: '#066AF3',
-  primaryText: '#1C1C1C',
-  secondaryText: '#707070',
-  border: '#DBDADA',
-  main: '#FFF',
+  primary: '#2E70E8',
+  primaryText: '#1E293B',
+  secondaryText: '#475569',
+  border: '#E2E8F0',
+  main: '#FFFFFF',
   error: '#B42318'
 }
 
 export const darkColors = {
-  primary: '#066AF3',
+  primary: '#2E70E8',
   primaryText: '#EFEFEF',
-  secondaryText: '#B8B8B8',
-  border: '#434343',
-  main: '#202020',
+  secondaryText: '#CBD5E1',
+  border: '#3A4A61',
+  main: '#1D2635',
   error: '#F97066'
 }
 
@@ -48,13 +48,13 @@ export const darkTheme = {
       boxShadow: '0 0 5px 0 rgba(0, 0, 0, 0.5)'
     },
     headerText: { color: darkColors.primaryText },
-    markAllReadText: { color: '#3B8EFF' }
+    markAllReadText: { color: darkColors.primary }
   },
   tabs: {
     color: darkColors.primaryText,
-    unselectedColor: darkColors.secondaryText,
+    unselectedColor: darkColors.secondaryText + 'D9',
     bottomColor: darkColors.primary,
-    badgeColor: darkColors.primary,
+    badgeColor: 'rgba(100, 116, 139, 0.5)',
     badgeText: darkColors.primaryText
   },
   notificationsContainer: {
@@ -73,41 +73,50 @@ export const darkTheme = {
   notification: {
     container: {
       borderBottom: `1px solid ${darkColors.border}`,
-      unreadBackgroundColor: '#292929',
-      unreadHoverBackgroundColor: '#3E3E3E',
       readBackgroundColor: darkColors.main,
-      readHoverBackgroundColor: '#121212'
+      unreadBackgroundColor: '#273244',
+      hoverBackgroundColor: '#2D3A4D'
     },
     pinnedText: {
       color: darkColors?.secondaryText
     },
     headerText: { color: darkColors.primaryText },
     bodyText: {
-      color: darkColors.primaryText,
-      blockquoteColor: darkColors.border
+      color: darkColors.secondaryText,
+      blockquoteColor: 'rgba(100, 116, 139, 0.5)'
     },
     unseenDot: { backgroundColor: darkColors.primary },
     createdOnText: { color: darkColors.secondaryText },
-    subtext: { color: darkColors.secondaryText },
-    actions: [{ container: { backgroundColor: darkColors.primary } }],
+    subtext: { color: '#94a3b8' },
+    actions: [
+      { container: { backgroundColor: darkColors.primary } },
+      {
+        container: {
+          borderColor: darkColors.border,
+          backgroundColor: 'transparent',
+          hoverBackgroundColor: darkColors.main
+        },
+        text: { color: darkColors.secondaryText }
+      }
+    ],
     expiresText: {
-      backgroundColor: 'rgba(100, 116, 139, 0.14)',
+      backgroundColor: 'rgba(100, 116, 139, 0.5)',
       color: darkColors.secondaryText,
-      expiringBackgroundColor: 'rgba(217, 45, 32, 0.5)',
+      expiringBackgroundColor: 'rgba(217, 45, 32, 0.15)',
       expiringColor: darkColors.error
     },
     actionsMenuIcon: {
-      color: darkColors.primaryText,
+      color: darkColors.secondaryText,
       hoverBackgroundColor: 'rgba(100, 116, 139, 0.5)'
     },
     actionsMenu: {
       backgroundColor: darkColors.main,
       borderColor: darkColors.border
     },
-    actionsMenuItem: { hoverBackgroundColor: '#121212' },
-    actionsMenuItemIcon: { color: darkColors.primaryText },
+    actionsMenuItem: { hoverBackgroundColor: 'rgba(100, 116, 139, 0.2)' },
+    actionsMenuItemIcon: { color: darkColors.secondaryText },
     actionsMenuItemText: {
-      color: darkColors.primaryText
+      color: darkColors.secondaryText
     }
   },
   toast: {
@@ -117,7 +126,7 @@ export const darkTheme = {
     },
     headerText: { color: darkColors.primaryText },
     bodyText: {
-      color: darkColors.primaryText,
+      color: darkColors.secondaryText,
       blockquoteColor: darkColors.border
     }
   }

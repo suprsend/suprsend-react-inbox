@@ -63,11 +63,11 @@ export default function Notification({ notificationData, handleActionClick }) {
   const [moreOpen, setMoreOpen] = useState(false)
 
   const { message, seen_on: seenOn, created_on: createdOn } = notificationData
-  const { notificationComponent, hideAvatar, inbox } = useInbox()
+  const { notificationComponent, hideAvatar, inbox, themeType } = useInbox()
   const { notification } = useTheme()
 
   const blockquoteColor =
-    notification?.bodyText?.blockquoteColor || lightColors.border
+    notification?.bodyText?.blockquoteColor || 'rgba(100, 116, 139, 0.3)'
   const linkColor = notification?.bodyText?.linkColor || lightColors.primary
 
   const actionOne = message?.actions?.[0]
@@ -113,28 +113,31 @@ export default function Notification({ notificationData, handleActionClick }) {
       )}
       <NotificationView>
         <LeftView>
-          {!hideAvatar && (
-            <AvatarView
-              onClick={(e) => {
-                const avatarData = message?.avatar
-                handleActionClick(e, {
-                  type: 'avatar',
-                  url: avatarData?.action_url,
-                  target: avatarData?.open_in_new_tab
-                })
-              }}
-            >
-              {message?.avatar?.avatar_url && validAvatar ? (
-                <AvatarImage
-                  src={message.avatar.avatar_url}
-                  alt='avatar'
-                  style={notification?.avatar}
-                />
-              ) : (
-                <AvatarIcon />
-              )}
-            </AvatarView>
-          )}
+          <LeftAvatarView>
+            <UnseenDot style={notification?.unseenDot} show={!seenOn} />
+            {!hideAvatar && (
+              <AvatarView
+                onClick={(e) => {
+                  const avatarData = message?.avatar
+                  handleActionClick(e, {
+                    type: 'avatar',
+                    url: avatarData?.action_url,
+                    target: avatarData?.open_in_new_tab
+                  })
+                }}
+              >
+                {message?.avatar?.avatar_url && validAvatar ? (
+                  <AvatarImage
+                    src={message.avatar.avatar_url}
+                    alt='avatar'
+                    style={notification?.avatar}
+                  />
+                ) : (
+                  <AvatarIcon type={themeType} />
+                )}
+              </AvatarView>
+            )}
+          </LeftAvatarView>
           <ContentView>
             {message.header && (
               <HeaderText style={notification?.headerText}>
@@ -174,7 +177,8 @@ export default function Notification({ notificationData, handleActionClick }) {
                           margin: 0,
                           paddingLeft: 10,
                           borderLeft: `3px ${blockquoteColor} solid`,
-                          marginBottom: 5
+                          marginBottom: 5,
+                          marginTop: 5
                         }}
                       >
                         {children}
@@ -294,12 +298,6 @@ export default function Notification({ notificationData, handleActionClick }) {
               formatter={getShortFormattedTime}
             />
           </CreatedText>
-          {!seenOn && (
-            <div>
-              <UnseenDot style={notification?.unseenDot} />
-            </div>
-          )}
-
           <CMenuView showMore={showMore}>
             <CMenuButton
               hoverBGColor={notification?.actionsMenuIcon?.hoverBackgroundColor}
@@ -349,37 +347,30 @@ export default function Notification({ notificationData, handleActionClick }) {
 }
 
 const Container = styled.div`
-  padding: 12px 14px;
+  padding: 16px;
   cursor: pointer;
   background-color: ${(props) => {
     return props.read
-      ? props?.style?.readBackgroundColor || '#FFF'
-      : props?.style?.unreadBackgroundColor || '#F4F9FF'
+      ? props?.style?.readBackgroundColor || lightColors.main
+      : props?.style?.unreadBackgroundColor || '#edf3ff'
   }};
   border-bottom: 0.5px solid ${lightColors.border};
   &:hover {
     background-color: ${(props) =>
-      props.read
-        ? props?.style?.readHoverBackgroundColor || '#F6F6F6'
-        : props?.style?.unreadHoverBackgroundColor || '#DFECFF'};
-  }
+      props?.style?.hoverBackgroundColor || '#DBE7FF'}
 `
 
 const PinnedView = styled.div`
   display: flex;
   align-items: center;
-  margin-left: ${(props) => (props.hideAvatar ? '0px' : '42px')};
-  margin-bottom: -6px;
+  margin-left: ${(props) => (props.hideAvatar ? '0px' : '52px')};
   gap: 4px;
 `
 
-const PinnedNotificationText = styled(HelperText)`
-  font-size: 11px;
-`
+const PinnedNotificationText = styled(HelperText)``
 
 const SubText = styled(HelperText)`
-  font-size: 11px;
-  color: ${lightColors.secondaryText};
+  color: #64748b;
 `
 
 const SubTextView = styled.div`
@@ -393,10 +384,9 @@ const SubTextView = styled.div`
 `
 
 const ExpiresText = styled(HelperText)`
-  font-size: 11px;
-  margin-top: 12px;
+  margin-top: 8px;
   display: inline-block;
-  padding: 1px 6px 1px 6px;
+  padding: 1px 6px;
   border-radius: 4px;
 `
 
@@ -408,20 +398,20 @@ const NotificationView = styled.div`
 `
 
 const HeaderText = styled(CText)`
-  margin: 10px 0px;
+  margin: 8px 0px 0px 0px;
   overflow-wrap: anywhere;
-  line-height: 16px;
+  line-height: 18px;
   font-weight: 700;
 `
 
 const BodyText = styled.div`
-  font-size: 13px;
-  line-height: 18px;
-  margin: 10px 0px 5px 0px;
+  font-size: 14px;
+  line-height: 20px;
+  margin: 8px 0px 6px;
   font-weight: 400;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
     Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-  color: ${lightColors.primaryText};
+  color: ${lightColors.secondaryText};
 `
 
 const UnseenDot = styled.div`
@@ -429,6 +419,7 @@ const UnseenDot = styled.div`
   border-radius: 50%;
   width: 7px;
   height: 7px;
+  visibility: ${(props) => (props.show ? 'visible' : 'hidden')};
 `
 
 const CreatedText = styled(HelperText)``
@@ -437,21 +428,25 @@ const ButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
   gap: 10px;
-  margin-bottom: 5px;
-  margin-top: 10px;
+  margin-bottom: 6px;
+  margin-top: 12px;
   overflow-wrap: anywhere;
 `
 
 const ButtonView = styled.div`
   max-width: 50%;
-  background: #066af3;
+  background: ${lightColors.primary};
   border-radius: 5px;
   text-decoration: none;
   padding: 4px 16px;
+  &:hover {
+    background-color: ${(props) =>
+      props.style?.hoverBackgroundColor || '#265cbf'} !important;
+  }
 `
 
 const ButtonText = styled(CText)`
-  color: #fff;
+  color: ${lightColors.main};
   text-align: center;
   word-break: break-all;
   font-weight: 600;
@@ -459,14 +454,18 @@ const ButtonText = styled(CText)`
 `
 
 const ButtonOutlineView = styled(ButtonView)`
-  background: #fff;
+  background: ${lightColors.main};
   border-color: ${lightColors.border};
   border-style: solid;
-  border-width: 0.5px;
+  border-width: 1.2px;
+  &:hover {
+    background-color: ${(props) =>
+      props.style?.hoverBackgroundColor || '#f7f7f9'} !important;
+  }
 `
 
 const ButtonOutlineText = styled(ButtonText)`
-  color: #434343;
+  color: ${lightColors.secondaryText};
 `
 
 const LeftView = styled.div`
@@ -475,10 +474,13 @@ const LeftView = styled.div`
   flex-grow: 1;
 `
 
-const AvatarView = styled.div`
-  margin-top: 10px;
-  margin-right: 10px;
+const LeftAvatarView = styled.div`
+  display: flex;
+  margin-top: 8px;
+  margin-right: 12px;
 `
+
+const AvatarView = styled.div``
 
 const ContentView = styled.div`
   flex: 1;
@@ -489,13 +491,13 @@ const RightView = styled.div`
   flex-direction: column;
   align-items: center;
   margin-top: 5px;
-  width: 40px;
+  max-width: 40px;
   gap: 5px;
 `
 
 const AvatarImage = styled.img`
-  height: 32px;
-  width: 32px;
+  height: 36px;
+  width: 36px;
   border-radius: 100px;
 `
 
@@ -521,7 +523,7 @@ const CMenuItem = styled.div`
   gap: 8px;
   &:hover {
     background-color: ${(props) =>
-      props?.style?.hoverBackgroundColor || '#f6f6f6'};
+      props?.style?.hoverBackgroundColor || 'rgba(100, 116, 139, 0.09)'};
   }
 `
 
