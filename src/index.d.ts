@@ -4,13 +4,10 @@ interface Dictionary {
   [key: string]: any
 }
 
-interface IToastOptions {
-  duration?: number
-}
-
 interface IToastProps {
   position?: string
-  toastOptions?: IToastOptions
+  duration?: number
+  limit?: number
   toastComponent?: ({
     notificationData
   }: {
@@ -116,6 +113,7 @@ interface IRemoteNotification {
   can_user_unpin?: boolean
   is_expiry_visible?: boolean
   expiry?: number
+  archived?: boolean
   message: IRemoteNotificationMessage
 }
 
@@ -175,4 +173,5 @@ export function useNotifications(storeId?: string): {
   markAllRead: () => void
   markRead(n_id: string): void
   markUnRead(n_id: string): void
+  markArchived(n_id: string): void
 }

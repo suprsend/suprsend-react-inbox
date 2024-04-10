@@ -2401,13 +2401,13 @@
 
 "@socket.io/component-emitter@~3.1.0":
   version "3.1.0"
-  resolved "https://registry.npmjs.org/@socket.io/component-emitter/-/component-emitter-3.1.0.tgz"
+  resolved "https://registry.yarnpkg.com/@socket.io/component-emitter/-/component-emitter-3.1.0.tgz#96116f2a912e0c02817345b3c10751069920d553"
   integrity sha512-+9jVqKhRSpsc591z5vX+X5Yyw+he/HCB4iQ/RYxw35CEPaY1gnsNE43nf9n9AaYjAQrTiI/mOwKUKdUs9vf7Xg==
 
-"@suprsend/js-inbox@^2.2.0":
-  version "2.2.0"
-  resolved "https://registry.npmjs.org/@suprsend/js-inbox/-/js-inbox-2.2.0.tgz"
-  integrity sha512-nWVm7W+Kl85XtMesoC7nNVGNo9k7iwP2QXevcZviby9YCoyhVQE5bC04w9iNpRWf2rp1j4InI/tETyjrPjaeUw==
+"@suprsend/js-inbox@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@suprsend/js-inbox/-/js-inbox-2.3.0.tgz#754278b43f612336a2b14aa891642a8d37d809b9"
+  integrity sha512-H4fXvVNBtFZQC3MKvO2xcnEhfkFMnlkTrI1ksdJtBrXyJlBBYBXeSFMhOJxp5FC/riPTg7NrWBHTP5/W7w/2XQ==
   dependencies:
     crypto-js "^4.1.1"
     mitt "^3.0.0"
@@ -4286,7 +4286,7 @@ cross-spawn@^7.0.1, cross-spawn@^7.0.2, cross-spawn@^7.0.3:
 
 crypto-js@^4.1.1:
   version "4.2.0"
-  resolved "https://registry.npmjs.org/crypto-js/-/crypto-js-4.2.0.tgz"
+  resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-4.2.0.tgz#4d931639ecdfd12ff80e8186dba6af2c2e856631"
   integrity sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==
 
 crypto-random-string@^2.0.0:
@@ -4959,7 +4959,7 @@ encodeurl@~1.0.2:
 
 engine.io-client@~6.5.2:
   version "6.5.3"
-  resolved "https://registry.npmjs.org/engine.io-client/-/engine.io-client-6.5.3.tgz"
+  resolved "https://registry.yarnpkg.com/engine.io-client/-/engine.io-client-6.5.3.tgz#4cf6fa24845029b238f83c628916d9149c399bc5"
   integrity sha512-9Z0qLB0NIisTRt1DZ/8U2k12RJn8yls/nXMZLn+/N8hANT3TcYjKFKcwbw5zFQiN4NTde3TSY9zb79e1ij6j9Q==
   dependencies:
     "@socket.io/component-emitter" "~3.1.0"
@@ -4969,9 +4969,9 @@ engine.io-client@~6.5.2:
     xmlhttprequest-ssl "~2.0.0"
 
 engine.io-parser@~5.2.1:
-  version "5.2.1"
-  resolved "https://registry.npmjs.org/engine.io-parser/-/engine.io-parser-5.2.1.tgz"
-  integrity sha512-9JktcM3u18nU9N2Lz3bWeBgxVgOKpw7yhRaoxQA3FUDZzzw+9WlA6p4G4u0RixNkg14fH7EfEc/RhpurtiROTQ==
+  version "5.2.2"
+  resolved "https://registry.yarnpkg.com/engine.io-parser/-/engine.io-parser-5.2.2.tgz#37b48e2d23116919a3453738c5720455e64e1c49"
+  integrity sha512-RcyUFKA93/CXH20l4SoVvzZfrSDMOTUS3bWVpTt2FuFP+XYrL8i8oonHP7WInRyVHXh0n/ORtoeiE1os+8qkSw==
 
 enhanced-resolve@^5.10.0:
   version "5.12.0"
@@ -8329,7 +8329,7 @@ minimist@^1.2.0, minimist@^1.2.6:
 
 mitt@^3.0.0:
   version "3.0.1"
-  resolved "https://registry.npmjs.org/mitt/-/mitt-3.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/mitt/-/mitt-3.0.1.tgz#ea36cf0cc30403601ae074c8f77b7092cdab36d1"
   integrity sha512-vKivATfr97l2/QBCYAkXYDbrIWPM2IIKEl7YPhjCvKlG3kE2gm+uBo6nEXK3M5/Ffh/FLpKExzOQ3JJoJGFKBw==
 
 mkdirp@^0.5.1, mkdirp@~0.5.1:
@@ -10976,9 +10976,9 @@ slice-ansi@^2.1.0:
     is-fullwidth-code-point "^2.0.0"
 
 socket.io-client@^4.6.1:
-  version "4.7.2"
-  resolved "https://registry.npmjs.org/socket.io-client/-/socket.io-client-4.7.2.tgz"
-  integrity sha512-vtA0uD4ibrYD793SOIAwlo8cj6haOeMHrGvwPxJsxH7CeIksqJ+3Zc06RvWTIFgiSqx4A3sOnTXpfAEE2Zyz6w==
+  version "4.7.5"
+  resolved "https://registry.yarnpkg.com/socket.io-client/-/socket.io-client-4.7.5.tgz#919be76916989758bdc20eec63f7ee0ae45c05b7"
+  integrity sha512-sJ/tqHOCe7Z50JCBCXrsY3I2k03iOiUe+tj1OmKeD2lXPiGH/RUCdTZFoqVyN7l1MnpIzPrGtLcijffmeouNlQ==
   dependencies:
     "@socket.io/component-emitter" "~3.1.0"
     debug "~4.3.2"
@@ -10987,7 +10987,7 @@ socket.io-client@^4.6.1:
 
 socket.io-parser@~4.2.4:
   version "4.2.4"
-  resolved "https://registry.npmjs.org/socket.io-parser/-/socket.io-parser-4.2.4.tgz"
+  resolved "https://registry.yarnpkg.com/socket.io-parser/-/socket.io-parser-4.2.4.tgz#c806966cf7270601e47469ddeec30fbdfda44c83"
   integrity sha512-/GbIKmo8ioc+NIWIhwdecY0ge+qVBSMdgxGygevmdHj24bsfgtCmcUUcQ5ZzcylGFHsN3k4HB4Cgkl96KVnuew==
   dependencies:
     "@socket.io/component-emitter" "~3.1.0"
@@ -11981,7 +11981,7 @@ url-parse@^1.5.3:
 
 use-sync-external-store@1.2.0:
   version "1.2.0"
-  resolved "https://registry.npmjs.org/use-sync-external-store/-/use-sync-external-store-1.2.0.tgz"
+  resolved "https://registry.yarnpkg.com/use-sync-external-store/-/use-sync-external-store-1.2.0.tgz#7dbefd6ef3fe4e767a0cf5d7287aacfb5846928a"
   integrity sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==
 
 util-deprecate@^1.0.1, util-deprecate@^1.0.2, util-deprecate@~1.0.1:
@@ -12556,7 +12556,7 @@ ws@^8.13.0:
 
 ws@~8.11.0:
   version "8.11.0"
-  resolved "https://registry.npmjs.org/ws/-/ws-8.11.0.tgz"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-8.11.0.tgz#6a0d36b8edfd9f96d8b25683db2f8d7de6e8e143"
   integrity sha512-HPG3wQd9sNQoT9xHyNCXoDUa+Xw/VevmY9FoHyQ+g+rrMn4j6FB4np7Z0OhdTgjx6MgQLK7jwSy1YecU1+4Asg==
 
 xml-name-validator@^3.0.0:
@@ -12571,7 +12571,7 @@ xmlchars@^2.2.0:
 
 xmlhttprequest-ssl@~2.0.0:
   version "2.0.0"
-  resolved "https://registry.npmjs.org/xmlhttprequest-ssl/-/xmlhttprequest-ssl-2.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/xmlhttprequest-ssl/-/xmlhttprequest-ssl-2.0.0.tgz#91360c86b914e67f44dce769180027c0da618c67"
   integrity sha512-QKxVRxiRACQcVuQEYFsI1hhkrMlrXHPegbbd1yn9UHOmRxY+si12nQYzri3vbzt8VdTTRviqcKxcyllFas5z2A==
 
 xtend@^4.0.2:
@@ -12623,8 +12623,8 @@ yocto-queue@^0.1.0:
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 
 zustand@^4.3.2:
-  version "4.4.7"
-  resolved "https://registry.npmjs.org/zustand/-/zustand-4.4.7.tgz"
-  integrity sha512-QFJWJMdlETcI69paJwhSMJz7PPWjVP8Sjhclxmxmxv/RYI7ZOvR5BHX+ktH0we9gTWQMxcne8q1OY8xxz604gw==
+  version "4.5.2"
+  resolved "https://registry.yarnpkg.com/zustand/-/zustand-4.5.2.tgz#fddbe7cac1e71d45413b3682cdb47b48034c3848"
+  integrity sha512-2cN1tPkDVkwCy5ickKrI7vijSjPksFRfqS6237NzT0vqSsztTNnQdHw9mmN7uBdk3gceVXU0a+21jFzFzAc9+g==
   dependencies:
     use-sync-external-store "1.2.0"

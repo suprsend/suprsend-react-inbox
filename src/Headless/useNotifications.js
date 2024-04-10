@@ -26,6 +26,7 @@ export default function useNotifications(storeId) {
     markClicked: notificationsFeed?.markClicked.bind(notificationsFeed),
     markRead: notificationsFeed?.markRead.bind(notificationsFeed),
     markUnRead: notificationsFeed?.markUnRead.bind(notificationsFeed),
+    markArchived: notificationsFeed?.markArchived.bind(notificationsFeed),
     markAllSeen: notificationsFeed?.markAllSeen.bind(notificationsFeed),
     markAllRead: notificationsFeed?.markAllRead.bind(notificationsFeed),
     fetchPrevious: notificationsFeed?.fetchNotifications.bind(notificationsFeed)

@@ -10,6 +10,7 @@ import MoreIcon from './Icons/MoreIcon'
 import PinnedNotificationIcon from './Icons/PinnedNotificationIcon'
 import UnReadIcon from './Icons/UnReadIcon'
 import ReadIcon from './Icons/ReadIcon'
+import ArchiveIcon from './Icons/ArchiveIcon'
 
 function ExpiryTime({ dateInput, style }) {
   const date = dateInput
@@ -335,6 +336,20 @@ export default function Notification({ notificationData, handleActionClick }) {
                   <ReadIcon style={notification?.actionsMenuItemIcon} />
                   <CMenuText style={notification?.actionsMenuItemText}>
                     Mark as read
+                  </CMenuText>
+                </CMenuItem>
+              )}
+              {!notificationData?.archived && (
+                <CMenuItem
+                  style={notification?.actionsMenuItem}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    inbox.feed.markArchived(notificationData.n_id)
+                  }}
+                >
+                  <ArchiveIcon style={notification?.actionsMenuItemIcon} />
+                  <CMenuText style={notification?.actionsMenuItemText}>
+                    Archive
                   </CMenuText>
                 </CMenuItem>
               )}
