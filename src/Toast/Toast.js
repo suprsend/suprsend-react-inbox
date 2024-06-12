@@ -2,7 +2,6 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { ToastContainer, toast } from 'react-toastify'
 import { ToastNotification } from './ToastNotification'
-import 'react-toastify/dist/ReactToastify.css'
 
 export default function Toast({ position, duration, limit }) {
   const toastDuration = duration || 3000

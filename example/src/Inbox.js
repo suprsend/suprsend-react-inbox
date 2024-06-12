@@ -1,5 +1,6 @@
 import React from 'react'
 import SuprsendInbox from '@suprsend/react-inbox'
+import 'react-toastify/dist/ReactToastify.css'
 
 function Buttons({ themeType, setThemeType, setDid, setSid }) {
   return (

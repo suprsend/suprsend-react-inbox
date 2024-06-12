@@ -45,7 +45,7 @@ interface ISuprSendInbox {
   showUnreadCountOnTabs?: boolean
 }
 
-declare function SuprSendInbox({
+declare function SuprsendInbox({
   distinctId,
   subscriberId,
   workspaceKey,
@@ -70,7 +70,7 @@ declare function SuprSendInbox({
   showUnreadCountOnTabs
 }: ISuprSendInbox): JSX.Element
 
-export default SuprSendInbox
+export default SuprsendInbox
 
 // ========================================= //
 
