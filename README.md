@@ -22,6 +22,7 @@ After installing, Import the component in your code and use it as given below. R
 
 ```javascript index.js
 import SuprSendInbox from '@suprsend/react-inbox'
+import 'react-toastify/dist/ReactToastify.css' // needed for toast notifications, can be ignored if hideToast=true
 
 // add to your react component;
 <SuprSendInbox
