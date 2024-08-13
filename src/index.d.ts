@@ -17,9 +17,9 @@ interface IToastProps {
 
 interface ICustomNotificationData {
   notificationData: any
-  markRead: (clickEvent: any) => void
-  markUnRead: (clickEvent: any) => void
-  markArchived: (clickEvent: any) => void
+  markRead: (clickEvent?: any) => void
+  markUnRead: (clickEvent?: any) => void
+  markArchived: (clickEvent?: any) => void
 }
 
 interface ISuprSendInbox {
