@@ -82,7 +82,29 @@ export default function Notification({ notificationData, handleActionClick }) {
 
   if (notificationComponent) {
     const NotificationComponent = notificationComponent
-    return <NotificationComponent notificationData={notificationData} />
+    return (
+      <NotificationComponent
+        notificationData={notificationData}
+        markRead={(e) => {
+          if (e?.stopPropagation) {
+            e.stopPropagation()
+          }
+          inbox.feed.markRead(notificationData.n_id)
+        }}
+        markUnRead={(e) => {
+          if (e?.stopPropagation) {
+            e.stopPropagation()
+          }
+          inbox.feed.markUnRead(notificationData.n_id)
+        }}
+        markArchived={(e) => {
+          if (e?.stopPropagation) {
+            e.stopPropagation()
+          }
+          inbox.feed.markArchived(notificationData.n_id)
+        }}
+      />
+    )
   }
 
   return (

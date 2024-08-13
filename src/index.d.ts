@@ -15,6 +15,13 @@ interface IToastProps {
   }) => JSX.Element
 }
 
+interface ICustomNotificationData {
+  notificationData: any
+  markRead: (clickEvent?: any) => void
+  markUnRead: (clickEvent?: any) => void
+  markArchived: (clickEvent?: any) => void
+}
+
 interface ISuprSendInbox {
   workspaceKey: string
   distinctId: string | null
@@ -27,11 +34,7 @@ interface ISuprSendInbox {
   hideInbox?: boolean
   hideToast?: boolean
   noNotificationsComponent?: () => JSX.Element
-  notificationComponent?: ({
-    notificationData
-  }: {
-    notificationData: any
-  }) => JSX.Element
+  notificationComponent?: (notification: ICustomNotificationData) => JSX.Element
   bellComponent?: () => JSX.Element
   badgeComponent?: ({ count }: { count: number | null }) => JSX.Element
   loaderComponent?: () => JSX.Element
