@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import Markdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+import rehypeRaw from 'rehype-raw'
 import TimeAgo from 'react-timeago'
 import { CText, HelperText, lightColors } from '../utils/styles'
 import { useInbox, useTheme } from '../utils/context'
@@ -169,6 +171,8 @@ export default function Notification({ notificationData, handleActionClick }) {
             )}
             <BodyText style={notification?.bodyText}>
               <Markdown
+                remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeRaw]}
                 components={{
                   a({ children, href }) {
                     return (

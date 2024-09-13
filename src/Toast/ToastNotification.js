@@ -5,6 +5,8 @@ import { useTheme, useInbox } from '../utils/context'
 import AvatarIcon from '../Notifications/Icons/AvatarIcon'
 import { isImgUrl } from '../utils'
 import Markdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+import rehypeRaw from 'rehype-raw'
 
 export function ToastNotification({ notificationData, closeToast }) {
   const { toast } = useTheme()
@@ -40,6 +42,8 @@ export function ToastNotification({ notificationData, closeToast }) {
         <HeaderText style={toast?.headerText}>{message.header}</HeaderText>
         <BodyText style={toast?.bodyText}>
           <Markdown
+            remarkPlugins={[remarkGfm]}
+            rehypePlugins={[rehypeRaw]}
             components={{
               a({ children, href }) {
                 return (
