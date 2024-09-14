@@ -40,6 +40,8 @@ interface ISuprSendInbox {
   loaderComponent?: () => JSX.Element
   tabBadgeComponent?: ({ count }: { count: number }) => JSX.Element
   notificationClickHandler?: (notificationData: any) => void
+  primaryActionClickHandler?: (notificationData: any) => void
+  secondaryActionClickHandler?: (notificationData: any) => void
   toastProps?: IToastProps
   theme?: Dictionary
   pagination?: boolean
@@ -65,6 +67,8 @@ declare function SuprSendInbox({
   loaderComponent,
   tabBadgeComponent,
   notificationClickHandler,
+  primaryActionClickHandler,
+  secondaryActionClickHandler,
   toastProps,
   theme,
   pageSize,

@@ -55,14 +55,18 @@ export default function ClickableNotification({ notificationData }) {
 
     if (!clicked && actionUrlTarget === '_self') {
       setTimeout(() => {
-        if (clickData?.url) {
+        if (clickData.customClickHandler) {
+          clickData.customClickHandler(notificationData)
+        } else if (clickData?.url) {
           window.open(formatActionLink(clickData.url), actionUrlTarget)
         } else {
           cardClickNavigation()
         }
       }, 1000)
     } else {
-      if (clickData?.url) {
+      if (clickData.customClickHandler) {
+        clickData.customClickHandler(notificationData)
+      } else if (clickData?.url) {
         window.open(formatActionLink(clickData.url), actionUrlTarget)
       } else {
         cardClickNavigation()
