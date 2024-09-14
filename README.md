@@ -74,6 +74,8 @@ interface ISuprSendInbox {
   loaderComponent?: () => JSX.Element
   tabBadgeComponent?: ({ count }: { count: number }) => JSX.Element
   notificationClickHandler?: (notificationData: any) => void
+  primaryActionClickHandler?: (notificationData: any) => void
+  secondaryActionClickHandler?: (notificationData: any) => void
   toastProps?: IToastProps
   theme?: Dictionary
   popperPosition?: 'top' | 'bottom' | 'left' | 'right'
@@ -198,7 +200,6 @@ Enclose your notifications component in **SuprSendProvider**. SuprSend hooks can
 
 ```javascript Syntax
 import { SuprSendProvider } from '@suprsend/react-inbox'
-
 <SuprSendProvider
   workspaceKey='<workspace_key>'
   subscriberId='<subscriber_id>'
