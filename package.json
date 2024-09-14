@@ -1,6 +1,6 @@
 {
   "name": "@suprsend/react-inbox",
-  "version": "3.4.0",
+  "version": "3.5.0",
   "description": "SuprSend SDK for integrating inbox functionality in React applications",
   "author": "SuprSend Developers",
   "license": "MIT",
@@ -66,6 +66,8 @@
     "react-markdown": "6.0.3",
     "react-popper": "^2.3.0",
     "react-timeago": "^7.2.0",
-    "react-toastify": "9.0.3"
+    "react-toastify": "9.0.3",
+    "rehype-raw": "6.1.1",
+    "remark-gfm": "1.0.0"
   }
 }
