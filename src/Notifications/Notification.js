@@ -252,6 +252,20 @@ export default function Notification({ notificationData, handleActionClick }) {
                         {...props}
                       />
                     )
+                  },
+                  table(props) {
+                    return (
+                      <table style={{ overflowWrap: 'break-word' }}>
+                        {props.children}
+                      </table>
+                    )
+                  },
+                  th(props) {
+                    return (
+                      <th style={{ textAlign: 'left', whiteSpace: 'nowrap' }}>
+                        {props.children}
+                      </th>
+                    )
                   }
                 }}
               >
