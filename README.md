@@ -200,6 +200,7 @@ Enclose your notifications component in **SuprSendProvider**. SuprSend hooks can
 
 ```javascript Syntax
 import { SuprSendProvider } from '@suprsend/react-inbox'
+
 <SuprSendProvider
   workspaceKey='<workspace_key>'
   subscriberId='<subscriber_id>'
