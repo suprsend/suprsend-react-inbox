@@ -64,7 +64,14 @@ export default function Notification({ notificationData, handleActionClick }) {
   const [moreOpen, setMoreOpen] = useState(false)
 
   const { message, seen_on: seenOn, created_on: createdOn } = notificationData
-  const { notificationComponent, hideAvatar, inbox, themeType } = useInbox()
+  const {
+    notificationComponent,
+    hideAvatar,
+    inbox,
+    themeType,
+    primaryActionClickHandler,
+    secondaryActionClickHandler
+  } = useInbox()
   const { notification } = useTheme()
 
   const blockquoteColor =
@@ -281,9 +288,10 @@ export default function Notification({ notificationData, handleActionClick }) {
                     key={actionOne.id}
                     onClick={(e) => {
                       handleActionClick(e, {
-                        type: 'action_button',
+                        type: 'primary_action_button',
                         url: actionOne.url,
-                        target: actionOne.open_in_new_tab
+                        target: actionOne.open_in_new_tab,
+                        customClickHandler: primaryActionClickHandler
                       })
                     }}
                   >
@@ -298,9 +306,10 @@ export default function Notification({ notificationData, handleActionClick }) {
                     style={notification?.actions?.[1]?.container}
                     onClick={(e) => {
                       handleActionClick(e, {
-                        type: 'action_button',
+                        type: 'secondary_action_button',
                         url: actionTwo.url,
-                        target: actionTwo.open_in_new_tab
+                        target: actionTwo.open_in_new_tab,
+                        customClickHandler: secondaryActionClickHandler
                       })
                     }}
                   >

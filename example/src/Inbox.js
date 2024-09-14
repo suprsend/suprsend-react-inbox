@@ -92,6 +92,12 @@ const App = () => {
         // notificationClickHandler={(notificationData) => {
         //   console.log('notification clicked', notificationData)
         // }}
+        // primaryActionClickHandler={() => {
+        //   console.log('clicked primary action button')
+        // }}
+        // secondaryActionClickHandler={() => {
+        //   console.log('clicked secondary action button')
+        // }}
         // noNotificationsComponent={() => <p>No Notifications Yet</p>}
         // toastProps={{
         //   toastOptions: { duration: 10000 },
