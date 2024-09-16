@@ -76,6 +76,8 @@ export default function Notification({ notificationData, handleActionClick }) {
   } = useInbox()
   const { notification } = useTheme()
 
+  const tableBorderColor =
+    notification?.bodyText?.tableBorderColor || 'rgba(100, 116, 139, 0.3)'
   const blockquoteColor =
     notification?.bodyText?.blockquoteColor || 'rgba(100, 116, 139, 0.3)'
   const linkColor = notification?.bodyText?.linkColor || lightColors.primary
@@ -273,7 +275,11 @@ export default function Notification({ notificationData, handleActionClick }) {
                   table({ children, style }) {
                     return (
                       <table
-                        style={{ overflowWrap: 'break-word', ...(style || {}) }}
+                        style={{
+                          overflowWrap: 'break-word',
+                          borderCollapse: 'collapse',
+                          ...(style || {})
+                        }}
                       >
                         {children}
                       </table>
@@ -285,11 +291,26 @@ export default function Notification({ notificationData, handleActionClick }) {
                         style={{
                           textAlign: 'left',
                           whiteSpace: 'nowrap',
+                          border: `1px solid ${tableBorderColor}`,
+                          padding: 5,
                           ...(style || {})
                         }}
                       >
                         {children}
                       </th>
+                    )
+                  },
+                  td({ children, style }) {
+                    return (
+                      <td
+                        style={{
+                          border: `1px solid ${tableBorderColor}`,
+                          padding: 5,
+                          ...(style || {})
+                        }}
+                      >
+                        {children}
+                      </td>
                     )
                   },
                   h1({ children, style }) {

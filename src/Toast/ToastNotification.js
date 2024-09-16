@@ -20,6 +20,8 @@ export function ToastNotification({ notificationData, closeToast }) {
     isValidAvatar.then((res) => setValidAvatar(res))
   }, [notificationData])
 
+  const tableBorderColor =
+    toast?.bodyText?.tableBorderColor || lightColors.border
   const blockquoteColor = toast?.bodyText?.blockquoteColor || lightColors.border
   const linkColor = toast?.bodyText?.linkColor || lightColors.primary
 
@@ -78,7 +80,7 @@ export function ToastNotification({ notificationData, closeToast }) {
                     style={{
                       margin: 0,
                       paddingLeft: 10,
-                      borderLeft: `3px ${blockquoteColor} solid`,
+                      borderLeft: `3px solid ${blockquoteColor}`,
                       marginBottom: 5,
                       marginTop: 5,
                       ...(style || {})
@@ -131,7 +133,11 @@ export function ToastNotification({ notificationData, closeToast }) {
               table({ children, style }) {
                 return (
                   <table
-                    style={{ overflowWrap: 'break-word', ...(style || {}) }}
+                    style={{
+                      overflowWrap: 'break-word',
+                      borderCollapse: 'collapse',
+                      ...(style || {})
+                    }}
                   >
                     {children}
                   </table>
@@ -143,11 +149,26 @@ export function ToastNotification({ notificationData, closeToast }) {
                     style={{
                       textAlign: 'left',
                       whiteSpace: 'nowrap',
+                      border: `1px solid ${tableBorderColor}`,
+                      padding: 5,
                       ...(style || {})
                     }}
                   >
                     {children}
                   </th>
+                )
+              },
+              td({ children, style }) {
+                return (
+                  <td
+                    style={{
+                      border: `1px solid ${tableBorderColor}`,
+                      padding: 5,
+                      ...(style || {})
+                    }}
+                  >
+                    {children}
+                  </td>
                 )
               },
               h1({ children, style }) {

@@ -127,7 +127,8 @@ export const darkTheme = {
     headerText: { color: darkColors.primaryText },
     bodyText: {
       color: darkColors.secondaryText,
-      blockquoteColor: darkColors.border
+      blockquoteColor: darkColors.border,
+      tableBorderColor: darkColors.border
     }
   }
 }
