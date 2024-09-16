@@ -20,6 +20,8 @@ export function ToastNotification({ notificationData, closeToast }) {
     isValidAvatar.then((res) => setValidAvatar(res))
   }, [notificationData])
 
+  const tableBorderColor =
+    toast?.bodyText?.tableBorderColor || lightColors.border
   const blockquoteColor = toast?.bodyText?.blockquoteColor || lightColors.border
   const linkColor = toast?.bodyText?.linkColor || lightColors.primary
 
@@ -45,58 +47,71 @@ export function ToastNotification({ notificationData, closeToast }) {
             remarkPlugins={[remarkGfm]}
             rehypePlugins={[rehypeRaw]}
             components={{
-              a({ children, href }) {
+              a({ children, href, style }) {
                 return (
                   <a
                     href={href}
-                    style={{ color: linkColor, textDecoration: 'none' }}
+                    style={{
+                      color: linkColor,
+                      textDecoration: 'none',
+                      ...(style || {})
+                    }}
                   >
                     {children}
                   </a>
                 )
               },
-              p({ children }) {
+              p({ children, style }) {
                 return (
-                  <p style={{ margin: 0, overflowWrap: 'anywhere' }}>
+                  <p
+                    style={{
+                      margin: 0,
+                      overflowWrap: 'anywhere',
+                      ...(style || {})
+                    }}
+                  >
                     {children}
                   </p>
                 )
               },
-              blockquote({ children }) {
+              blockquote({ children, style }) {
                 return (
                   <blockquote
                     style={{
                       margin: 0,
                       paddingLeft: 10,
-                      borderLeft: `3px ${blockquoteColor} solid`,
+                      borderLeft: `3px solid ${blockquoteColor}`,
                       marginBottom: 5,
-                      marginTop: 5
+                      marginTop: 5,
+                      ...(style || {})
                     }}
                   >
                     {children}
                   </blockquote>
                 )
               },
-              ul({ children }) {
+              ul({ children, style }) {
                 return (
                   <ul
                     style={{
                       whiteSpace: 'normal',
                       margin: 0,
-                      paddingLeft: 10
+                      paddingLeft: 10,
+                      ...(style || {})
                     }}
                   >
                     {children}
                   </ul>
                 )
               },
-              ol({ children }) {
+              ol({ children, style }) {
                 return (
                   <ol
                     style={{
                       whiteSpace: 'normal',
                       margin: 0,
-                      paddingLeft: 10
+                      paddingLeft: 10,
+                      ...(style || {})
                     }}
                   >
                     {children}
@@ -106,24 +121,133 @@ export function ToastNotification({ notificationData, closeToast }) {
               img(props) {
                 return (
                   <img
-                    style={{ maxWidth: '100%', objectFit: 'contain' }}
+                    style={{
+                      maxWidth: '100%',
+                      objectFit: 'contain',
+                      ...(props?.style || {})
+                    }}
                     {...props}
                   />
                 )
               },
-              table(props) {
+              table({ children, style }) {
                 return (
-                  <table style={{ overflowWrap: 'break-word' }}>
-                    {props.children}
+                  <table
+                    style={{
+                      overflowWrap: 'break-word',
+                      borderCollapse: 'collapse',
+                      ...(style || {})
+                    }}
+                  >
+                    {children}
                   </table>
                 )
               },
-              th(props) {
+              th({ children, style }) {
                 return (
-                  <th style={{ textAlign: 'left', whiteSpace: 'nowrap' }}>
-                    {props.children}
+                  <th
+                    style={{
+                      textAlign: 'left',
+                      whiteSpace: 'nowrap',
+                      border: `1px solid ${tableBorderColor}`,
+                      padding: 5,
+                      ...(style || {})
+                    }}
+                  >
+                    {children}
                   </th>
                 )
+              },
+              td({ children, style }) {
+                return (
+                  <td
+                    style={{
+                      border: `1px solid ${tableBorderColor}`,
+                      padding: 5,
+                      ...(style || {})
+                    }}
+                  >
+                    {children}
+                  </td>
+                )
+              },
+              h1({ children, style }) {
+                return (
+                  <h1
+                    style={{
+                      margin: 0,
+                      ...(style || {})
+                    }}
+                  >
+                    {children}
+                  </h1>
+                )
+              },
+              h2({ children, style }) {
+                return (
+                  <h2
+                    style={{
+                      margin: 0,
+                      ...(style || {})
+                    }}
+                  >
+                    {children}
+                  </h2>
+                )
+              },
+              h3({ children, style }) {
+                return (
+                  <h3
+                    style={{
+                      margin: 0,
+                      ...(style || {})
+                    }}
+                  >
+                    {children}
+                  </h3>
+                )
+              },
+              h4({ children, style }) {
+                return (
+                  <h4
+                    style={{
+                      margin: 0,
+                      ...(style || {})
+                    }}
+                  >
+                    {children}
+                  </h4>
+                )
+              },
+              h5({ children, style }) {
+                return (
+                  <h5
+                    style={{
+                      margin: 0,
+                      ...(style || {})
+                    }}
+                  >
+                    {children}
+                  </h5>
+                )
+              },
+              h6({ children, style }) {
+                return (
+                  <h6
+                    style={{
+                      margin: 0,
+                      ...(style || {})
+                    }}
+                  >
+                    {children}
+                  </h6>
+                )
+              },
+              script() {
+                return null
+              },
+              link() {
+                return null
               }
             }}
           >
