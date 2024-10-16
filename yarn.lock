@@ -2404,10 +2404,10 @@
   resolved "https://registry.yarnpkg.com/@socket.io/component-emitter/-/component-emitter-3.1.0.tgz#96116f2a912e0c02817345b3c10751069920d553"
   integrity sha512-+9jVqKhRSpsc591z5vX+X5Yyw+he/HCB4iQ/RYxw35CEPaY1gnsNE43nf9n9AaYjAQrTiI/mOwKUKdUs9vf7Xg==
 
-"@suprsend/js-inbox@^2.3.0":
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/@suprsend/js-inbox/-/js-inbox-2.3.0.tgz#754278b43f612336a2b14aa891642a8d37d809b9"
-  integrity sha512-H4fXvVNBtFZQC3MKvO2xcnEhfkFMnlkTrI1ksdJtBrXyJlBBYBXeSFMhOJxp5FC/riPTg7NrWBHTP5/W7w/2XQ==
+"@suprsend/js-inbox@^2.3.1":
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/@suprsend/js-inbox/-/js-inbox-2.3.1.tgz#6457db21d6e44370d6d11c0fd5315cd1dcdef69d"
+  integrity sha512-o0/N32szUaJrO9pIAsYETmHSkmw05jpykGxNt0kUQ3MUygH5S+R4tGZWFjqjzM2eew8QAfpn5A8H2D4cjZOAkw==
   dependencies:
     crypto-js "^4.1.1"
     mitt "^3.0.0"
