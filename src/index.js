@@ -31,7 +31,8 @@ function SuprsendInbox({
   pagination = true,
   pageSize,
   popperPosition = 'bottom',
-  showUnreadCountOnTabs = true
+  showUnreadCountOnTabs = true,
+  host
 }) {
   if (inboxId) {
     subscriberId = inboxId
@@ -50,7 +51,8 @@ function SuprsendInbox({
     const inboxInst = new SuprsendJSInbox(workspaceKey, {
       pageSize,
       tenantID: tenantId,
-      stores
+      stores,
+      host
     })
     setInbox(inboxInst)
 

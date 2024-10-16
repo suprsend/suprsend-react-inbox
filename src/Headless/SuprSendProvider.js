@@ -21,7 +21,8 @@ function SuprSendProvider({
   inboxId,
   tenantId,
   stores,
-  pageSize
+  pageSize,
+  host
 }) {
   if (inboxId) {
     subscriberId = inboxId
@@ -36,7 +37,8 @@ function SuprSendProvider({
     const inboxInst = new SuprsendJSInbox(workspaceKey, {
       pageSize,
       tenantID: tenantId,
-      stores
+      stores,
+      host
     })
     setInbox(inboxInst)
 
