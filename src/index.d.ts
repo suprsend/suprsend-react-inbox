@@ -48,6 +48,7 @@ interface ISuprSendInbox {
   pageSize?: number
   popperPosition?: 'top' | 'bottom' | 'left' | 'right'
   showUnreadCountOnTabs?: boolean
+  host?: { socketHost?: string; apiHost?: string; collectorHost?: string }
 }
 
 declare function SuprSendInbox({
@@ -74,7 +75,8 @@ declare function SuprSendInbox({
   pageSize,
   pagination,
   popperPosition,
-  showUnreadCountOnTabs
+  showUnreadCountOnTabs,
+  host
 }: ISuprSendInbox): JSX.Element
 
 export default SuprSendInbox
@@ -133,6 +135,7 @@ interface ISuprSendProvider {
   tenantId?: string
   stores?: IStore[]
   pageSize?: number
+  host?: { socketHost?: string; apiHost?: string; collectorHost?: string }
 }
 
 export function SuprSendProvider({

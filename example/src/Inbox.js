@@ -65,6 +65,11 @@ const App = () => {
         workspaceKey={process.env.REACT_APP_WORKSPACE_KEY}
         subscriberId={sId}
         distinctId={dId}
+        host={{
+          socketHost: process.env.REACT_APP_SOCKET_URL,
+          apiHost: process.env.REACT_APP_API_URL,
+          collectorHost: process.env.REACT_APP_COLLECTOR_URL
+        }}
         // stores={[
         //   {
         //     storeId: 'test',
