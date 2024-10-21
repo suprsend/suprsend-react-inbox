@@ -14,6 +14,21 @@ function hasNotifications(storeData) {
   return hasData
 }
 
+function InternalHeaderRightComponent({ isEmpty, header, inbox }) {
+  if (isEmpty) return null
+  return (
+    <AllReadButton
+      style={header?.markAllReadText}
+      onClick={(e) => {
+        e.stopPropagation()
+        inbox.feed.markAllRead()
+      }}
+    >
+      Mark all as read
+    </AllReadButton>
+  )
+}
+
 export default function Header() {
   const { header, tabs } = useTheme()
   const {
@@ -23,28 +38,28 @@ export default function Header() {
     setActiveStore,
     setChangingActiveStore,
     showUnreadCountOnTabs,
-    tabBadgeComponent
+    tabBadgeComponent,
+    headerRightComponent
   } = useInbox()
 
   const isEmpty = !hasNotifications(notificationsData?.storeData)
   const stores = inbox.feed.stores
   const hasStores = stores?.length > 0
   const TabBadgeComponent = tabBadgeComponent
+  const HeaderRightComponent = headerRightComponent
 
   return (
     <Container style={header?.container}>
       <TopContainer hasStores={hasStores}>
         <HeaderText style={header?.headerText}>Notifications</HeaderText>
-        {!isEmpty && (
-          <AllReadButton
-            style={header?.markAllReadText}
-            onClick={(e) => {
-              e.stopPropagation()
-              inbox.feed.markAllRead()
-            }}
-          >
-            Mark all as read
-          </AllReadButton>
+        {HeaderRightComponent ? (
+          <HeaderRightComponent markAllRead={() => inbox.feed.markAllRead()} />
+        ) : (
+          <InternalHeaderRightComponent
+            isEmpty={isEmpty}
+            header={header}
+            inbox={inbox}
+          />
         )}
       </TopContainer>
       {stores && stores.length > 0 && (
