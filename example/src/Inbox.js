@@ -70,6 +70,19 @@ const App = () => {
           apiHost: process.env.REACT_APP_API_URL,
           collectorHost: process.env.REACT_APP_COLLECTOR_URL
         }}
+        // headerRightComponent={({ markAllRead }) => (
+        //   <div>
+        //     <p
+        //       style={{ margin: 0 }}
+        //       onClick={(e) => {
+        //         e.stopPropagation()
+        //         markAllRead()
+        //       }}
+        //     >
+        //       Header Right
+        //     </p>
+        //   </div>
+        // )}
         // stores={[
         //   {
         //     storeId: 'test',
