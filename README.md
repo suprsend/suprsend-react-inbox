@@ -24,8 +24,8 @@ After installing, Import the component in your code and use it as given below. R
 import SuprSendInbox from '@suprsend/react-inbox'
 import 'react-toastify/dist/ReactToastify.css' // needed for toast notifications, can be ignored if hideToast=true
 
-// add to your react component;
-<SuprSendInbox
+// add to your react component
+;<SuprSendInbox
   workspaceKey='<workspace_key>'
   subscriberId='<subscriber_id>'
   distinctId='<distinct_id>'
@@ -73,6 +73,7 @@ interface ISuprSendInbox {
   badgeComponent?: ({ count }: { count: number | null }) => JSX.Element
   loaderComponent?: () => JSX.Element
   tabBadgeComponent?: ({ count }: { count: number }) => JSX.Element
+  headerRightComponent?: ({ markAllRead }: { markAllRead: ()=> void }) => JSX.Element
   notificationClickHandler?: (notificationData: any) => void
   primaryActionClickHandler?: (notificationData: any) => void
   secondaryActionClickHandler?: (notificationData: any) => void
@@ -200,8 +201,7 @@ Enclose your notifications component in **SuprSendProvider**. SuprSend hooks can
 
 ```javascript Syntax
 import { SuprSendProvider } from '@suprsend/react-inbox'
-
-<SuprSendProvider
+;<SuprSendProvider
   workspaceKey='<workspace_key>'
   subscriberId='<subscriber_id>'
   distinctId='<distinct_id>'
