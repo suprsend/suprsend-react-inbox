@@ -40,9 +40,11 @@ interface ISuprSendInbox {
   loaderComponent?: () => JSX.Element
   tabBadgeComponent?: ({ count }: { count: number }) => JSX.Element
   headerRightComponent?: ({
-    markAllRead
+    markAllRead,
+    closeInboxPopup
   }: {
     markAllRead: () => void
+    closeInboxPopup: () => void
   }) => JSX.Element
   notificationClickHandler?: (notificationData: any) => void
   primaryActionClickHandler?: (notificationData: any) => void
