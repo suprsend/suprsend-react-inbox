@@ -39,7 +39,8 @@ export default function Header() {
     setChangingActiveStore,
     showUnreadCountOnTabs,
     tabBadgeComponent,
-    headerRightComponent
+    headerRightComponent,
+    toggleInbox
   } = useInbox()
 
   const isEmpty = !hasNotifications(notificationsData?.storeData)
@@ -53,7 +54,12 @@ export default function Header() {
       <TopContainer hasStores={hasStores}>
         <HeaderText style={header?.headerText}>Notifications</HeaderText>
         {HeaderRightComponent ? (
-          <HeaderRightComponent markAllRead={() => inbox.feed.markAllRead()} />
+          <HeaderRightComponent
+            markAllRead={() => inbox.feed.markAllRead()}
+            closeInboxPopup={() => {
+              toggleInbox(false)
+            }}
+          />
         ) : (
           <InternalHeaderRightComponent
             isEmpty={isEmpty}

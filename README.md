@@ -73,7 +73,7 @@ interface ISuprSendInbox {
   badgeComponent?: ({ count }: { count: number | null }) => JSX.Element
   loaderComponent?: () => JSX.Element
   tabBadgeComponent?: ({ count }: { count: number }) => JSX.Element
-  headerRightComponent?: ({ markAllRead }: { markAllRead: ()=> void }) => JSX.Element
+  headerRightComponent?: ({ markAllRead, closeInboxPopup }: { markAllRead: ()=> void , closeInboxPopup: () => void}) => JSX.Element
   notificationClickHandler?: (notificationData: any) => void
   primaryActionClickHandler?: (notificationData: any) => void
   secondaryActionClickHandler?: (notificationData: any) => void
