@@ -1,5 +1,9 @@
 # @suprsend/react-inbox
 
+> 🚧 End of Support for `@suprsend/react-inbox`: Migrate to `@suprsend/react`
+> 
+> Development of the [@suprsend/react-inbox](https://github.com/suprsend/suprsend-react-inbox) SDK has been discontinued in favour of the new [@suprsend/react](https://docs.suprsend.com/docs/inapp-feed-1) SDK. Please refer the [migration guide](https://docs.suprsend.com/docs/migration-guide) for instructions on transitioning to the new SDK.
+
 Integrating SuprSend Inbox channel in React websites can be done in two ways:
 
 - **SuprSendInbox** component which comes with UI and customizing props.
