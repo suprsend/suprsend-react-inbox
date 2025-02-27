@@ -13,8 +13,9 @@ import PinnedNotificationIcon from './Icons/PinnedNotificationIcon'
 import UnReadIcon from './Icons/UnReadIcon'
 import ReadIcon from './Icons/ReadIcon'
 import ArchiveIcon from './Icons/ArchiveIcon'
+import { useTranslation } from '../i18n/useTranslations'
 
-function ExpiryTime({ dateInput, style }) {
+function ExpiryTime({ dateInput, style, t }) {
   const date = dateInput
   const [, setTime] = useState(Date.now())
 
@@ -42,7 +43,7 @@ function ExpiryTime({ dateInput, style }) {
               : style?.backgroundColor || 'rgba(100, 116, 139, 0.09)'
           }}
         >
-          Expires in{' '}
+          {t('expiresIn')}{' '}
           {expiredAlready ? (
             'a minute'
           ) : (
@@ -72,9 +73,11 @@ export default function Notification({ notificationData, handleActionClick }) {
     inbox,
     themeType,
     primaryActionClickHandler,
-    secondaryActionClickHandler
+    secondaryActionClickHandler,
+    language
   } = useInbox()
   const { notification } = useTheme()
+  const { t } = useTranslation(language)
 
   const tableBorderColor =
     notification?.bodyText?.tableBorderColor || 'rgba(100, 116, 139, 0.3)'
@@ -141,7 +144,7 @@ export default function Notification({ notificationData, handleActionClick }) {
         <PinnedView hideAvatar={hideAvatar}>
           <PinnedNotificationIcon style={notification?.pinnedIcon} />
           <PinnedNotificationText style={notification?.pinnedText}>
-            Pinned
+            {t('pinned')}
           </PinnedNotificationText>
         </PinnedView>
       )}
@@ -420,6 +423,7 @@ export default function Notification({ notificationData, handleActionClick }) {
               <ExpiryTime
                 dateInput={notificationData.expiry}
                 style={notification?.expiresText}
+                t={t}
               />
             )}
             {hasButtons && (
@@ -494,7 +498,7 @@ export default function Notification({ notificationData, handleActionClick }) {
                 >
                   <UnReadIcon style={notification?.actionsMenuItemIcon} />
                   <CMenuText style={notification?.actionsMenuItemText}>
-                    Mark as unread
+                    {t('markAsUnread')}
                   </CMenuText>
                 </CMenuItem>
               ) : (
@@ -508,7 +512,7 @@ export default function Notification({ notificationData, handleActionClick }) {
                 >
                   <ReadIcon style={notification?.actionsMenuItemIcon} />
                   <CMenuText style={notification?.actionsMenuItemText}>
-                    Mark as read
+                    {t('markAsRead')}
                   </CMenuText>
                 </CMenuItem>
               )}
@@ -522,7 +526,7 @@ export default function Notification({ notificationData, handleActionClick }) {
                 >
                   <ArchiveIcon style={notification?.actionsMenuItemIcon} />
                   <CMenuText style={notification?.actionsMenuItemText}>
-                    Archive
+                    {t('archive')}
                   </CMenuText>
                 </CMenuItem>
               )}
