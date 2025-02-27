@@ -2,6 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { CText, HeadingText, lightColors } from '../utils/styles'
 import { useTheme, useInbox } from '../utils/context'
+import { useTranslation } from '../i18n/useTranslations'
 
 function hasNotifications(storeData) {
   let hasData = false
@@ -14,7 +15,7 @@ function hasNotifications(storeData) {
   return hasData
 }
 
-function InternalHeaderRightComponent({ isEmpty, header, inbox }) {
+function InternalHeaderRightComponent({ isEmpty, header, inbox, t }) {
   if (isEmpty) return null
   return (
     <AllReadButton
@@ -24,7 +25,7 @@ function InternalHeaderRightComponent({ isEmpty, header, inbox }) {
         inbox.feed.markAllRead()
       }}
     >
-      Mark all as read
+      {t('markAllAsRead')}
     </AllReadButton>
   )
 }
@@ -40,8 +41,10 @@ export default function Header() {
     showUnreadCountOnTabs,
     tabBadgeComponent,
     headerRightComponent,
-    toggleInbox
+    toggleInbox,
+    language
   } = useInbox()
+  const { t } = useTranslation(language)
 
   const isEmpty = !hasNotifications(notificationsData?.storeData)
   const stores = inbox.feed.stores
@@ -52,7 +55,7 @@ export default function Header() {
   return (
     <Container style={header?.container}>
       <TopContainer hasStores={hasStores}>
-        <HeaderText style={header?.headerText}>Notifications</HeaderText>
+        <HeaderText style={header?.headerText}>{t('notifications')}</HeaderText>
         {HeaderRightComponent ? (
           <HeaderRightComponent
             markAllRead={() => inbox.feed.markAllRead()}
@@ -65,6 +68,7 @@ export default function Header() {
             isEmpty={isEmpty}
             header={header}
             inbox={inbox}
+            t={t}
           />
         )}
       </TopContainer>

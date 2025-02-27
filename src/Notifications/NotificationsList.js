@@ -6,6 +6,7 @@ import EmptyNotificationIcon from './Icons/EmptyNotificationIcon'
 import { useInbox, useTheme } from '../utils/context'
 import { CText, HeadingText, lightColors } from '../utils/styles'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import { useTranslation } from '../i18n/useTranslations'
 
 function Loader({ style, size }) {
   const color = style?.color
@@ -23,8 +24,10 @@ export default function NotificationsList() {
     loaderComponent,
     pagination,
     changingActiveStore,
-    inbox
+    inbox,
+    language
   } = useInbox()
+  const { t } = useTranslation(language)
   const { notificationsContainer } = useTheme()
   const notifications = storeData?.[activeStoreId]?.notifications || []
 
@@ -45,10 +48,10 @@ export default function NotificationsList() {
       <EmptyNotificationsContainer>
         <EmptyNotificationIcon />
         <EmptyText style={notificationsContainer?.noNotificationsText}>
-          No notifications yet
+          {t('noNotificationsTitle')}
         </EmptyText>
         <EmptySubText style={notificationsContainer?.noNotificationsSubtext}>
-          We'll let you know when we've got something new for you.
+          {t('noNotificationsDescription')}
         </EmptySubText>
       </EmptyNotificationsContainer>
     )

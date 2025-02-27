@@ -2,7 +2,7 @@ import React from 'react'
 import SuprsendInbox from '@suprsend/react-inbox'
 import 'react-toastify/dist/ReactToastify.css'
 
-function Buttons({ themeType, setThemeType, setDid, setSid }) {
+function Buttons({ themeType, setThemeType, setDid, setSid, setLang }) {
   return (
     <div style={{ display: 'flex', gap: 10 }}>
       <button
@@ -12,6 +12,13 @@ function Buttons({ themeType, setThemeType, setDid, setSid }) {
         }}
       >
         Change Theme
+      </button>
+      <button
+        onClick={() => {
+          setLang((val) => (val === 'en' ? 'fr' : 'en'))
+        }}
+      >
+        Change Lang
       </button>
       <button
         onClick={() => {
@@ -45,6 +52,7 @@ const App = () => {
   const [themeType, setThemeType] = React.useState('light')
   const [dId, setDid] = React.useState(process.env.REACT_APP_DISTINCT_ID)
   const [sId, setSid] = React.useState(process.env.REACT_APP_SUBSCRIBER_ID)
+  const [lang, setLang] = React.useState('en')
 
   return (
     <div
@@ -60,11 +68,13 @@ const App = () => {
         setThemeType={setThemeType}
         setDid={setDid}
         setSid={setSid}
+        setLang={setLang}
       />
       <SuprsendInbox
         workspaceKey={process.env.REACT_APP_WORKSPACE_KEY}
         subscriberId={sId}
         distinctId={dId}
+        language={lang}
         host={{
           socketHost: process.env.REACT_APP_SOCKET_URL,
           apiHost: process.env.REACT_APP_API_URL,
