@@ -34,7 +34,8 @@ function SuprsendInbox({
   popperPosition = 'bottom',
   showUnreadCountOnTabs = true,
   host,
-  language
+  language,
+  disableMarkdown
 }) {
   if (inboxId) {
     subscriberId = inboxId
@@ -132,7 +133,8 @@ function SuprsendInbox({
           setChangingActiveStore,
           showUnreadCountOnTabs,
           themeType,
-          language
+          language,
+          disableMarkdown
         }}
       >
         {!hideInbox && (
