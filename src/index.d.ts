@@ -57,6 +57,7 @@ interface ISuprSendInbox {
   showUnreadCountOnTabs?: boolean
   host?: { socketHost?: string; apiHost?: string; collectorHost?: string }
   language?: 'en' | 'fr'
+  disableMarkdown?: boolean
 }
 
 declare function SuprSendInbox({
