@@ -79,6 +79,7 @@ export default function NotificationsList() {
           <ClickableNotification
             notificationData={notification}
             key={notification.n_id}
+            notificationList={notifications}
           />
         ))}
       </InfiniteScroll>
