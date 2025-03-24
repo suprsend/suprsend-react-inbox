@@ -7,7 +7,10 @@ function getURLTarget(target) {
   return target ? '_blank' : '_self'
 }
 
-export default function ClickableNotification({ notificationData }) {
+export default function ClickableNotification({
+  notificationData,
+  notificationList
+}) {
   const { notificationClickHandler, inbox } = useInbox()
 
   const cardClickNavigation = () => {
@@ -79,6 +82,7 @@ export default function ClickableNotification({ notificationData }) {
       <Notification
         notificationData={notificationData}
         handleActionClick={handleActionClick}
+        notificationList={notificationList}
       />
     </div>
   )

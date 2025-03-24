@@ -2,7 +2,7 @@ const fr = {
   language: 'fr',
   translations: {
     notifications: 'Notifications',
-    markAllAsRead: 'Marquer tout comme lu',
+    markAllAsRead: 'Tout marquer comme lu',
     noNotificationsTitle: 'Pas encore de notifications',
     noNotificationsDescription:
       'Nous vous informerons lorsque nous aurons quelque chose de nouveau pour vous.',

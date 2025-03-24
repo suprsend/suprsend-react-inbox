@@ -61,7 +61,11 @@ function ExpiryTime({ dateInput, style, t }) {
   }
 }
 
-export default function Notification({ notificationData, handleActionClick }) {
+export default function Notification({
+  notificationData,
+  handleActionClick,
+  notificationList
+}) {
   const [validAvatar, setValidAvatar] = useState(false)
   const [showMore, setShowMore] = useState(false)
   const [moreOpen, setMoreOpen] = useState(false)
@@ -80,6 +84,10 @@ export default function Notification({ notificationData, handleActionClick }) {
   const { notification } = useTheme()
   const { t } = useTranslation(language)
 
+  const lastNotification = notificationList?.length
+    ? notificationList[notificationList.length - 1]
+    : null
+  const isLastNotification = lastNotification?.n_id === notificationData.n_id
   const tableBorderColor =
     notification?.bodyText?.tableBorderColor || 'rgba(100, 116, 139, 0.3)'
   const blockquoteColor =
@@ -491,7 +499,11 @@ export default function Notification({ notificationData, handleActionClick }) {
             >
               <MoreIcon style={notification?.actionsMenuIcon} />
             </CMenuButton>
-            <CMenuPopup moreOpen={moreOpen} style={notification?.actionsMenu}>
+            <CMenuPopup
+              moreOpen={moreOpen}
+              style={notification?.actionsMenu}
+              isLastNotification={isLastNotification}
+            >
               {notificationData.seen_on ? (
                 <CMenuItem
                   style={notification?.actionsMenuItem}
@@ -700,7 +712,8 @@ const AvatarImage = styled.img`
 
 const CMenuPopup = styled.div`
   position: absolute;
-  right: 0px;
+  right: ${(props) => (props.isLastNotification ? '25px' : '0px')};
+  bottom: ${(props) => (props.isLastNotification ? '-12.5px' : 'auto')};
   display: ${(props) => (props.moreOpen ? 'block' : 'none')};
   min-width: 150px;
   padding: 2px;
