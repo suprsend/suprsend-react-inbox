@@ -1,25 +1,25 @@
-import { IStore } from '@suprsend/js-inbox'
+import { IStore } from '@suprsend/js-inbox';
 
 interface Dictionary {
-  [key: string]: any
+  [key: string]: any;
 }
 
 interface IToastProps {
-  position?: string
-  duration?: number
-  limit?: number
+  position?: string;
+  duration?: number;
+  limit?: number;
   toastComponent?: ({
     notificationData
   }: {
-    notificationData: any
-  }) => JSX.Element
+    notificationData: any;
+  }) => JSX.Element;
 }
 
 interface ICustomNotificationData {
-  notificationData: any
-  markRead: (clickEvent?: any) => void
-  markUnRead: (clickEvent?: any) => void
-  markArchived: (clickEvent?: any) => void
+  notificationData: any;
+  markRead: (clickEvent?: any) => void;
+  markUnRead: (clickEvent?: any) => void;
+  markArchived: (clickEvent?: any) => void;
 }
 
 interface ITranslationKeys {
@@ -40,42 +40,44 @@ interface ILanguageDefinition {
 }
 
 interface ISuprSendInbox {
-  workspaceKey: string
-  distinctId: string | null
-  subscriberId: string | null
-  inboxId?: string | null
-  tenantId?: string
-  stores?: IStore[]
-  themeType?: 'light' | 'dark'
-  hideAvatar?: boolean
-  hideInbox?: boolean
-  hideToast?: boolean
-  noNotificationsComponent?: () => JSX.Element
-  notificationComponent?: (notification: ICustomNotificationData) => JSX.Element
-  bellComponent?: () => JSX.Element
-  badgeComponent?: ({ count }: { count: number | null }) => JSX.Element
-  loaderComponent?: () => JSX.Element
-  tabBadgeComponent?: ({ count }: { count: number }) => JSX.Element
+  workspaceKey: string;
+  distinctId: string | null;
+  subscriberId: string | null;
+  inboxId?: string | null;
+  tenantId?: string;
+  stores?: IStore[];
+  themeType?: 'light' | 'dark';
+  hideAvatar?: boolean;
+  hideInbox?: boolean;
+  hideToast?: boolean;
+  noNotificationsComponent?: () => JSX.Element;
+  notificationComponent?: (
+    notification: ICustomNotificationData
+  ) => JSX.Element;
+  bellComponent?: () => JSX.Element;
+  badgeComponent?: ({ count }: { count: number | null }) => JSX.Element;
+  loaderComponent?: () => JSX.Element;
+  tabBadgeComponent?: ({ count }: { count: number }) => JSX.Element;
   headerRightComponent?: ({
     markAllRead,
     closeInboxPopup
   }: {
-    markAllRead: () => void
-    closeInboxPopup: () => void
-  }) => JSX.Element
-  notificationClickHandler?: (notificationData: any) => void
-  primaryActionClickHandler?: (notificationData: any) => void
-  secondaryActionClickHandler?: (notificationData: any) => void
-  toastProps?: IToastProps
-  theme?: Dictionary
-  pagination?: boolean
-  pageSize?: number
-  popperPosition?: 'top' | 'bottom' | 'left' | 'right'
-  showUnreadCountOnTabs?: boolean
-  host?: { socketHost?: string; apiHost?: string; collectorHost?: string }
-  language?: 'en' | 'fr'
-  disableMarkdown?: boolean
-  translations?: { [key: string]: ILanguageDefinition }
+    markAllRead: () => void;
+    closeInboxPopup: () => void;
+  }) => JSX.Element;
+  notificationClickHandler?: (notificationData: any) => void;
+  primaryActionClickHandler?: (notificationData: any) => void;
+  secondaryActionClickHandler?: (notificationData: any) => void;
+  toastProps?: IToastProps;
+  theme?: Dictionary;
+  pagination?: boolean;
+  pageSize?: number;
+  popperPosition?: 'top' | 'bottom' | 'left' | 'right';
+  showUnreadCountOnTabs?: boolean;
+  host?: { socketHost?: string; apiHost?: string; collectorHost?: string };
+  language?: 'en' | 'fr';
+  disableMarkdown?: boolean;
+  translations?: { [key: string]: ILanguageDefinition };
 }
 
 declare function SuprSendInbox({
@@ -105,65 +107,65 @@ declare function SuprSendInbox({
   popperPosition,
   showUnreadCountOnTabs,
   host
-}: ISuprSendInbox): JSX.Element
+}: ISuprSendInbox): JSX.Element;
 
-export default SuprSendInbox
+export default SuprSendInbox;
 
 // ========================================= //
 
 interface IActionObject {
-  name: string
-  url: string
-  open_in_new_tab?: boolean
+  name: string;
+  url: string;
+  open_in_new_tab?: boolean;
 }
 
 interface IAvatarObject {
-  action_url?: string
-  avatar_url: string
+  action_url?: string;
+  avatar_url: string;
 }
 
 interface ISubTextObject {
-  action_url?: string
-  text: string
+  action_url?: string;
+  text: string;
 }
 
 interface IRemoteNotificationMessage {
-  schema: string
-  header?: string
-  text: string
-  url?: string
-  open_in_new_tab?: boolean
-  extra_data?: string
-  actions?: IActionObject[]
-  avatar?: IAvatarObject
-  subtext?: ISubTextObject
+  schema: string;
+  header?: string;
+  text: string;
+  url?: string;
+  open_in_new_tab?: boolean;
+  extra_data?: string;
+  actions?: IActionObject[];
+  avatar?: IAvatarObject;
+  subtext?: ISubTextObject;
 }
 
 interface IRemoteNotification {
-  n_id: string
-  n_category: string
-  created_on: number
-  seen_on?: number
-  interacted_on?: number
-  tags?: string[]
-  is_pinned?: boolean
-  can_user_unpin?: boolean
-  is_expiry_visible?: boolean
-  expiry?: number
-  archived?: boolean
-  message: IRemoteNotificationMessage
+  n_id: string;
+  n_category: string;
+  created_on: number;
+  seen_on?: number;
+  interacted_on?: number;
+  tags?: string[];
+  is_pinned?: boolean;
+  can_user_unpin?: boolean;
+  is_expiry_visible?: boolean;
+  expiry?: number;
+  archived?: boolean;
+  message: IRemoteNotificationMessage;
 }
 
 interface ISuprSendProvider {
-  children: JSX.Element
-  workspaceKey: string
-  distinctId?: string
-  subscriberId?: string
-  inboxId?: string
-  tenantId?: string
-  stores?: IStore[]
-  pageSize?: number
-  host?: { socketHost?: string; apiHost?: string; collectorHost?: string }
+  children: JSX.Element;
+  workspaceKey: string;
+  distinctId?: string;
+  subscriberId?: string;
+  inboxId?: string;
+  tenantId?: string;
+  stores?: IStore[];
+  pageSize?: number;
+  host?: { socketHost?: string; apiHost?: string; collectorHost?: string };
 }
 
 export function SuprSendProvider({
@@ -175,41 +177,41 @@ export function SuprSendProvider({
   tenantId,
   stores,
   pageSize
-}: ISuprSendProvider): JSX.Element
+}: ISuprSendProvider): JSX.Element;
 
 export function useBell(): {
-  unSeenCount: number
-  markAllSeen: () => Promise<void>
-}
+  unSeenCount: number;
+  markAllSeen: () => Promise<void>;
+};
 
 export function useUnseenCount(): {
-  unSeenCount: number
-  markAllSeen: () => Promise<void>
-}
+  unSeenCount: number;
+  markAllSeen: () => Promise<void>;
+};
 
 export function useStoreUnseenCount(storeId?: string): {
-  unSeenCount: number
-}
+  unSeenCount: number;
+};
 
 export function useStoresUnseenCount(): {
-  [key: string]: number
-}
+  [key: string]: number;
+};
 
 export function useEvent(
   eventName: string,
   callback: (notification: IRemoteNotification) => void
-): void
+): void;
 
 export function useNotifications(storeId?: string): {
-  notifications: IRemoteNotification[]
-  initialLoading: boolean
-  hasNext: boolean
-  fetchMoreLoading: boolean
-  markClicked: (n_id: string) => void
-  markAllSeen: () => void
-  fetchPrevious: () => void
-  markAllRead: () => void
-  markRead(n_id: string): void
-  markUnRead(n_id: string): void
-  markArchived(n_id: string): void
-}
+  notifications: IRemoteNotification[];
+  initialLoading: boolean;
+  hasNext: boolean;
+  fetchMoreLoading: boolean;
+  markClicked: (n_id: string) => void;
+  markAllSeen: () => void;
+  fetchPrevious: () => void;
+  markAllRead: () => void;
+  markRead(n_id: string): void;
+  markUnRead(n_id: string): void;
+  markArchived(n_id: string): void;
+};
