@@ -22,6 +22,23 @@ interface ICustomNotificationData {
   markArchived: (clickEvent?: any) => void
 }
 
+interface ITranslationKeys {
+  notifications: string;
+  markAllAsRead: string;
+  noNotificationsTitle: string;
+  noNotificationsDescription: string;
+  pinned: string;
+  markAsUnread: string;
+  markAsRead: string;
+  archive: string;
+  expiresIn: string;
+}
+
+interface ILanguageDefinition {
+  language: string;
+  translations: ITranslationKeys;
+}
+
 interface ISuprSendInbox {
   workspaceKey: string
   distinctId: string | null
@@ -58,6 +75,7 @@ interface ISuprSendInbox {
   host?: { socketHost?: string; apiHost?: string; collectorHost?: string }
   language?: 'en' | 'fr'
   disableMarkdown?: boolean
+  translations?: { [key: string]: ILanguageDefinition }
 }
 
 declare function SuprSendInbox({
