@@ -56,8 +56,21 @@ interface ISuprSendInbox {
   popperPosition?: 'top' | 'bottom' | 'left' | 'right'
   showUnreadCountOnTabs?: boolean
   host?: { socketHost?: string; apiHost?: string; collectorHost?: string }
-  language?: 'en' | 'fr'
+  language?: string
   disableMarkdown?: boolean
+  translations?: ITranslations
+}
+
+interface ITranslations {
+  notifications?: string
+  markAllAsRead?: string
+  noNotificationsTitle?: string
+  noNotificationsDescription?: string
+  pinned?: string
+  markAsUnread?: string
+  markAsRead?: string
+  archive?: string
+  expiresIn?: string
 }
 
 declare function SuprSendInbox({

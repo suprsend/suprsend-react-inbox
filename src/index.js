@@ -35,7 +35,8 @@ function SuprsendInbox({
   showUnreadCountOnTabs = true,
   host,
   language,
-  disableMarkdown
+  disableMarkdown,
+  translations
 }) {
   if (inboxId) {
     subscriberId = inboxId
@@ -134,7 +135,8 @@ function SuprsendInbox({
           showUnreadCountOnTabs,
           themeType,
           language,
-          disableMarkdown
+          disableMarkdown,
+          translations
         }}
       >
         {!hideInbox && (
