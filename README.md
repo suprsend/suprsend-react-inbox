@@ -1,7 +1,7 @@
 # @suprsend/react-inbox
 
 > 🚧 End of Support for `@suprsend/react-inbox`: Migrate to `@suprsend/react`
-> 
+>
 > Development of the [@suprsend/react-inbox](https://github.com/suprsend/suprsend-react-inbox) SDK has been discontinued in favour of the new [@suprsend/react](https://docs.suprsend.com/docs/inapp-feed-1) SDK. Please refer the [migration guide](https://docs.suprsend.com/docs/migration-guide) for instructions on transitioning to the new SDK.
 
 Integrating SuprSend Inbox channel in React websites can be done in two ways:
@@ -9,7 +9,7 @@ Integrating SuprSend Inbox channel in React websites can be done in two ways:
 - **SuprSendInbox** component which comes with UI and customizing props.
 - **SuprSendProvider** headless component and hooks, incase you want to totally take control of UI. (example: Full page notifications).
 
-Detailed documentation can be found here: https://docs.suprsend.com/docs/inbox-react
+Detailed documentation can be found [here](https://github.com/suprsend/suprsend-react-inbox/blob/main/docs)
 <br>
 
 ## Installation
@@ -51,15 +51,15 @@ interface ISuprSendInbox {
 
 <br>
 
-| Field        | Type                 | Description                                                                                                                                                           |
-| :----------- | :------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| workspaceKey | string (Mandatory)   | You can find it in SuprSend Dashboard inside _Settings -> API Keys_.                                                                                                  |
-| distinctId   | any (Mandatory)      | Unique identifier for the user.                                                                                                                                       |
-| subscriberId | string (Mandatory)   | This is unique string for every distinctId used for authentication to inbox service. You check [generation docs](https://docs.suprsend.com/docs/hmac-authentication). |
-| tenantId     | string (Optional)    | If you use multi-tenant architecture you can get inbox notifications for that specific tenant/brand only.                                                             |
-| stores       | IStore\[] (Optional) | Pass stores array if you ant to use [multi-tab feature](https://docs.suprsend.com/docs/multi-tabs).                                                                   |
-| pageSize     | number (Optional)    | Notifications to get in one api call. Used for pagination to get older notifications. Maximum allowed is 50. Defaults to 20.                                          |
-| pagination   | boolean (Optional)   | By default infinite scroll will be enabled to get older notifications on scroll. It can be disabled by passing false.                                                 |
+| Field        | Type                 | Description                                                                                                                                                                                          |
+| :----------- | :------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| workspaceKey | string (Mandatory)   | You can find it in SuprSend Dashboard inside _Settings -> API Keys_.                                                                                                                                 |
+| distinctId   | any (Mandatory)      | Unique identifier for the user.                                                                                                                                                                      |
+| subscriberId | string (Mandatory)   | This is unique string for every distinctId used for authentication to inbox service. You check [generation docs](https://github.com/suprsend/suprsend-react-inbox/blob/main/docs/authentication.md). |
+| tenantId     | string (Optional)    | If you use multi-tenant architecture you can get inbox notifications for that specific tenant/brand only.                                                                                            |
+| stores       | IStore\[] (Optional) | Pass stores array if you ant to use [multi-tab feature](https://github.com/suprsend/suprsend-react-inbox/blob/main/docs/multi-tab.md).                                                               |
+| pageSize     | number (Optional)    | Notifications to get in one api call. Used for pagination to get older notifications. Maximum allowed is 50. Defaults to 20.                                                                         |
+| pagination   | boolean (Optional)   | By default infinite scroll will be enabled to get older notifications on scroll. It can be disabled by passing false.                                                                                |
 
 <br>
 Apart from props provided above, SuprSendInbox also takes other props for customization.
@@ -214,14 +214,14 @@ import { SuprSendProvider } from '@suprsend/react-inbox'
 </SuprSendProvider>
 ```
 
-| Props        | Type                 | Description                                                                                                                                                           |
-| :----------- | :------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| workspaceKey | string (Mandatory)   | You can find it in SuprSend Dashboard inside _Settings -> API Keys_.                                                                                                  |
-| distinctId   | string (Mandatory)   | Unique identifier for the user.                                                                                                                                       |
-| subscriberId | string (Mandatory)   | This is unique string for every distinctId used for authentication to inbox service. You check [generation docs](https://docs.suprsend.com/docs/hmac-authentication). |
-| tenantId     | string (Optional)    | If you use multi-tenant architecture you can get inbox notifications for that specific tenant/brand only.                                                             |
-| pageSize     | number (Optional)    | Notifications to get in one api call. Used for pagination to get older notifications. Maximum allowed is 50. Defaults to 20.                                          |
-| stores       | IStore\[] (Optional) | Pass stores array if you ant to use [multi-tab feature](https://docs.suprsend.com/docs/multi-tabs).                                                                   |
+| Props        | Type                 | Description                                                                                                                                                                                          |
+| :----------- | :------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| workspaceKey | string (Mandatory)   | You can find it in SuprSend Dashboard inside _Settings -> API Keys_.                                                                                                                                 |
+| distinctId   | string (Mandatory)   | Unique identifier for the user.                                                                                                                                                                      |
+| subscriberId | string (Mandatory)   | This is unique string for every distinctId used for authentication to inbox service. You check [generation docs](https://github.com/suprsend/suprsend-react-inbox/blob/main/docs/authentication.md). |
+| tenantId     | string (Optional)    | If you use multi-tenant architecture you can get inbox notifications for that specific tenant/brand only.                                                                                            |
+| pageSize     | number (Optional)    | Notifications to get in one api call. Used for pagination to get older notifications. Maximum allowed is 50. Defaults to 20.                                                                         |
+| stores       | IStore\[] (Optional) | Pass stores array if you ant to use [multi-tab feature](https://github.com/suprsend/suprsend-react-inbox/blob/main/docs/multi-tab.md).                                                               |
 
 ```javascript IStore
 interface IStore {
