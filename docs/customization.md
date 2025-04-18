@@ -1,3 +1,5 @@
+# Customizing Inbox
+
 The inbox component is highly customizable. For most parts in Inbox, we also support custom components using render props. This is how the default inbox looks like with its components marked in order.
 
 <br />

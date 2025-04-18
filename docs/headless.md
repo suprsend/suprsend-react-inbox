@@ -1,3 +1,5 @@
+# Build your own UI (Headless)
+
 This Headless Inbox can be used if you want more control on the UI of Inbox Notifications like showing notifications in Sidepanel or in Fullscreen etc.
 
 # Installation

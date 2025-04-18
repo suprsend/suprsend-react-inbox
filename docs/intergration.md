@@ -1,3 +1,5 @@
+# Integrating Inbox
+
 Integrating SuprSend Inbox channel in React websites can be done in two ways:
 
 - **SuprSendInbox** component which comes with UI and customizing props.
